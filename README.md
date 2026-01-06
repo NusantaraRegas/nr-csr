@@ -80,7 +80,7 @@ flowchart LR
   Artisan[Artisan CLI]
 
   subgraph LaravelApp[Laravel Application]
-    Routes[routes/web.php\n(routes/api.php)]
+    Routes[routes/web.php + routes/api.php]
     MW[Middleware\n(web, cred.login, timeOut, role guards)]
     Controllers[Controllers\n(app/Http/Controllers)]
     Views[Blade Views\n(resources/views)]
