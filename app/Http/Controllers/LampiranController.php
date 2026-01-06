@@ -1,0 +1,195 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\EditLampiran;
+use App\Models\Kelayakan;
+use App\Models\Lampiran;
+use Illuminate\Http\Request;
+use App\Http\Requests\InsertLampiran;
+use DB;
+use Mail;
+use Exception;
+
+class LampiranController extends Controller
+{
+    public function index($loginID){
+        try {
+            $logID = decrypt($loginID);
+        } catch (Exception $e) {
+            abort(404);
+        }
+        $jumlahData = DB::table('tbl_lampiran')
+            ->select(DB::raw('count(*) as jumlah'))
+            ->where('no_agenda', $logID)
+            ->first();
+        $data = Lampiran::where('no_agenda',$logID)->get();
+        return view('report.data_lampiran')
+            ->with([
+                'jumlahData' => $jumlahData,
+                'dataLampiran' => $data,
+                'noAgenda' => $logID
+            ]);
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            $kelayakanID = decrypt($request->kelayakanID);
+        } catch (Exception $e) {
+            abort(404);
+        }
+
+        $request->validate([
+            'nama' => 'required',
+            'lampiran' => 'required|file|mimes:pdf',
+        ], [
+            'nama.required' => 'Jenis dokumen wajib diisi',
+            'lampiran.required' => 'Lampiran wajib diunggah',
+            'lampiran.mimes' => 'Lampiran harus berformat PDF',
+            //'lampiran.max' => 'Ukuran file lampiran maksimal 2MB',
+        ]);
+
+        $kelayakan = Kelayakan::findOrFail($kelayakanID);
+
+        if(empty($kelayakan)){
+            return redirect()->back()->with('gagal', "Kelayakan proposal tidak ditemukan")->withInput();
+        }
+
+        $image = $request->file('lampiran');
+        $name = str_replace(' ', '-', $image->getClientOriginalName());
+        $size = $image->getSize();
+        $type = $image->getClientOriginalExtension();
+        $featured_new_name = time() .".".$type;
+        $image->move('attachment',$featured_new_name);
+
+        $dataLampiran = [
+            'ID_KELAYAKAN' => $kelayakan->id_kelayakan,
+            'NO_AGENDA' => $kelayakan->no_agenda,
+            'NAMA' => $request->nama,
+            'LAMPIRAN' => $featured_new_name,
+            'UPLOAD_BY' => session('user')->username,
+            'CREATED_BY' => session('user')->id_user,
+            'UPLOAD_DATE' => now(),
+        ];
+
+        try {
+            Lampiran::create($dataLampiran);
+            return redirect()->back()->with('suksesDetail', 'Dokumen pendukung berhasil disimpan');
+        } catch (Exception $e) {
+            return redirect()->back()->with('gagalDetail', 'Dokumen pendukung gagal disimpan');
+        }
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $lampiranID = decrypt($request->lampiranID);
+        } catch (Exception $e) {
+            abort(404, 'ID Lampiran tidak valid');
+        }
+
+        $request->validate([
+            'nama' => 'required',
+            'lampiran' => 'nullable|file|mimes:pdf',
+        ], [
+            'nama.required' => 'Jenis dokumen wajib diisi',
+            'lampiran.mimes' => 'Lampiran harus berformat PDF',
+            //'lampiran.max' => 'Ukuran file lampiran maksimal 2MB',
+        ]);
+
+        $lampiran = Lampiran::findOrFail($lampiranID);
+
+        if (!$lampiran) {
+            return redirect()->back()->with('gagal', 'Data lampiran tidak ditemukan');
+        }
+
+        $lampiran->nama = $request->nama;
+
+        // Jika user mengupload file baru
+        if ($request->hasFile('lampiran')) {
+            $file = $request->file('lampiran');
+            $extension = $file->getClientOriginalExtension();
+            $fileName = time() . '.' . $extension;
+
+            // Hapus file lama jika ada
+            $oldPath = public_path('attachment/' . $lampiran->lampiran);
+            if (file_exists($oldPath)) {
+                unlink($oldPath);
+            }
+
+            // Simpan file baru
+            $file->move('attachment', $fileName);
+            $lampiran->lampiran = $fileName;
+            $lampiran->upload_date = now();
+        }
+
+        $lampiran->created_by = session('user')->id_user;
+        $lampiran->save();
+
+        return redirect()->back()->with('sukses', 'Dokumen berhasil diperbarui');
+    }
+    
+    public function delete($id)
+    {
+        try {
+            $lampiranID = decrypt($id);
+        } catch (Exception $e) {
+            abort(404);
+        }
+
+        $lampiran = Lampiran::findOrFail($lampiranID);
+
+        // if(in_array($lampiran->nama, ['Surat Pengantar dan Proposal', 'Disposisi'])){
+        //     return redirect()->back()->with('gagal', "Dokumen ini hanya bisa diedit dan tidak bisa dihapus")->withInput();
+        // }
+
+        $lampiran->delete();
+        //Lampiran::where('id_lampiran', $lampiranID)->delete();
+        return redirect()->back()->with('berhasil', 'Dokumen pendukung berhasil dihapus');
+    }
+
+    public function storeDokumentasi(Request $request)
+    {
+        try {
+            $kelayakanID = decrypt($request->kelayakanID);
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
+        $request->validate([
+            'dokumentasi' => 'required|file|mimes:jpeg,png,jpg,gif,svg,mp4,avi,mov,webm|max:10240',
+        ], [
+            'dokumentasi.required' => 'Dokumentasi wajib diunggah.',
+            'dokumentasi.file' => 'Dokumentasi harus berupa file.',
+            'dokumentasi.mimes' => 'Format file tidak didukung. Gunakan jpeg, png, jpg, gif, svg, mp4, avi, mov, atau webm.',
+            'dokumentasi.max' => 'Ukuran maksimal file adalah 10MB.',
+        ]);
+
+        $kelayakan = Kelayakan::findOrFail($kelayakanID);
+
+        $file = $request->file('dokumentasi');
+
+        // Simpan file ke storage/app/public/dokumentasi
+        $path = $file->store('dokumentasi', 'public'); // hasil: dokumentasi/nama-file.ext
+
+        $dataLampiran = [
+            'ID_KELAYAKAN' => $kelayakan->id_kelayakan,
+            'NO_AGENDA' => $kelayakan->no_agenda,
+            'NAMA' => 'Dokumentasi',
+            'LAMPIRAN' => $path, // Simpan path relatif untuk nanti ditampilkan
+            'UPLOAD_BY' => session('user')->username ?? 'unknown',
+            'CREATED_BY' => session('user')->id_user ?? null,
+            'UPLOAD_DATE' => now(),
+        ];
+
+        try {
+            Lampiran::create($dataLampiran);
+            return redirect()->back()->with('suksesDetail', 'Dokumentasi bantuan berhasil disimpan');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('gagalDetail', 'Dokumentasi bantuan gagal disimpan');
+        }
+    }
+
+}

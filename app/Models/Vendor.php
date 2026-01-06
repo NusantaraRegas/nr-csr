@@ -1,0 +1,12 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Vendor extends Model
+{
+    protected $table = "tbl_vendor";
+    protected $primaryKey = "vendor_id";
+    protected $guarded = ["vendor_id"];
+}

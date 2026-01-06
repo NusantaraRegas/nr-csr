@@ -1,0 +1,10 @@
+﻿/vendor/
+/node_modules/
+.env
+.env.*
+/storage/logs/
+/storage/framework/laravel-excel/
+/public/file_upload/
+/public/avatar/
+/public/profile/
+/public/sign/
