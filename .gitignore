@@ -4,7 +4,28 @@
 .env.*
 /storage/logs/
 /storage/framework/laravel-excel/
+/storage/framework/cache/
+/storage/framework/sessions/
+/storage/framework/views/
+/storage/framework/testing/
+/bootstrap/cache/*.php
+.phpunit.result.cache
 /public/file_upload/
 /public/avatar/
 /public/profile/
 /public/sign/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDEs
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
