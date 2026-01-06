@@ -22,25 +22,33 @@ flowchart TB
   Admin([Admin])
   User([Internal User])
   Finance([Finance])
-  Report([Report/Monitoring])
+  Report([Report Monitoring])
   Legal([Legal])
   Vendor([Vendor])
   Subsidiary([Subsidiary User])
 
   %% Modules
-  Auth[Authentication & OTP (LoginController)]
-  Master[Master Data (Role/User/Anggota/Hirarki/Sektor/Kebijakan/SDG/Pilar/Perusahaan/Exception)]
-  Proposal[Proposal Intake (Kelayakan/SubProposal/Lembaga/Lampiran)]
-  Evaluasi[Evaluation (EvaluasiController)]
-  Survei[Survey (SurveiController)]
-  LegalDocs[Legal Documents (BAST/SPK)]
-  Budget[Budgeting & Programs (Anggaran/Proker/Relokasi/Alokasi)]
-  Payment[Payment Execution (PembayaranController + Popay endpoints)]
-  Dashboard[Dashboards (DashboardController + Proposal dashboard)]
-  Reporting[Reporting & Exports (Laporan/Report/APIController)]
-  VendorReg[Vendor Registration & Docs (VendorController)]
-  Subs[Subsidiary Flows (Dashboard/Anggaran/Relokasi/Realisasi/Report Subsidiary)]
-  Tasklist[Tasklists / Approvals (Tasklist*Controller)]
+  Auth[Authentication and OTP]
+  Master[Master Data]
+  Proposal[Proposal Intake]
+  Evaluasi[Evaluation]
+  Survei[Survey]
+  LegalDocs[Legal Documents]
+  Budget[Budgeting and Programs]
+  Payment[Payment Execution]
+  Dashboard[Dashboards]
+  Reporting[Reporting and Exports]
+  VendorReg[Vendor Registration and Docs]
+  Subs[Subsidiary Flows]
+  Tasklist[Tasklists and Approvals]
+
+  %% Details (kept simple to avoid Mermaid parsing issues on GitHub)
+  AuthDetail[LoginController]
+  MasterDetail[Role User Anggota Hirarki Sektor Kebijakan SDG Pilar Perusahaan Exception]
+  ProposalDetail[Kelayakan SubProposal Lembaga Lampiran]
+  BudgetDetail[Anggaran Proker Relokasi Alokasi]
+  PaymentDetail[PembayaranController Popay]
+  ReportingDetail[LaporanController ReportController APIController]
 
   %% Relationships (high-level)
   Admin --> Auth
@@ -52,12 +60,17 @@ flowchart TB
   Subsidiary --> Auth
 
   Admin --> Master
+  Master --> MasterDetail
   User --> Proposal
+  Proposal --> ProposalDetail
   User --> Evaluasi
   User --> Survei
   Report --> Reporting
+  Reporting --> ReportingDetail
   Finance --> Budget
+  Budget --> BudgetDetail
   Finance --> Payment
+  Payment --> PaymentDetail
   Legal --> LegalDocs
   Vendor --> VendorReg
   Subsidiary --> Subs
@@ -66,6 +79,15 @@ flowchart TB
   User --> Dashboard
   Finance --> Dashboard
   Subsidiary --> Dashboard
+
+  Admin --> Auth
+  User --> Auth
+  Finance --> Auth
+  Report --> Auth
+  Legal --> Auth
+  Vendor --> Auth
+  Subsidiary --> Auth
+  Auth --> AuthDetail
 ```
 
 ## Architecture Overview
@@ -74,25 +96,25 @@ This codebase follows a classic Laravel monolith pattern: Routes → Middleware 
 
 ```mermaid
 flowchart LR
-  Browser[Browser / User Agent]
+  Browser[Browser User Agent]
   VendorPortal[Vendor Portal]
   SubsPortal[Subsidiary Portal]
   Artisan[Artisan CLI]
 
   subgraph LaravelApp[Laravel Application]
-    Routes[routes/web.php + routes/api.php]
-    MW[Middleware (web, cred.login, timeOut, role guards)]
-    Controllers[Controllers (app/Http/Controllers)]
-    Views[Blade Views (resources/views)]
-    Models[Eloquent Models (app/Models + View* models)]
-    Exports[Excel Exports (app/Exports)]
-    Imports[Excel Imports (app/Imports)]
-    Helpers[Helpers (app/Helper/* via HelperServiceProvider)]
+    Routes[routes web and routes api]
+    MW[Middleware web cred login timeout role guards]
+    Controllers[Controllers app Http Controllers]
+    Views[Blade Views resources views]
+    Models[Eloquent Models app Models and View models]
+    Exports[Excel Exports app Exports]
+    Imports[Excel Imports app Imports]
+    Helpers[Helpers app Helper via HelperServiceProvider]
   end
 
-  DB[(Oracle Database)]
-  FileStore[(Storage/public uploads)]
-  External[External Services (reCAPTCHA, possible payment/Popay)]
+  DB[Oracle Database]
+  FileStore[Storage public uploads]
+  External[External Services recaptcha and possible payment]
 
   Browser --> Routes
   VendorPortal --> Routes
