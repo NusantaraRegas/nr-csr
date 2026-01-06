@@ -28,19 +28,19 @@ flowchart TB
   Subsidiary([Subsidiary User])
 
   %% Modules
-  Auth[Authentication & OTP\n(LoginController)]
-  Master[Master Data\n(Role/User/Anggota/Hirarki\nSektor/Kebijakan/SDG/Pilar/Perusahaan/Exception)]
-  Proposal[Proposal Intake\n(Kelayakan/SubProposal/Lembaga/Lampiran)]
-  Evaluasi[Evaluation\n(EvaluasiController)]
-  Survei[Survey\n(SurveiController)]
-  LegalDocs[Legal Documents\n(BAST/SPK)]
-  Budget[Budgeting & Programs\n(Anggaran/Proker/Relokasi/Alokasi)]
-  Payment[Payment Execution\n(PembayaranController + Popay integration endpoints)]
-  Dashboard[Dashboards\n(DashboardController + Proposal dashboard)]
-  Reporting[Reporting & Exports\n(Laporan/Report/APIController)]
-  VendorReg[Vendor Registration & Docs\n(VendorController)]
-  Subs[Subsidiary Flows\n(Dashboard/Anggaran/Relokasi/Realisasi/Report Subsidiary)]
-  Tasklist[Tasklists / Approvals\n(Tasklist*Controller)]
+  Auth[Authentication & OTP (LoginController)]
+  Master[Master Data (Role/User/Anggota/Hirarki/Sektor/Kebijakan/SDG/Pilar/Perusahaan/Exception)]
+  Proposal[Proposal Intake (Kelayakan/SubProposal/Lembaga/Lampiran)]
+  Evaluasi[Evaluation (EvaluasiController)]
+  Survei[Survey (SurveiController)]
+  LegalDocs[Legal Documents (BAST/SPK)]
+  Budget[Budgeting & Programs (Anggaran/Proker/Relokasi/Alokasi)]
+  Payment[Payment Execution (PembayaranController + Popay endpoints)]
+  Dashboard[Dashboards (DashboardController + Proposal dashboard)]
+  Reporting[Reporting & Exports (Laporan/Report/APIController)]
+  VendorReg[Vendor Registration & Docs (VendorController)]
+  Subs[Subsidiary Flows (Dashboard/Anggaran/Relokasi/Realisasi/Report Subsidiary)]
+  Tasklist[Tasklists / Approvals (Tasklist*Controller)]
 
   %% Relationships (high-level)
   Admin --> Auth
@@ -81,18 +81,18 @@ flowchart LR
 
   subgraph LaravelApp[Laravel Application]
     Routes[routes/web.php + routes/api.php]
-    MW[Middleware\n(web, cred.login, timeOut, role guards)]
-    Controllers[Controllers\n(app/Http/Controllers)]
-    Views[Blade Views\n(resources/views)]
-    Models[Eloquent Models\n(app/Models + View* models)]
-    Exports[Excel Exports\n(app/Exports)]
-    Imports[Excel Imports\n(app/Imports)]
-    Helpers[Helpers\n(app/Helper/* via HelperServiceProvider)]
+    MW[Middleware (web, cred.login, timeOut, role guards)]
+    Controllers[Controllers (app/Http/Controllers)]
+    Views[Blade Views (resources/views)]
+    Models[Eloquent Models (app/Models + View* models)]
+    Exports[Excel Exports (app/Exports)]
+    Imports[Excel Imports (app/Imports)]
+    Helpers[Helpers (app/Helper/* via HelperServiceProvider)]
   end
 
   DB[(Oracle Database)]
   FileStore[(Storage/public uploads)]
-  External[External Services\n(reCAPTCHA, possible payment/Popay)]
+  External[External Services (reCAPTCHA, possible payment/Popay)]
 
   Browser --> Routes
   VendorPortal --> Routes
@@ -124,8 +124,8 @@ sequenceDiagram
   participant Web as public/index.php
   participant Bootstrap as bootstrap/app.php
   participant Kernel as App\\Http\\Kernel
-  participant Providers as Service Providers\n(config/app.php)
-  participant Routes as RouteServiceProvider\n(routes/web.php)
+  participant Providers as Service Providers (config/app.php)
+  participant Routes as RouteServiceProvider (routes/web.php)
   participant MW as Middleware
   participant Ctrl as Controllers
   participant DB as Oracle (yajra/oci8)
@@ -134,7 +134,7 @@ sequenceDiagram
   Bootstrap-->>Web: returns Application container
   Web->>Kernel: resolve Http Kernel + handle(Request)
   Kernel->>Providers: bootstraps framework + loads providers
-  Providers->>Providers: HelperServiceProvider.register()\n(require app/Helper/*.php)
+  Providers->>Providers: HelperServiceProvider.register() (require app/Helper/*.php)
   Providers->>Routes: RouteServiceProvider.mapWebRoutes()
   Routes->>Routes: loads routes/web.php
   Web->>MW: run global + route middleware
