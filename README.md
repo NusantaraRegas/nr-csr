@@ -7,7 +7,7 @@ Laravel 6 (PHP ^7.2) monolith for CSR proposal intake, evaluation/survey workflo
 ## Tech Stack
 
 - **Backend**: Laravel Framework `^6.0`
-- **DB**: Oracle (via `yajra/laravel-oci8`)
+- **DB**: PostgreSQL (Docker local) / Oracle (legacy via `yajra/laravel-oci8`)
 - **UI**: Blade views + `webpack.mix.js` (Laravel Mix)
 - **Reporting / Export**: `maatwebsite/excel` + `yajra/laravel-datatables-oracle`
 - **Captcha**: `anhskohbo/no-captcha`
@@ -199,3 +199,71 @@ sequenceDiagram
 ## Notes
 
 - This README uses Mermaid diagrams. GitHub renders Mermaid automatically; for other renderers ensure Mermaid is enabled.
+
+## Docker (PostgreSQL) Local Setup
+
+This repo can be run fully via Docker using PostgreSQL.
+
+### Database schema source
+
+The repository includes an Oracle → PostgreSQL converted schema dump:
+
+- `NR_CSR.sql`
+
+From that dump we generate Laravel migrations (Postgres) under `database/migrations/2026_01_12_*`.
+
+> Note: Some views in the original Oracle schema reference objects under `NR_PAYMENT.*`. In this repo we keep those as **stubs/TODO** so migrations can run in a standalone `NR_CSR` database.
+
+### 1) Bring up containers
+
+```bash
+docker compose up -d --build
+```
+
+### 2) Create `.env`
+
+```bash
+copy .env.docker.example .env
+```
+
+Then generate app key:
+
+```bash
+docker compose exec -T app php artisan key:generate --force
+```
+
+### 3) Install PHP dependencies
+
+This project includes packages that require extensions used by Oracle (oci8) and Excel exports (gd). If you are running Postgres-only locally, you can install dependencies while ignoring those platform requirements:
+
+```bash
+docker compose exec -T app composer install --no-interaction --ignore-platform-req=ext-gd --ignore-platform-req=ext-oci8
+```
+
+### 4) Run migrations
+
+```bash
+docker compose exec -T app php artisan migrate --force
+```
+
+If you want to rebuild schema from scratch:
+
+```bash
+docker compose exec -T app php artisan migrate:fresh --force
+```
+
+### Schema verification (optional)
+
+List tables created in the NR_CSR schema:
+
+```bash
+docker compose exec -T db psql -U nr_csr -d nr_csr -c "SELECT schemaname, tablename FROM pg_tables WHERE schemaname IN ('NR_CSR') ORDER BY tablename;"
+```
+
+### 5) Open the app
+
+Nginx is exposed on:
+
+```
+http://localhost:8080
+```

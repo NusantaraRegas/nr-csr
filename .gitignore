@@ -1,15 +1,41 @@
-﻿/vendor/
-/node_modules/
+﻿############################
+# Laravel / PHP
+############################
+/vendor/
+/.phpunit.cache/
+.phpunit.result.cache
+
+# Environment (secrets)
 .env
 .env.*
+
+# Runtime storage (generated)
+/storage/*.key
 /storage/logs/
-/storage/framework/laravel-excel/
 /storage/framework/cache/
 /storage/framework/sessions/
 /storage/framework/views/
 /storage/framework/testing/
+/storage/framework/laravel-excel/
+
+# Compiled framework cache
 /bootstrap/cache/*.php
-.phpunit.result.cache
+
+############################
+# Node / Frontend
+############################
+/node_modules/
+
+# Laravel Mix / compiled assets (generated on build)
+/public/mix-manifest.json
+/public/hot
+/public/js/
+/public/css/
+/public/build/
+
+############################
+# User uploads (should not be committed)
+############################
 /public/file_upload/
 /public/avatar/
 /public/profile/
@@ -21,11 +47,26 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Misc build / cache logs
+*.log
+
 # IDEs
 .idea/
 .vscode/
+.vs/
+.history/
+*.swp
+*.swo
 
 # OS
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+############################
+# Docker (local-only)
+############################
+# If you later add bind-mounted DB volumes, keep them untracked
+/docker/pgdata/
+/docker/mysql/
+/docker/postgres/

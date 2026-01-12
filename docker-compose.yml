@@ -1,0 +1,73 @@
+services:
+  php74-pgsql:
+    build:
+      context: .
+      dockerfile: docker/php74-pgsql/Dockerfile
+    working_dir: /app
+    volumes:
+      - ./:/app
+    entrypoint: ["bash", "-lc"]
+
+  php74-cli:
+    image: php:7.4-cli
+    working_dir: /app
+    volumes:
+      - ./:/app
+    entrypoint: ["bash", "-lc"]
+    command: |
+      apt-get update \
+      && apt-get install -y --no-install-recommends libpq-dev \
+      && docker-php-ext-install pdo pdo_pgsql \
+      && php -v
+
+  composer74:
+    image: composer:2
+    working_dir: /app
+    volumes:
+      - ./:/app
+    entrypoint: ["bash", "-lc"]
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    container_name: nr_csr_app
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: nr_csr
+      DB_USERNAME: nr_csr
+      DB_PASSWORD: nr_csr
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: nr_csr_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+
+  db:
+    image: postgres:16-alpine
+    container_name: nr_csr_db
+    environment:
+      POSTGRES_DB: nr_csr
+      POSTGRES_USER: nr_csr
+      POSTGRES_PASSWORD: nr_csr
+    ports:
+      - "5432:5432"
+    volumes:
+      - nr_csr_pgdata:/var/lib/postgresql/data
+
+volumes:
+  nr_csr_pgdata:

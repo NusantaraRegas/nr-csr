@@ -1,0 +1,5493 @@
+{
+  "schemas": [
+    "NR_CSR",
+    "NR_PAYMENT"
+  ],
+  "tables": [
+    {
+      "schema": "NR_CSR",
+      "name": "NO_AGENDA",
+      "columns": [
+        {
+          "name": "TAHUN",
+          "type": "INTEGER",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "LAST_NO",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_ALOKASI",
+      "columns": [
+        {
+          "name": "ID_ALOKASI",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_RELOKASI",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PROKER",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PROVINSI",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TAHUN",
+          "type": "VARCHAR(4)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NOMINAL_ALOKASI",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SEKTOR_BANTUAN",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_ANGGARAN",
+      "columns": [
+        {
+          "name": "ID_ANGGARAN",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NOMINAL",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TAHUN",
+          "type": "VARCHAR(4)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERUSAHAAN_OLD",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_PERUSAHAAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERUSAHAAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_ANGGOTA",
+      "columns": [
+        {
+          "name": "ID_ANGGOTA",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NAMA_ANGGOTA",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FRAKSI",
+          "type": "VARCHAR(150)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KOMISI",
+          "type": "VARCHAR(10)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JABATAN",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STAF_AHLI",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_TELP",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FOTO_PROFILE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(10)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_AREA",
+      "columns": [
+        {
+          "name": "ID_AREA",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "AREA_KERJA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_AT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPDATED_AT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_ASSESSMENT_VENDOR",
+      "columns": [
+        {
+          "name": "ASSESSMENT_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "TANGGAL",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_VENDOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TAHUN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_BAKN",
+      "columns": [
+        {
+          "name": "BAKN_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NOMOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TANGGAL",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PEKERJAAN_ID",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CATATAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_VENDOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FILE_BAKN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI_KESEPAKATAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SPH_ID",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "RESPONSE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "RESPONSE_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_BANK",
+      "columns": [
+        {
+          "name": "BANK_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NAMA_BANK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_BAST_DANA",
+      "columns": [
+        {
+          "name": "ID_BAST_DANA",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NO_AGENDA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PILAR",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "BANTUAN_UNTUK",
+          "type": "VARCHAR(300)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PROPOSAL_DARI",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ALAMAT",
+          "type": "VARCHAR(500)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PROVINSI",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KABUPATEN",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PENANGGUNG_JAWAB",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "BERTINDAK_SEBAGAI",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_SURAT",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TGL_SURAT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERIHAL",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_BANK",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_REKENING",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ATAS_NAMA",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_BAST_DANA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_BAST_PIHAK_KEDUA",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TGL_BAST",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_PEJABAT",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JABATAN_PEJABAT",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_BARANG",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JUMLAH_BARANG",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SATUAN_BARANG",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_PELIMPAHAN",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TGL_PELIMPAHAN",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PIHAK_KEDUA",
+          "type": "VARCHAR(500)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVED_BY",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "DESKRIPSI",
+          "type": "VARCHAR(500)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_KELAYAKAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVER_ID",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_CITY",
+      "columns": [
+        {
+          "name": "ID_CITY",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "CITY_NAME",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_DETAIL_APPROVAL",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ID_KELAYAKAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_HIRARKI",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_USER",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CATATAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TASK_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ACTION_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PHASE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PESAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_DETAIL_KRITERIA",
+      "columns": [
+        {
+          "name": "ID_DETAIL_KRITERIA",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NO_AGENDA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KRITERIA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_AT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPDATED_AT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_KELAYAKAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_DETAIL_SPK",
+      "columns": [
+        {
+          "name": "ID_DETAIL_SPK",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NO_AGENDA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "COLUMN1",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "COLUMN2",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "COLUMN3",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_DOKUMEN",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NAMA_DOKUMEN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "MANDATORI",
+          "type": "VARCHAR(10)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_DOKUMEN_MANDATORI_PROYEK",
+      "columns": [
+        {
+          "name": "DOKUMEN_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NAMA_DOKUMEN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_DOKUMEN_MANDATORI_VENDOR",
+      "columns": [
+        {
+          "name": "DOKUMEN_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NAMA_DOKUMEN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_DOKUMEN_VENDOR",
+      "columns": [
+        {
+          "name": "DOKUMEN_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ID_VENDOR",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_DOKUMEN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NOMOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TANGGAL",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "MASA_BERLAKU",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KETERANGAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CATATAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FILE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PARAMETER1",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PARAMETER2",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PARAMETER3",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PARAMETER4",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PARAMETER5",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "VERIFIKASI_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "VERIFIKASI_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_EVALUASI",
+      "columns": [
+        {
+          "name": "ID_EVALUASI",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NO_AGENDA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "RENCANA_ANGGARAN",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "DOKUMEN",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "DENAH",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SYARAT",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "EVALUATOR1",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CATATAN1",
+          "type": "TEXT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "EVALUATOR2",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CATATAN2",
+          "type": "TEXT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KADEP",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KADIV",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KET_KADIV",
+          "type": "VARCHAR(150)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KET_KADIN1",
+          "type": "VARCHAR(150)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KET_KADIN2",
+          "type": "VARCHAR(150)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KETERANGAN",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVE_KADEP",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVE_KADIV",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "REVISI_BY",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "REVISI_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "REJECT_BY",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "REJECT_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATE_BY",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_AT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPDATED_AT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CATATAN1_NEW",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CATATAN2_NEW",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_KELAYAKAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SEKPER",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "DIRUT",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KET_SEKPER",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KET_DIRUT",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVE_SEKPER",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVE_DIRUT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_EXCEPTION",
+      "columns": [
+        {
+          "name": "ERROR_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "EXCEPTION",
+          "type": "LONG",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ERROR_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ERROR_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "REMARK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_HIRARKI",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ID_USER",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_LEVEL",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(10)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_IZIN_USAHA",
+      "columns": [
+        {
+          "name": "IZIN_USAHA_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ID_VENDOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NIB",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JENIS_KBLI",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KODE_KBLI",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ALAMAT",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FILE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_KEBIJAKAN",
+      "columns": [
+        {
+          "name": "ID_KEBIJAKAN",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "KEBIJAKAN",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_KELAYAKAN",
+      "columns": [
+        {
+          "name": "NO_AGENDA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TGL_TERIMA",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_SURAT",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TGL_SURAT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SEBAGAI",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": "''"
+        },
+        {
+          "name": "PROVINSI",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KABUPATEN",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KELURAHAN",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KODEPOS",
+          "type": "VARCHAR(10)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "BANTUAN_UNTUK",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CONTACT_PERSON",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI_PENGAJUAN",
+          "type": "NUMERIC(38,0)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SEKTOR_BANTUAN",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_BANK",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ATAS_NAMA",
+          "type": "VARCHAR(150)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_REKENING",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI_BANTUAN",
+          "type": "NUMERIC(38,0)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_ANGGOTA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FRAKSI",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JABATAN",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PIC",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ASAL_SURAT",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KOMISI",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SIFAT",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "EMAIL_PENGAJU",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_PERSON",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "MATA_UANG_PENGAJUAN",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "MATA_UANG_BANTUAN",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PROPOSAL",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATE_BY",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PENGIRIM",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERIHAL",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PENGAJU_PROPOSAL",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ALAMAT",
+          "type": "VARCHAR(400)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CABANG_BANK",
+          "type": "VARCHAR(150)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JENIS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "HEWAN_KURBAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JUMLAH_HEWAN",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KODE_BANK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KODE_KOTA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KOTA_BANK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CABANG",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "DESKRIPSI",
+          "type": "VARCHAR(500)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PILAR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TPB",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KODE_INDIKATOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KETERANGAN_INDIKATOR",
+          "type": "VARCHAR(1000)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PROKER",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "INDIKATOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SMAP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "YKPP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CHECKLIST_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CHECKLIST_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NOMINAL_APPROVED",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NOMINAL_FEE",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TOTAL_YKPP",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS_YKPP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVED_YKPP_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVED_YKPP_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SUBMITED_YKPP_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SUBMITED_YKPP_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_SURAT_YKPP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TGL_SURAT_YKPP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PENYALURAN_KE_OLD",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_KELAYAKAN",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "SURAT_YKPP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TAHUN_YKPP",
+          "type": "VARCHAR(4)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PENYALURAN_KE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_LEMBAGA",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_PENGIRIM",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_PROKER",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KECAMATAN",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": "''"
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_KODE",
+      "columns": [
+        {
+          "name": "KODE",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PROVINSI",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_KTP_PENGURUS",
+      "columns": [
+        {
+          "name": "KTP_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ID_VENDOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NOMOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JABATAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_TELP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "EMAIL",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FILE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_LAMPIRAN",
+      "columns": [
+        {
+          "name": "ID_LAMPIRAN",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NO_AGENDA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "LAMPIRAN",
+          "type": "VARCHAR(500)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPLOAD_BY",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPLOAD_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_AT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPDATED_AT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_KELAYAKAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_LAMPIRAN_AP",
+      "columns": [
+        {
+          "name": "ID_LAMPIRAN",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ID_REALISASI",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "LAMPIRAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPLOAD_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPLOAD_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_LAMPIRAN_PEKERJAAN",
+      "columns": [
+        {
+          "name": "LAMPIRAN_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ID_VENDOR",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NOMOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_FILE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FILE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TYPE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SIZE",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CATATAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPLOAD_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPLOAD_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_DOKUMEN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PEKERJAAN_ID",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_LAMPIRAN_VENDOR",
+      "columns": [
+        {
+          "name": "LAMPIRAN_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ID_VENDOR",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NOMOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_FILE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FILE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TYPE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SIZE",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CATATAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPLOAD_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPLOAD_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_DOKUMEN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_LEMBAGA",
+      "columns": [
+        {
+          "name": "ID_LEMBAGA",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NAMA_LEMBAGA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_PIC",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ALAMAT",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_TELP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JABATAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_REKENING",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ATAS_NAMA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_BANK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CABANG",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KOTA_BANK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KODE_BANK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KODE_KOTA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERUSAHAAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_PERUSAHAAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_LEVEL_HIRARKI",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "LEVEL",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_LEVEL",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_LOG",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ID_KELAYAKAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KETERANGAN",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_LOG_PEKERJAAN",
+      "columns": [
+        {
+          "name": "LOG_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "PEKERJAAN_ID",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPDATE_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPDATE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ACTION",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KETERANGAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_LOG_RELOKASI",
+      "columns": [
+        {
+          "name": "ID_LOG",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ID_PROKER",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KETERANGAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_LOG_VENDOR",
+      "columns": [
+        {
+          "name": "LOG_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ID_VENDOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPDATE_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPDATE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ACTION",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KETERANGAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_PEJABAT",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NAMA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JABATAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TANGGAL",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_PEKERJAAN",
+      "columns": [
+        {
+          "name": "PEKERJAAN_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NAMA_PEKERJAAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TAHUN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PROKER_ID",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI_PERKIRAAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "RINGKASAN",
+          "type": "LONG",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KAK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_VENDOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI_PENAWARAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI_KESEPAKATAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_PEMBAYARAN",
+      "columns": [
+        {
+          "name": "ID_PEMBAYARAN",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NO_AGENDA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_BAST",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_BA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TERMIN",
+          "type": "VARCHAR(2)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI_APPROVED",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERSEN",
+          "type": "VARCHAR(3)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PR_ID",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": "NULL"
+        },
+        {
+          "name": "CREATE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATE_BY",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "EXPORT_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "EXPORT_BY",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_KELAYAKAN",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "DESKRIPSI",
+          "type": "VARCHAR(500)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FEE",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JUMLAH_PEMBAYARAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SUBTOTAL",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FEE_PERSEN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS_YKPP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVED_YKPP_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVED_YKPP_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SUBMITED_YKPP_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SUBMITED_YKPP_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_SURAT_YKPP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TGL_SURAT_YKPP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SURAT_YKPP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TAHUN_YKPP",
+          "type": "VARCHAR(4)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PENYALURAN_KE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "METODE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_PEMBAYARAN_VENDOR",
+      "columns": [
+        {
+          "name": "ID_PEMBAYARAN",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "PEKERJAAN_ID",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_BAST",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_BA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TERMIN",
+          "type": "VARCHAR(2)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI_KESEPAKATAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERSEN",
+          "type": "VARCHAR(3)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JUMLAH_PEMBAYARAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PR_ID",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATE_BY",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "EXPORT_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "EXPORT_BY",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_VENDOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_PEMBAYARAN_copy1",
+      "columns": [
+        {
+          "name": "ID_PEMBAYARAN",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NO_AGENDA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_BAST",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_BA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TERMIN",
+          "type": "VARCHAR(2)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI_APPROVED",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERSEN",
+          "type": "VARCHAR(3)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PR_ID",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": "NULL"
+        },
+        {
+          "name": "CREATE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATE_BY",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "EXPORT_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "EXPORT_BY",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_KELAYAKAN",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "DESKRIPSI",
+          "type": "VARCHAR(500)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FEE",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JUMLAH_PEMBAYARAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SUBTOTAL",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FEE_PERSEN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS_YKPP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVED_YKPP_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVED_YKPP_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SUBMITED_YKPP_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SUBMITED_YKPP_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_SURAT_YKPP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TGL_SURAT_YKPP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SURAT_YKPP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TAHUN_YKPP",
+          "type": "VARCHAR(4)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PENYALURAN_KE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "METODE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_PENGALAMAN_KERJA",
+      "columns": [
+        {
+          "name": "PENGALAMAN_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ID_VENDOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_KONTRAK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TGL_KONTRAK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PEKERJAAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PEMBERI_KERJA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "LOKASI",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FILE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_PENGEMBALIAN_ANGGARAN",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ANGGARAN_ID",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PENGEMBALIAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_PENGIRIM",
+      "columns": [
+        {
+          "name": "ID_PENGIRIM",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "PENGIRIM",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_AT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPDATED_AT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERUSAHAAN",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_PERUSAHAAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(10)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_PERUSAHAAN",
+      "columns": [
+        {
+          "name": "ID_PERUSAHAAN",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NAMA_PERUSAHAAN",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KATEGORI",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KODE",
+          "type": "VARCHAR(10)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FOTO_PROFILE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ALAMAT",
+          "type": "VARCHAR(500)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_TELP",
+          "type": "VARCHAR(15)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PIC",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_PILAR",
+      "columns": [
+        {
+          "name": "ID_PILAR",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "KODE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_PROKER",
+      "columns": [
+        {
+          "name": "ID_PROKER",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "PROKER",
+          "type": "VARCHAR(1000)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_INDIKATOR",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TAHUN",
+          "type": "VARCHAR(4)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ANGGARAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PRIORITAS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "EB",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PILAR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "GOLS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERUSAHAAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_PERUSAHAAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KODE_TPB",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_PROVINSI",
+      "columns": [
+        {
+          "name": "ID_PROVINSI",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "KODE_PROVINSI",
+          "type": "VARCHAR(10)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PROVINSI",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_REALISASI_AP",
+      "columns": [
+        {
+          "name": "ID_REALISASI",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NO_PROPOSAL",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TGL_PROPOSAL",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PENGIRIM",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TGL_REALISASI",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SIFAT",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERIHAL",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "BESAR_PERMOHONAN",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KATEGORI",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI_BANTUAN",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PROVINSI",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KABUPATEN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "DESKRIPSI",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_PROKER",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PROKER",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PILAR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "GOLS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_YAYASAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ALAMAT",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PIC",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JABATAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_TELP",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_REKENING",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ATAS_NAMA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_BANK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KOTA_BANK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CABANG_BANK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JENIS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERUSAHAAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TAHUN",
+          "type": "VARCHAR(4)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PRIORITAS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_PERUSAHAAN",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KECAMATAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KELURAHAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_RELOKASI",
+      "columns": [
+        {
+          "name": "ID_RELOKASI",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "PROKER_ASAL",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NOMINAL_ASAL",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PROKER_TUJUAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NOMINAL_TUJUAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "REQUEST_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "REQUEST_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVER",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TAHUN",
+          "type": "VARCHAR(4)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERUSAHAAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NOMINAL_RELOKASI",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_PERUSAHAAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_ROLE",
+      "columns": [
+        {
+          "name": "ID_ROLE",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ROLE",
+          "type": "VARCHAR(2)",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ROLE_NAME",
+          "type": "VARCHAR(30)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_SDG",
+      "columns": [
+        {
+          "name": "ID_SDG",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NAMA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KODE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PILAR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_SEKTOR",
+      "columns": [
+        {
+          "name": "ID_SEKTOR",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "KODE_SEKTOR",
+          "type": "VARCHAR(10)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SEKTOR_BANTUAN",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_SPH",
+      "columns": [
+        {
+          "name": "SPH_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NOMOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TANGGAL",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PEKERJAAN_ID",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CATATAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_VENDOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FILE_SPH",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI_PENAWARAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SPPH_ID",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_SPK",
+      "columns": [
+        {
+          "name": "SPK_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NOMOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TANGGAL",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PEKERJAAN_ID",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CATATAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_VENDOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FILE_SPK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI_KESEPAKATAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SPH_ID",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "BAKN_ID",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "START_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "DUE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "DURASI",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "RESPONSE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "RESPONSE_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_SPPH",
+      "columns": [
+        {
+          "name": "SPPH_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NOMOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TANGGAL",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PEKERJAAN_ID",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CATATAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_VENDOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FILE_SPPH",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "RESPONSE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_SUB_PILAR",
+      "columns": [
+        {
+          "name": "ID_SUB_PILAR",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "TPB",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KODE_INDIKATOR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KETERANGAN",
+          "type": "VARCHAR(1000)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PILAR",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_SUB_PROPOSAL",
+      "columns": [
+        {
+          "name": "ID_SUB_PROPOSAL",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NO_AGENDA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_SUB_AGENDA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_KETUA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_LEMBAGA",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KAMBING",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SAPI",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TOTAL",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "HARGA_KAMBING",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "HARGA_SAPI",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PROVINSI",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KABUPATEN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ALAMAT",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FEE",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SUBTOTAL",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PPN",
+          "type": "BIGINT",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_SURVEI",
+      "columns": [
+        {
+          "name": "ID_SURVEI",
+          "type": "BIGINT",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NO_AGENDA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "HASIL_KONFIRMASI",
+          "type": "TEXT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "HASIL_SURVEI",
+          "type": "TEXT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "USULAN",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "BANTUAN_BERUPA",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI_BANTUAN",
+          "type": "NUMERIC(38,0)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NILAI_APPROVED",
+          "type": "NUMERIC(38,0)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TERMIN",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "RUPIAH1",
+          "type": "NUMERIC(38,0)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "RUPIAH2",
+          "type": "NUMERIC(38,0)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "RUPIAH3",
+          "type": "NUMERIC(38,0)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "RUPIAH4",
+          "type": "NUMERIC(38,0)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SURVEI1",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SURVEI2",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KADEP",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KADIV",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KET_KADIN1",
+          "type": "TEXT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KET_KADIN2",
+          "type": "TEXT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KET_KADIV",
+          "type": "TEXT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KETERANGAN",
+          "type": "TEXT",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVE_KADEP",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVE_KADIV",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATE_BY",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "REVISI_BY",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "REVISI_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_AT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPDATED_AT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "BAST",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SPK",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PKS",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "VENDOR_ID",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_KELAYAKAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_BY",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SEKPER",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "DIRUT",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KET_SEKPER",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "KET_DIRUT",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVE_SEKPER",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVE_DIRUT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERSEN1",
+          "type": "NUMERIC(10,2)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERSEN2",
+          "type": "NUMERIC(10,2)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERSEN3",
+          "type": "NUMERIC(10,2)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERSEN4",
+          "type": "NUMERIC(10,2)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_USER",
+      "columns": [
+        {
+          "name": "ID_USER",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "USERNAME",
+          "type": "VARCHAR(100)",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "EMAIL",
+          "type": "VARCHAR(100)",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NAMA",
+          "type": "VARCHAR(100)",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "JABATAN",
+          "type": "VARCHAR(100)",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "PASSWORD",
+          "type": "VARCHAR(200)",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "ROLE",
+          "type": "VARCHAR(100)",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "AREA_KERJA",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FOTO_PROFILE",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "REMEMBER_TOKEN",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JK",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "OLD_EMAIL",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "PERUSAHAAN",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "VENDOR_ID",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ID_PERUSAHAAN",
+          "type": "NUMERIC",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_SK",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "TGL_SK",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_VENDOR",
+      "columns": [
+        {
+          "name": "VENDOR_ID",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "NAMA_PERUSAHAAN",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "ALAMAT",
+          "type": "VARCHAR(500)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_TELP",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "EMAIL",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "WEBSITE",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_KTP",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NAMA_PIC",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "JABATAN",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "EMAIL_PIC",
+          "type": "VARCHAR(100)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "NO_HP",
+          "type": "VARCHAR(20)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "FILE_KTP",
+          "type": "VARCHAR(200)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CREATED_AT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "UPDATED_AT",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "STATUS",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVE_BY",
+          "type": "VARCHAR(255)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "APPROVE_DATE",
+          "type": "TIMESTAMP",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "TBL_WILAYAH",
+      "columns": [
+        {
+          "name": "ID_WILAYAH",
+          "type": "NUMERIC",
+          "not_null": true,
+          "default": null
+        },
+        {
+          "name": "PROVINCE",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CITY",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "CITY_NAME",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "SUB_DISTRICT",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "VILLAGE",
+          "type": "VARCHAR(50)",
+          "not_null": false,
+          "default": null
+        },
+        {
+          "name": "POSTAL_CODE",
+          "type": "VARCHAR(5)",
+          "not_null": false,
+          "default": null
+        }
+      ]
+    }
+  ],
+  "primary_keys": [
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_ANGGARAN",
+      "constraint": "TBL_ANGGARAN_PK",
+      "columns": [
+        "ID_ANGGARAN"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_ANGGOTA",
+      "constraint": "TBL_ANGGOTA_PK",
+      "columns": [
+        "ID_ANGGOTA"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_ASSESSMENT_VENDOR",
+      "constraint": "SYS_C002141356",
+      "columns": [
+        "ASSESSMENT_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_BAKN",
+      "constraint": "SYS_C002172927",
+      "columns": [
+        "BAKN_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_BANK",
+      "constraint": "SYS_C002165427",
+      "columns": [
+        "BANK_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_BAST_DANA",
+      "constraint": "TBL_BAST_DANA_PK",
+      "columns": [
+        "ID_BAST_DANA"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_DETAIL_APPROVAL",
+      "constraint": "SYS_C002597877",
+      "columns": [
+        "ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_DETAIL_KRITERIA",
+      "constraint": "SYS_C002597880",
+      "columns": [
+        "ID_DETAIL_KRITERIA"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_DETAIL_SPK",
+      "constraint": "TBL_DETAIL_SPK_PK",
+      "columns": [
+        "ID_DETAIL_SPK"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_DOKUMEN",
+      "constraint": "SYS_C002586878",
+      "columns": [
+        "ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_DOKUMEN_MANDATORI_PROYEK",
+      "constraint": "SYS_C002172827",
+      "columns": [
+        "DOKUMEN_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_DOKUMEN_MANDATORI_VENDOR",
+      "constraint": "SYS_C002165428",
+      "columns": [
+        "DOKUMEN_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_DOKUMEN_VENDOR",
+      "constraint": "SYS_C002141352",
+      "columns": [
+        "DOKUMEN_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_EXCEPTION",
+      "constraint": "SYS_C001319167",
+      "columns": [
+        "ERROR_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_HIRARKI",
+      "constraint": "SYS_C002581243",
+      "columns": [
+        "ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_IZIN_USAHA",
+      "constraint": "SYS_C002161794",
+      "columns": [
+        "IZIN_USAHA_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_KEBIJAKAN",
+      "constraint": "TBL_KEBIJAKAN_PK",
+      "columns": [
+        "ID_KEBIJAKAN"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_KELAYAKAN",
+      "constraint": "SYS_C002001360",
+      "columns": [
+        "ID_KELAYAKAN"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_KTP_PENGURUS",
+      "constraint": "SYS_C002141437",
+      "columns": [
+        "KTP_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_LAMPIRAN_AP",
+      "constraint": "SYS_C001388084",
+      "columns": [
+        "ID_LAMPIRAN"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_LAMPIRAN_PEKERJAAN",
+      "constraint": "SYS_C002171003",
+      "columns": [
+        "LAMPIRAN_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_LAMPIRAN_VENDOR",
+      "constraint": "SYS_C002141351",
+      "columns": [
+        "LAMPIRAN_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_LEMBAGA",
+      "constraint": "SYS_C001237315",
+      "columns": [
+        "ID_LEMBAGA"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_LEVEL_HIRARKI",
+      "constraint": "SYS_C002581245",
+      "columns": [
+        "ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_LOG",
+      "constraint": "TBL_LOG_PK",
+      "columns": [
+        "ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_LOG_PEKERJAAN",
+      "constraint": "SYS_C002171005",
+      "columns": [
+        "LOG_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_LOG_RELOKASI",
+      "constraint": "SYS_C001356432",
+      "columns": [
+        "ID_LOG"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_LOG_VENDOR",
+      "constraint": "SYS_C002141355",
+      "columns": [
+        "LOG_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_PEJABAT",
+      "constraint": "SYS_C002616462",
+      "columns": [
+        "ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_PEKERJAAN",
+      "constraint": "SYS_C002167335",
+      "columns": [
+        "PEKERJAAN_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_PENGALAMAN_KERJA",
+      "constraint": "SYS_C002163610",
+      "columns": [
+        "PENGALAMAN_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_PENGEMBALIAN_ANGGARAN",
+      "constraint": "SYS_C002465143",
+      "columns": [
+        "ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_PENGIRIM",
+      "constraint": "SYS_C002579424",
+      "columns": [
+        "ID_PENGIRIM"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_PERUSAHAAN",
+      "constraint": "SYS_C001352957",
+      "columns": [
+        "ID_PERUSAHAAN"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_PILAR",
+      "constraint": "SYS_C0015585991",
+      "columns": [
+        "ID_PILAR"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_PROKER",
+      "constraint": "TBL_PROKER_PK",
+      "columns": [
+        "ID_PROKER"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_REALISASI_AP",
+      "constraint": "SYS_C001386382",
+      "columns": [
+        "ID_REALISASI"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_RELOKASI",
+      "constraint": "SYS_C001356429",
+      "columns": [
+        "ID_RELOKASI"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_SDG",
+      "constraint": "SYS_C0015585989",
+      "columns": [
+        "ID_SDG"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_SEKTOR",
+      "constraint": "TBL_SEKTOR_PK",
+      "columns": [
+        "ID_SEKTOR"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_SPH",
+      "constraint": "SYS_C002172825",
+      "columns": [
+        "SPH_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_SPK",
+      "constraint": "SYS_C002172822",
+      "columns": [
+        "SPK_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_SPPH",
+      "constraint": "SYS_C002139512",
+      "columns": [
+        "SPPH_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_SUB_PILAR",
+      "constraint": "SYS_C0015585993",
+      "columns": [
+        "ID_SUB_PILAR"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_SUB_PROPOSAL",
+      "constraint": "SYS_C0015579351",
+      "columns": [
+        "ID_SUB_PROPOSAL"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_USER",
+      "constraint": "TBL_USER_PK",
+      "columns": [
+        "ID_USER"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_VENDOR",
+      "constraint": "TBL_VENDOR_PK",
+      "columns": [
+        "VENDOR_ID"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_WILAYAH",
+      "constraint": "SYS_C002583062",
+      "columns": [
+        "ID_WILAYAH"
+      ]
+    }
+  ],
+  "unique_constraints": [
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_ANGGARAN",
+      "constraint": "TAHUN",
+      "columns": [
+        "TAHUN",
+        "ID_PERUSAHAAN"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_BAST_DANA",
+      "constraint": "TBL_BAST_DANA_UK1",
+      "columns": [
+        "NO_AGENDA"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_KELAYAKAN",
+      "constraint": "TBL_KELAYAKAN_UK1",
+      "columns": [
+        "NO_AGENDA"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_SEKTOR",
+      "constraint": "TBL_SEKTOR_UK1",
+      "columns": [
+        "KODE_SEKTOR"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_USER",
+      "constraint": "TBL_USER_UK1",
+      "columns": [
+        "USERNAME"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_USER",
+      "constraint": "TBL_USER_UK2",
+      "columns": [
+        "EMAIL"
+      ]
+    }
+  ],
+  "indexes": [
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_BAKN",
+      "index_schema": "NR_CSR",
+      "name": "NO_BAKN",
+      "unique": true,
+      "columns": [
+        "NOMOR"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_SPH",
+      "index_schema": "NR_CSR",
+      "name": "NO_SPH",
+      "unique": true,
+      "columns": [
+        "NOMOR"
+      ]
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_SPPH",
+      "index_schema": "NR_CSR",
+      "name": "NO_SPPH",
+      "unique": true,
+      "columns": [
+        "NOMOR"
+      ]
+    }
+  ],
+  "foreign_keys": [
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_ANGGARAN",
+      "constraint": "FK_ID_PERUSAHAAN_ANGGARAN",
+      "column": "ID_PERUSAHAAN"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_BAST_DANA",
+      "constraint": "FK_ID_APPROVER",
+      "column": "APPROVER_ID"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_BAST_DANA",
+      "constraint": "FK_ID_KELAYAKAN_BAST",
+      "column": "ID_KELAYAKAN"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_DETAIL_APPROVAL",
+      "constraint": "FK_ID_HIRARKI",
+      "column": "ID_HIRARKI"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_DETAIL_APPROVAL",
+      "constraint": "FK_ID_MAKER_LOG",
+      "column": "CREATED_BY"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_DETAIL_APPROVAL",
+      "constraint": "FK_ID_USER_APPROVAL",
+      "column": "ID_USER"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_EVALUASI",
+      "constraint": "FK_ID_KELAYAKAN_EVALUASI",
+      "column": "ID_KELAYAKAN"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_EVALUASI",
+      "constraint": "FK_ID_USER_EVALUASI",
+      "column": "CREATED_BY"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_HIRARKI",
+      "constraint": "FK_HIRARKI_LEVEL",
+      "column": "ID_LEVEL"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_HIRARKI",
+      "constraint": "FK_HIRARKI_USER",
+      "column": "ID_USER"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_KELAYAKAN",
+      "constraint": "FK_ID_LEMBAGA",
+      "column": "ID_LEMBAGA"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_KELAYAKAN",
+      "constraint": "FK_ID_PENGIRIM",
+      "column": "ID_PENGIRIM"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_KELAYAKAN",
+      "constraint": "FK_ID_PROKER",
+      "column": "ID_PROKER"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_KELAYAKAN",
+      "constraint": "FK_ID_USER",
+      "column": "CREATED_BY"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_LAMPIRAN",
+      "constraint": "FK_LAMPIRAN_KELAYAKAN",
+      "column": "ID_KELAYAKAN"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_LAMPIRAN",
+      "constraint": "FK_MAKER_ID",
+      "column": "CREATED_BY"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_LOG",
+      "constraint": "FK_CREATED_BY",
+      "column": "CREATED_BY"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_LOG",
+      "constraint": "FK_ID_KELAYAKAN",
+      "column": "ID_KELAYAKAN"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_PEMBAYARAN",
+      "constraint": "FK_ID_KELAYAKAN_PEMBAYARAN",
+      "column": "ID_KELAYAKAN"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_PEMBAYARAN_copy1",
+      "constraint": "SYS_C002684983",
+      "column": "ID_KELAYAKAN"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_PENGIRIM",
+      "constraint": "FK_PENGIRIM_PERUSAHAAN",
+      "column": "ID_PERUSAHAAN"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_PERUSAHAAN",
+      "constraint": "FK_PIC_USER",
+      "column": "PIC"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_SURVEI",
+      "constraint": "FK_ID_KELAYAKAN_SURVEI",
+      "column": "ID_KELAYAKAN"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_SURVEI",
+      "constraint": "FK_ID_USER_SURVEI",
+      "column": "CREATED_BY"
+    },
+    {
+      "schema": "NR_CSR",
+      "table": "TBL_USER",
+      "constraint": "FK_ID_PERUSAHAAN",
+      "column": "ID_PERUSAHAAN"
+    }
+  ],
+  "views": [
+    {
+      "schema": "NR_CSR",
+      "name": "V_ANGGARAN",
+      "sql": "SELECT TBL_ANGGARAN.ID_ANGGARAN, TBL_ANGGARAN.NOMINAL, TBL_ANGGARAN.TAHUN, TBL_ANGGARAN.ID_PERUSAHAAN, TBL_PERUSAHAAN.NAMA_PERUSAHAAN, TBL_PERUSAHAAN.KODE FROM TBL_ANGGARAN INNER JOIN TBL_PERUSAHAAN ON TBL_ANGGARAN.ID_PERUSAHAAN = TBL_PERUSAHAAN.ID_PERUSAHAAN"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_BAST",
+      "sql": "SELECT bast.ID_BAST_DANA, sur.BANTUAN_BERUPA, kel.ID_KELAYAKAN, kel.PILAR, kel.DESKRIPSI, kel.PROVINSI, kel.KABUPATEN, lem.NAMA_LEMBAGA, bast.NO_BAST_DANA, bast.NO_BAST_PIHAK_KEDUA, bast.TGL_BAST, sur.NILAI_APPROVED, lem.NAMA_PIC, lem.JABATAN, kel.NO_SURAT, kel.BANTUAN_UNTUK, kel.TGL_SURAT, sur.TERMIN, sur.PERSEN1, sur.PERSEN2, sur.PERSEN3, sur.PERSEN4, sur.RUPIAH1, sur.RUPIAH2, sur.RUPIAH3, sur.RUPIAH4, sur.SURVEI1, kel.NAMA_BANK, kel.ATAS_NAMA, kel.NO_REKENING, bast.JUMLAH_BARANG, bast.NO_PELIMPAHAN, bast.APPROVER_ID, lem.ALAMAT FROM TBL_BAST_DANA bast INNER JOIN TBL_KELAYAKAN kel ON bast.ID_KELAYAKAN = kel.ID_KELAYAKAN INNER JOIN TBL_SURVEI sur ON kel.ID_KELAYAKAN = sur.ID_KELAYAKAN INNER JOIN TBL_LEMBAGA lem ON kel.ID_LEMBAGA = lem.ID_LEMBAGA"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_BAST_DANA",
+      "sql": "SELECT \"TBL_BAST_DANA\".\"NO_AGENDA\", \"TBL_BAST_DANA\".\"ID_BAST_DANA\", \"TBL_KELAYAKAN\".\"ID_KELAYAKAN\", \"TBL_KELAYAKAN\".\"SEKTOR_BANTUAN\", \"TBL_KELAYAKAN\".\"PILAR\", \"TBL_KELAYAKAN\".\"TPB\", \"TBL_BAST_DANA\".\"BANTUAN_UNTUK\", \"TBL_KELAYAKAN\".\"DESKRIPSI\", \"TBL_BAST_DANA\".\"PROPOSAL_DARI\", \"TBL_BAST_DANA\".ALAMAT, \"TBL_BAST_DANA\".PROVINSI, \"TBL_BAST_DANA\".KABUPATEN, \"TBL_BAST_DANA\".\"PENANGGUNG_JAWAB\", \"TBL_BAST_DANA\".\"BERTINDAK_SEBAGAI\", \"TBL_BAST_DANA\".\"NO_SURAT\", \"TBL_BAST_DANA\".\"TGL_SURAT\", \"TBL_BAST_DANA\".PERIHAL, \"TBL_BAST_DANA\".PIHAK_KEDUA, \"TBL_BAST_DANA\".\"NAMA_BANK\", \"TBL_BAST_DANA\".\"NO_REKENING\", \"TBL_BAST_DANA\".\"ATAS_NAMA\", \"TBL_BAST_DANA\".\"NO_BAST_DANA\", \"TBL_BAST_DANA\".\"NO_BAST_PIHAK_KEDUA\", \"TBL_BAST_DANA\".\"TGL_BAST\", \"TBL_BAST_DANA\".\"NAMA_BARANG\", \"TBL_BAST_DANA\".\"JUMLAH_BARANG\", \"TBL_BAST_DANA\".\"SATUAN_BARANG\", \"TBL_BAST_DANA\".\"NAMA_PEJABAT\", \"TBL_BAST_DANA\".\"JABATAN_PEJABAT\", \"TBL_BAST_DANA\".\"CREATED_BY\", \"TBL_BAST_DANA\".\"CREATED_DATE\", \"TBL_BAST_DANA\".\"NO_PELIMPAHAN\", \"TBL_BAST_DANA\".\"TGL_PELIMPAHAN\", \"TBL_BAST_DANA\".\"STATUS\", \"TBL_BAST_DANA\".\"APPROVED_BY\", \"TBL_BAST_DANA\".\"APPROVED_DATE\", \"TBL_SURVEI\".\"NILAI_APPROVED\", \"TBL_SURVEI\".TERMIN, \"TBL_SURVEI\".PERSEN1, \"TBL_SURVEI\".PERSEN2, \"TBL_SURVEI\".PERSEN3, \"TBL_SURVEI\".PERSEN4, \"TBL_SURVEI\".RUPIAH1, \"TBL_SURVEI\".RUPIAH2, \"TBL_SURVEI\".RUPIAH3, \"TBL_SURVEI\".RUPIAH4, \"TBL_SURVEI\".SURVEI1, \"TBL_SURVEI\".BANTUAN_BERUPA FROM \"TBL_BAST_DANA\" JOIN \"TBL_KELAYAKAN\" ON \"TBL_BAST_DANA\".\"NO_AGENDA\" = \"TBL_KELAYAKAN\".\"NO_AGENDA\" JOIN \"TBL_SURVEI\" ON \"TBL_BAST_DANA\".\"NO_AGENDA\" = \"TBL_SURVEI\".\"NO_AGENDA\""
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_BULAN",
+      "sql": "SELECT sum(pr.invoice_amount) jumlah, TO_CHAR(pr.invoice_date, 'MM') as BULAN, TO_CHAR(pr.invoice_date, 'YYYY') as TAHUN FROM NR_PAYMENT.T_INVOICE_LINE INV, NR_PAYMENT.T_PAYMENT_REQUEST PR WHERE INV.ID_PAYMENT_REQUEST = PR.ID AND PR.TYPE = 'CSR 517/518' AND pr.receiver_type = 'EXTERNAL' AND inv.account_eb in ('517','518') group by pr.id, pr.invoice_date"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_DETAIL_APPROVAL",
+      "sql": "SELECT NR_CSR.TBL_DETAIL_APPROVAL.ID, NR_CSR.TBL_DETAIL_APPROVAL.ID_KELAYAKAN, NR_CSR.TBL_DETAIL_APPROVAL.ID_HIRARKI, NR_CSR.TBL_DETAIL_APPROVAL.PHASE, NR_CSR.TBL_HIRARKI.ID_LEVEL, NR_CSR.TBL_LEVEL_HIRARKI.\"LEVEL\", NR_CSR.TBL_LEVEL_HIRARKI.NAMA_LEVEL, NR_CSR.TBL_DETAIL_APPROVAL.ID_USER, NR_CSR.TBL_DETAIL_APPROVAL.CATATAN, NR_CSR.TBL_DETAIL_APPROVAL.STATUS, NR_CSR.TBL_DETAIL_APPROVAL.STATUS_DATE, NR_CSR.TBL_DETAIL_APPROVAL.TASK_DATE, NR_CSR.TBL_DETAIL_APPROVAL.ACTION_DATE FROM NR_CSR.TBL_DETAIL_APPROVAL INNER JOIN NR_CSR.TBL_HIRARKI ON NR_CSR.TBL_DETAIL_APPROVAL.ID_HIRARKI = NR_CSR.TBL_HIRARKI.ID INNER JOIN NR_CSR.TBL_LEVEL_HIRARKI ON NR_CSR.TBL_HIRARKI.ID_LEVEL = NR_CSR.TBL_LEVEL_HIRARKI.ID"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_EVALUASI",
+      "sql": "SELECT e.ID_EVALUASI AS ID_EVALUASI, k.NO_AGENDA AS NO_AGENDA, k.PENGIRIM AS PENGIRIM, k.TGL_TERIMA AS TGL_TERIMA, k.NO_SURAT AS NO_SURAT, k.TGL_SURAT AS TGL_SURAT, k.PERIHAL AS PERIHAL, k.PENGAJU_PROPOSAL AS PENGAJU_PROPOSAL, k.SEBAGAI AS SEBAGAI, k.ALAMAT AS ALAMAT, k.PROVINSI AS PROVINSI, k.KABUPATEN AS KABUPATEN, k.BANTUAN_UNTUK AS BANTUAN_UNTUK, k.DESKRIPSI AS DESKRIPSI, k.JENIS AS JENIS, k.ATAS_NAMA AS ATAS_NAMA, k.NAMA_PERSON AS NAMA_PERSON, k.CONTACT_PERSON AS CONTACT_PERSON, k.NILAI_PENGAJUAN AS NILAI_PENGAJUAN, k.SEKTOR_BANTUAN AS SEKTOR_BANTUAN, k.NILAI_BANTUAN AS NILAI_BANTUAN, k.NAMA_ANGGOTA AS NAMA_ANGGOTA, k.FRAKSI AS FRAKSI, k.JABATAN AS JABATAN, k.PIC AS PIC, k.ASAL_SURAT AS ASAL_SURAT, k.KOMISI AS KOMISI, k.SIFAT AS SIFAT, k.EMAIL_PENGAJU AS EMAIL_PENGAJU, k.MATA_UANG_PENGAJUAN AS MATA_UANG_PENGAJUAN, k.MATA_UANG_BANTUAN AS MATA_UANG_BANTUAN, e.RENCANA_ANGGARAN AS RENCANA_ANGGARAN, k.PROPOSAL AS PROPOSAL, e.DOKUMEN AS DOKUMEN, e.DENAH AS DENAH, e.SYARAT AS SYARAT, e.EVALUATOR1 AS EVALUATOR1, e.CATATAN1 AS CATATAN1, e.EVALUATOR2 AS EVALUATOR2, e.CATATAN2 AS CATATAN2, e.KADEP AS KADEP, e.KADIV AS KADIV, e.STATUS AS STATUS, e.APPROVE_DATE AS APPROVE_DATE, e.APPROVE_KADEP AS APPROVE_KADEP, e.APPROVE_KADIV AS APPROVE_KADIV, e.KET_KADIN1 AS KET_KADIN1, e.KET_KADIV AS KET_KADIV, e.REVISI_BY AS REVISI_BY, e.REVISI_DATE AS REVISI_DATE, e.REJECT_BY AS REJECT_BY, e.REJECT_DATE AS REJECT_DATE, e.CREATE_BY AS CREATE_BY, e.CREATE_DATE AS CREATE_DATE, k.ID_KELAYAKAN AS ID_KELAYAKAN, e.SEKPER, e.DIRUT, e.KET_SEKPER, e.KET_DIRUT, e.APPROVE_SEKPER, e.APPROVE_DIRUT FROM TBL_KELAYAKAN k JOIN TBL_EVALUASI e ON e.ID_KELAYAKAN = k.ID_KELAYAKAN"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_HIRARKI",
+      "sql": "SELECT NR_CSR.TBL_HIRARKI.ID, NR_CSR.TBL_HIRARKI.ID_USER, NR_CSR.TBL_USER.NAMA, NR_CSR.TBL_USER.USERNAME, NR_CSR.TBL_USER.EMAIL, NR_CSR.TBL_USER.JABATAN, NR_CSR.TBL_USER.FOTO_PROFILE, NR_CSR.TBL_HIRARKI.ID_LEVEL, NR_CSR.TBL_LEVEL_HIRARKI.\"LEVEL\", NR_CSR.TBL_LEVEL_HIRARKI.NAMA_LEVEL, NR_CSR.TBL_HIRARKI.STATUS FROM NR_CSR.TBL_HIRARKI INNER JOIN NR_CSR.TBL_USER ON NR_CSR.TBL_HIRARKI.ID_USER = NR_CSR.TBL_USER.ID_USER INNER JOIN NR_CSR.TBL_LEVEL_HIRARKI ON NR_CSR.TBL_HIRARKI.ID_LEVEL = NR_CSR.TBL_LEVEL_HIRARKI.ID"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_INFO_BANK",
+      "sql": "SELECT NO_AGENDA, ATAS_NAMA, NAMA_BANK, KODE_BANK, KOTA_BANK, KODE_KOTA, CABANG_BANK FROM \"TBL_KELAYAKAN\""
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_INV_PAYREQUEST",
+      "sql": "SELECT pr.invoice_number, pr.invoice_date, pr.description, pr.long_description, pr.invoice_amount, pr.payment_termin, pr.budget_year, pr.status, pr.id, inv.account_eb, inv.account_cad1, inv.account_cad2 FROM NR_PAYMENT.T_INVOICE_LINE INV, NR_PAYMENT.T_PAYMENT_REQUEST PR WHERE INV.ID_PAYMENT_REQUEST = PR.ID AND PR.TYPE = 'CSR 517/518' AND PR.STATUS = 'PAID' AND pr.receiver_type = 'EXTERNAL' AND inv.account_eb in ('517','518')"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_JENIS",
+      "sql": "SELECT JENIS, COUNT(JENIS) AS JUMLAH, TO_CHAR(TGL_TERIMA, 'YYYY') as TAHUN FROM TBL_KELAYAKAN GROUP BY TGL_TERIMA, JENIS"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_KABUPATEN_KAMBING",
+      "sql": "SELECT KABUPATEN FROM TBL_SUB_PROPOSAL WHERE KAMBING > 0 GROUP BY KABUPATEN"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_KABUPATEN_SAPI",
+      "sql": "SELECT KABUPATEN FROM TBL_SUB_PROPOSAL WHERE SAPI > 0 GROUP BY KABUPATEN"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_KELAYAKAN",
+      "sql": "SELECT NR_CSR.TBL_KELAYAKAN.TGL_TERIMA, NR_CSR.TBL_KELAYAKAN.DESKRIPSI, NR_CSR.TBL_KELAYAKAN.PENGAJU_PROPOSAL, NR_CSR.TBL_SURVEI.NILAI_BANTUAN, NR_CSR.TBL_KELAYAKAN.PILAR FROM NR_CSR.TBL_KELAYAKAN INNER JOIN NR_CSR.TBL_SURVEI ON NR_CSR.TBL_KELAYAKAN.NO_AGENDA = NR_CSR.TBL_SURVEI.NO_AGENDA WHERE TO_CHAR(TBL_KELAYAKAN.TGL_TERIMA, 'YYYY') = '2022' AND TBL_KELAYAKAN.STATUS = 'Approved'"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_NILAI_REALISASI_PROVINSI",
+      "sql": "select account_eb, account_cad1, account_cad2, invoice_amount, TO_CHAR(invoice_date, 'YYYY') as TAHUN from v_inv_payrequest"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_PEKERJAAN",
+      "sql": "SELECT NR_CSR.TBL_PEKERJAAN.PEKERJAAN_ID, NR_CSR.TBL_PEKERJAAN.NAMA_PEKERJAAN, NR_CSR.TBL_PEKERJAAN.RINGKASAN, NR_CSR.TBL_PEKERJAAN.NILAI_PERKIRAAN, NR_CSR.TBL_PEKERJAAN.NILAI_PENAWARAN, NR_CSR.TBL_PEKERJAAN.NILAI_KESEPAKATAN, NR_CSR.TBL_PEKERJAAN.TAHUN, NR_CSR.TBL_PEKERJAAN.PROKER_ID, NR_CSR.TBL_PEKERJAAN.KAK, NR_CSR.TBL_PEKERJAAN.ID_VENDOR, NR_CSR.TBL_PROKER.PROKER, NR_CSR.TBL_PROKER.PRIORITAS, NR_CSR.TBL_PROKER.PILAR, NR_CSR.TBL_PROKER.GOLS, NR_CSR.TBL_PEKERJAAN.STATUS, NR_CSR.TBL_PEKERJAAN.CREATED_BY, NR_CSR.TBL_PEKERJAAN.CREATED_DATE FROM NR_CSR.TBL_PEKERJAAN INNER JOIN NR_CSR.TBL_PROKER ON NR_CSR.TBL_PEKERJAAN.PROKER_ID = NR_CSR.TBL_PROKER.ID_PROKER"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_PEMBAYARAN",
+      "sql": "SELECT P.ID_PEMBAYARAN, P.TERMIN, P.NILAI_APPROVED, P.STATUS, P.PR_ID, P.CREATE_DATE, P.CREATE_BY, P.EXPORT_DATE, P.EXPORT_BY, P.ID_KELAYAKAN, P.DESKRIPSI DESKRIPSI_PEMBAYARAN, P.FEE, P.JUMLAH_PEMBAYARAN, P.SUBTOTAL, K.NO_AGENDA, K.TGL_TERIMA, K.PROVINSI, K.KABUPATEN, K.KECAMATAN, K.KELURAHAN, K.BANTUAN_UNTUK, K.NAMA_BANK, K.ATAS_NAMA, K.NO_REKENING, K.PERIHAL, K.JENIS, K.DESKRIPSI, K.ID_LEMBAGA, L.NAMA_LEMBAGA, K.ID_PROKER, PR.PROKER, PR.TAHUN, PR.PILAR, PR.KODE_TPB, PR.GOLS, PR.PRIORITAS, S.APPROVE_KADIV APPROVE_DATE, P.METODE FROM TBL_PEMBAYARAN P LEFT JOIN TBL_KELAYAKAN K ON P.ID_KELAYAKAN = K.ID_KELAYAKAN LEFT JOIN TBL_LEMBAGA L ON K.ID_LEMBAGA = L.ID_LEMBAGA LEFT JOIN TBL_PROKER PR ON K.ID_PROKER = PR.ID_PROKER LEFT JOIN TBL_SURVEI S ON S.ID_KELAYAKAN = K.ID_KELAYAKAN"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_PRIORITAS",
+      "sql": "SELECT NR_CSR.TBL_KELAYAKAN.NO_AGENDA, NR_CSR.TBL_KELAYAKAN.ID_PROKER, NR_CSR.TBL_PROKER.PRIORITAS, NR_CSR.TBL_PROKER.TAHUN, NR_CSR.TBL_SURVEI.NILAI_APPROVED FROM NR_CSR.TBL_KELAYAKAN INNER JOIN NR_CSR.TBL_PROKER ON NR_CSR.TBL_KELAYAKAN.ID_PROKER = NR_CSR.TBL_PROKER.ID_PROKER INNER JOIN NR_CSR.TBL_SURVEI ON NR_CSR.TBL_KELAYAKAN.NO_AGENDA = NR_CSR.TBL_SURVEI.NO_AGENDA WHERE NR_CSR.TBL_KELAYAKAN.ID_PROKER IS NOT NULL AND NR_CSR.TBL_PROKER.PRIORITAS IS NOT NULL AND NR_CSR.TBL_KELAYAKAN.STATUS = 'Approved'"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_PROKER",
+      "sql": "SELECT NR_CSR.TBL_PROKER.ID_PROKER, NR_CSR.TBL_PROKER.PROKER, NR_CSR.TBL_SUB_PILAR.PILAR, NR_CSR.TBL_SUB_PILAR.TPB, NR_CSR.TBL_PROKER.ID_INDIKATOR, NR_CSR.TBL_SUB_PILAR.KODE_INDIKATOR, NR_CSR.TBL_SUB_PILAR.KETERANGAN, NR_CSR.TBL_PROKER.TAHUN, NR_CSR.TBL_PROKER.ANGGARAN, NR_CSR.TBL_PROKER.PRIORITAS, NR_CSR.TBL_PROKER.EB FROM NR_CSR.TBL_PROKER INNER JOIN NR_CSR.TBL_SUB_PILAR ON NR_CSR.TBL_PROKER.ID_INDIKATOR = NR_CSR.TBL_SUB_PILAR.ID_SUB_PILAR"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_PROPOSAL",
+      "sql": "SELECT K.ID_KELAYAKAN, K.NO_AGENDA, K.TGL_TERIMA, K.NO_SURAT, K.TGL_SURAT, K.ID_PENGIRIM, P.PENGIRIM, K.SIFAT, K.JENIS, K.ID_PROKER, PR.PROKER, PR.PILAR, PR.KODE_TPB, PR.GOLS, PR.PRIORITAS, K.PERIHAL, K.BANTUAN_UNTUK, K.ID_LEMBAGA, L.NAMA_LEMBAGA, L.NAMA_PIC, L.ALAMAT, L.NO_TELP, L.JABATAN, K.NO_REKENING, K.ATAS_NAMA, K.NAMA_BANK, K.NILAI_PENGAJUAN, K.NILAI_BANTUAN, K.PROVINSI, K.KABUPATEN, K.KECAMATAN, K.KELURAHAN, K.DESKRIPSI, K.YKPP, K.STATUS_YKPP, K.SMAP, K.STATUS, K.EMAIL_PENGAJU, K.CREATED_DATE, K.CREATED_BY, U.NAMA AS NAMA_MAKER, U.EMAIL AS EMAIL_MAKER, U.JABATAN AS JABATAN_MAKER, U.FOTO_PROFILE, K.CHECKLIST_BY, K.CHECKLIST_DATE, K.NOMINAL_APPROVED, K.NOMINAL_FEE, K.TOTAL_YKPP, K.APPROVED_YKPP_BY, K.APPROVED_YKPP_DATE, K.SUBMITED_YKPP_BY, K.SUBMITED_YKPP_DATE, K.NO_SURAT_YKPP, K.TGL_SURAT_YKPP, K.SURAT_YKPP, K.TAHUN_YKPP, K.PENYALURAN_KE FROM NR_CSR.TBL_KELAYAKAN K LEFT JOIN NR_CSR.TBL_PENGIRIM P ON K.ID_PENGIRIM = P.ID_PENGIRIM LEFT JOIN NR_CSR.TBL_LEMBAGA L ON K.ID_LEMBAGA = L.ID_LEMBAGA LEFT JOIN NR_CSR.TBL_USER U ON K.CREATED_BY = U.ID_USER LEFT JOIN NR_CSR.TBL_PROKER PR ON K.ID_PROKER = PR.ID_PROKER"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_PROVINSI_KAMBING",
+      "sql": "SELECT PROVINSI FROM TBL_SUB_PROPOSAL WHERE KAMBING > 0 GROUP BY PROVINSI"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_PROVINSI_SAPI",
+      "sql": "SELECT PROVINSI FROM TBL_SUB_PROPOSAL WHERE SAPI > 0 GROUP BY PROVINSI"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_REALISASI_AP",
+      "sql": "SELECT NR_CSR.TBL_REALISASI_AP.ID_REALISASI, NR_CSR.TBL_REALISASI_AP.NO_PROPOSAL, NR_CSR.TBL_REALISASI_AP.TGL_PROPOSAL, NR_CSR.TBL_REALISASI_AP.PENGIRIM, NR_CSR.TBL_REALISASI_AP.TGL_REALISASI, NR_CSR.TBL_REALISASI_AP.SIFAT, NR_CSR.TBL_REALISASI_AP.PERIHAL, NR_CSR.TBL_REALISASI_AP.BESAR_PERMOHONAN, NR_CSR.TBL_REALISASI_AP.KATEGORI, NR_CSR.TBL_REALISASI_AP.NILAI_BANTUAN, NR_CSR.TBL_REALISASI_AP.STATUS, NR_CSR.TBL_REALISASI_AP.PROVINSI, NR_CSR.TBL_REALISASI_AP.KABUPATEN, NR_CSR.TBL_REALISASI_AP.DESKRIPSI, NR_CSR.TBL_REALISASI_AP.ID_PROKER, NR_CSR.TBL_REALISASI_AP.PROKER, NR_CSR.TBL_REALISASI_AP.PILAR, NR_CSR.TBL_REALISASI_AP.GOLS, NR_CSR.TBL_REALISASI_AP.NAMA_YAYASAN, NR_CSR.TBL_REALISASI_AP.ALAMAT, NR_CSR.TBL_REALISASI_AP.PIC, NR_CSR.TBL_REALISASI_AP.JABATAN, NR_CSR.TBL_REALISASI_AP.NO_TELP, NR_CSR.TBL_REALISASI_AP.NO_REKENING, NR_CSR.TBL_REALISASI_AP.ATAS_NAMA, NR_CSR.TBL_REALISASI_AP.NAMA_BANK, NR_CSR.TBL_REALISASI_AP.KOTA_BANK, NR_CSR.TBL_REALISASI_AP.CABANG_BANK, NR_CSR.TBL_REALISASI_AP.CREATED_BY, NR_CSR.TBL_REALISASI_AP.CREATED_DATE, NR_CSR.TBL_REALISASI_AP.JENIS, NR_CSR.TBL_REALISASI_AP.PERUSAHAAN, TO_CHAR(TGL_REALISASI, 'MM') AS BULAN, NR_CSR.TBL_REALISASI_AP.TAHUN, NR_CSR.TBL_REALISASI_AP.STATUS_DATE FROM NR_CSR.TBL_REALISASI_AP"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_REALISASI_PROVINSI",
+      "sql": "select account_cad2 from v_inv_payrequest group by account_cad2 order by account_cad2 asc"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_SEKTOR",
+      "sql": "SELECT SEKTOR_BANTUAN, COUNT(SEKTOR_BANTUAN) AS JUMLAH, TO_CHAR(TGL_TERIMA, 'YYYY') as TAHUN FROM TBL_KELAYAKAN GROUP BY TGL_TERIMA, SEKTOR_BANTUAN"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_SPK",
+      "sql": "SELECT \"TBL_SPK\".\"ID_SPK\", \"TBL_KELAYAKAN\".\"ID_KELAYAKAN\", \"TBL_SPK\".\"NO_AGENDA\", \"TBL_SPK\".\"NO_SPK\", \"TBL_SPK\".\"TGL_SPK\", \"TBL_SPK\".KEGIATAN, \"TBL_SPK\".JABATAN, \"TBL_SPK\".PERUSAHAAN, \"TBL_SPK\".ALAMAT, \"TBL_SPK\".\"NO_PENAWARAN\", \"TBL_SPK\".\"TGL_PENAWARAN\", \"TBL_SPK\".\"NO_BERITA_ACARA\", \"TBL_SPK\".\"TGL_BERITA_ACARA\", \"TBL_SPK\".NOMINAL, \"TBL_SPK\".TERMIN, \"TBL_SPK\".RUPIAH1, \"TBL_SPK\".RUPIAH2, \"TBL_SPK\".RUPIAH3, \"TBL_SPK\".RUPIAH4, \"TBL_SPK\".\"NAMA_BANK\", \"TBL_SPK\".CABANG, \"TBL_SPK\".\"NO_REKENING\", \"TBL_SPK\".\"ATAS_NAMA\", \"TBL_SPK\".\"DUE_DATE\", \"TBL_SPK\".\"NAMA_PENGADILAN\", \"TBL_SPK\".\"NAMA_PEJABAT\", \"TBL_SPK\".\"JABATAN_PEJABAT\", \"TBL_SPK\".STATUS, \"TBL_SPK\".NAMA, \"TBL_SPK\".HEADER1, \"TBL_SPK\".HEADER2, \"TBL_SPK\".HEADER3, \"TBL_SPK\".\"CREATED_BY\", \"TBL_SPK\".\"CREATED_DATE\" FROM \"TBL_SPK\" JOIN \"TBL_KELAYAKAN\" ON \"TBL_SPK\".\"NO_AGENDA\" = \"TBL_KELAYAKAN\".\"NO_AGENDA\""
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_SPPH",
+      "sql": "SELECT NR_CSR.TBL_SPPH.SPPH_ID, NR_CSR.TBL_SPPH.NOMOR, NR_CSR.TBL_SPPH.TANGGAL, TO_CHAR(TBL_SPPH.TANGGAL, 'MM') AS BULAN, TO_CHAR(TBL_SPPH.TANGGAL, 'YYYY') AS TAHUN, NR_CSR.TBL_SPPH.PEKERJAAN_ID, NR_CSR.TBL_PEKERJAAN.NAMA_PEKERJAAN, NR_CSR.TBL_SPPH.STATUS, NR_CSR.TBL_SPPH.CATATAN, NR_CSR.TBL_SPPH.CREATED_BY, NR_CSR.TBL_SPPH.CREATED_DATE, NR_CSR.TBL_SPPH.ID_VENDOR, NR_CSR.TBL_SPPH.FILE_SPPH, NR_CSR.TBL_SPPH.RESPONSE_DATE, NR_CSR.TBL_VENDOR.NAMA_PERUSAHAAN, NR_CSR.TBL_PEKERJAAN.KAK, NR_CSR.TBL_PEKERJAAN.RINGKASAN FROM NR_CSR.TBL_SPPH INNER JOIN NR_CSR.TBL_PEKERJAAN ON NR_CSR.TBL_SPPH.PEKERJAAN_ID = NR_CSR.TBL_PEKERJAAN.PEKERJAAN_ID INNER JOIN NR_CSR.TBL_VENDOR ON NR_CSR.TBL_SPPH.ID_VENDOR = NR_CSR.TBL_VENDOR.VENDOR_ID"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_SUM_SEKTOR",
+      "sql": "select v_survei.sektor_bantuan AS sektor_bantuan,sum(v_survei.nilai_approved) AS jumlah, TO_CHAR(TGL_TERIMA, 'YYYY') as TAHUN from NR_CSR.v_survei where (v_survei.status = 'Approved 3') group by v_survei.sektor_bantuan, v_survei.tgl_terima"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_SUM_SEKTOR2",
+      "sql": "SELECT max(pr.invoice_amount) jumlah, inv.account_cad1 as sektor_bantuan, pr.budget_year as TAHUN, pr.status as STATUS FROM NR_PAYMENT.T_INVOICE_LINE INV, NR_PAYMENT.T_PAYMENT_REQUEST PR WHERE INV.ID_PAYMENT_REQUEST = PR.ID AND PR.TYPE = 'CSR 517/518' AND pr.receiver_type = 'EXTERNAL' AND inv.account_eb in ('517','518') group by pr.id, pr.budget_year, inv.account_cad1, pr.status"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_SUM_STATUS",
+      "sql": "SELECT sum(pr.invoice_amount) jumlah, pr.status as status, pr.budget_year as TAHUN FROM NR_PAYMENT.T_INVOICE_LINE INV, NR_PAYMENT.T_PAYMENT_REQUEST PR WHERE INV.ID_PAYMENT_REQUEST = PR.ID AND PR.TYPE = 'CSR 517/518' AND pr.receiver_type = 'EXTERNAL' AND inv.account_eb in ('517','518') group by pr.id, pr.budget_year, pr.status"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_SURVEI",
+      "sql": "SELECT s.ID_SURVEI AS ID_SURVEI, k.PENGIRIM AS PENGIRIM, k.JENIS AS JENIS, k.TGL_TERIMA AS TGL_TERIMA, k.NO_SURAT AS NO_SURAT, k.TGL_SURAT AS TGL_SURAT, k.PERIHAL AS PERIHAL, k.PILAR AS PILAR, k.TPB AS TPB, k.PENGAJU_PROPOSAL AS PENGAJU_PROPOSAL, k.SEBAGAI AS SEBAGAI, k.ALAMAT AS ALAMAT, k.PROVINSI AS PROVINSI, k.KABUPATEN AS KABUPATEN, k.BANTUAN_UNTUK AS BANTUAN_UNTUK, k.CONTACT_PERSON AS CONTACT_PERSON, k.NILAI_PENGAJUAN AS NILAI_PENGAJUAN, k.SEKTOR_BANTUAN AS SEKTOR_BANTUAN, k.NAMA_BANK AS NAMA_BANK, k.ATAS_NAMA AS ATAS_NAMA, k.NO_REKENING AS NO_REKENING, k.NAMA_ANGGOTA AS NAMA_ANGGOTA, k.FRAKSI AS FRAKSI, k.JABATAN AS JABATAN, k.PIC AS PIC, k.ASAL_SURAT AS ASAL_SURAT, k.KOMISI AS KOMISI, k.SIFAT AS SIFAT, k.EMAIL_PENGAJU AS EMAIL_PENGAJU, k.NAMA_PERSON AS NAMA_PERSON, k.MATA_UANG_PENGAJUAN AS MATA_UANG_PENGAJUAN, k.MATA_UANG_BANTUAN AS MATA_UANG_BANTUAN, s.HASIL_KONFIRMASI AS HASIL_KONFIRMASI, s.HASIL_SURVEI AS HASIL_SURVEI, s.USULAN AS USULAN, s.BANTUAN_BERUPA AS BANTUAN_BERUPA, s.NILAI_BANTUAN AS NILAI_BANTUAN, s.TERMIN AS TERMIN, s.SURVEI1 AS SURVEI1, s.SURVEI2 AS SURVEI2, s.STATUS AS STATUS, s.KADEP AS KADEP, s.KADIV AS KADIV, s.KET_KADIN1 AS KET_KADIN1, s.KET_KADIN2 AS KET_KADIN2, s.KET_KADIV AS KET_KADIV, s.KETERANGAN AS KETERANGAN, k.DESKRIPSI AS DESKRIPSI, s.APPROVE_DATE AS APPROVE_DATE, s.APPROVE_KADEP AS APPROVE_KADEP, s.APPROVE_KADIV AS APPROVE_KADIV, s.CREATE_BY AS CREATE_BY, s.CREATE_DATE AS CREATE_DATE, e.RENCANA_ANGGARAN AS RENCANA_ANGGARAN, k.PROPOSAL AS PROPOSAL, s.PERSEN1 AS PERSEN1, s.PERSEN2 AS PERSEN2, s.PERSEN3 AS PERSEN3, s.PERSEN4 AS PERSEN4, s.RUPIAH1 AS RUPIAH1, s.RUPIAH2 AS RUPIAH2, s.RUPIAH3 AS RUPIAH3, s.RUPIAH4 AS RUPIAH4, s.BAST AS BAST, s.SPK AS SPK, s.PKS AS PKS, s.REVISI_BY AS REVISI_BY, s.REVISI_DATE AS REVISI_DATE, s.NILAI_APPROVED AS NILAI_APPROVED, k.ID_KELAYAKAN AS ID_KELAYAKAN, s.SEKPER, s.DIRUT, s.KET_SEKPER, s.KET_DIRUT, s.APPROVE_SEKPER, s.APPROVE_DIRUT, k.NO_AGENDA AS NO_AGENDA FROM TBL_KELAYAKAN k JOIN TBL_EVALUASI e ON e.ID_KELAYAKAN = k.ID_KELAYAKAN JOIN TBL_SURVEI s ON s.ID_KELAYAKAN = k.ID_KELAYAKAN"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_USER",
+      "sql": "select NR_CSR.tbl_user.id_user AS id_user,NR_CSR.tbl_user.username AS username,NR_CSR.tbl_user.email AS email,NR_CSR.tbl_user.nama AS nama,NR_CSR.tbl_user.jabatan AS jabatan,NR_CSR.tbl_user.password AS password,NR_CSR.tbl_user.role AS role,NR_CSR.tbl_role.role_name AS role_name,NR_CSR.tbl_user.area_kerja AS area_kerja,NR_CSR.tbl_user.status AS status,NR_CSR.tbl_user.foto AS foto,NR_CSR.tbl_user.remember_token AS remember_token from (NR_CSR.tbl_user join NR_CSR.tbl_role on((NR_CSR.tbl_user.role = NR_CSR.tbl_role.role)))"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_YKPP",
+      "sql": "SELECT P.ID_PEMBAYARAN, P.ID_KELAYAKAN, K.NO_AGENDA, K.TGL_TERIMA, K.DESKRIPSI, K.ID_LEMBAGA, L.NAMA_LEMBAGA, L.NAMA_PIC, L.ALAMAT, K.ID_PROKER, PR.PROKER, PR.ANGGARAN, PR.PRIORITAS, PR.PILAR, PR.GOLS, PR.KODE_TPB, P.JUMLAH_PEMBAYARAN, P.FEE, P.SUBTOTAL, P.FEE_PERSEN, P.STATUS_YKPP, P.PENYALURAN_KE, P.TAHUN_YKPP, P.NO_SURAT_YKPP, P.TGL_SURAT_YKPP, P.SURAT_YKPP, P.SUBMITED_YKPP_BY, P.SUBMITED_YKPP_DATE, P.APPROVED_YKPP_BY, P.APPROVED_YKPP_DATE, P.METODE, P.CREATE_DATE, P.CREATE_BY, K.PROVINSI, K.KABUPATEN, K.KECAMATAN, K.KELURAHAN, K.NAMA_BANK, K.ATAS_NAMA, K.NO_REKENING, P.TERMIN FROM TBL_PEMBAYARAN P LEFT JOIN TBL_KELAYAKAN K ON P.ID_KELAYAKAN = K.ID_KELAYAKAN LEFT JOIN TBL_LEMBAGA L ON K.ID_LEMBAGA = L.ID_LEMBAGA LEFT JOIN TBL_PROKER PR ON K.ID_PROKER = PR.ID_PROKER WHERE P.METODE = 'YKPP'"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_YKPP_ASPIRASI",
+      "sql": "SELECT \"NO_AGENDA\",\"TGL_TERIMA\",\"NO_SURAT\",\"TGL_SURAT\",\"SEBAGAI\",\"PROVINSI\",\"KABUPATEN\",\"KECAMATAN\",\"KELURAHAN\",\"KODEPOS\",\"BANTUAN_UNTUK\",\"CONTACT_PERSON\",\"NILAI_PENGAJUAN\",\"SEKTOR_BANTUAN\",\"NAMA_BANK\",\"ATAS_NAMA\",\"NO_REKENING\",\"NILAI_BANTUAN\",\"NAMA_ANGGOTA\",\"FRAKSI\",\"JABATAN\",\"PIC\",\"ASAL_SURAT\",\"KOMISI\",\"SIFAT\",\"STATUS\",\"EMAIL_PENGAJU\",\"NAMA_PERSON\",\"MATA_UANG_PENGAJUAN\",\"MATA_UANG_BANTUAN\",\"PROPOSAL\",\"CREATE_BY\",\"CREATE_DATE\",\"PENGIRIM\",\"PERIHAL\",\"PENGAJU_PROPOSAL\",\"ALAMAT\",\"CABANG_BANK\",\"JENIS\",\"HEWAN_KURBAN\",\"JUMLAH_HEWAN\",\"KODE_BANK\",\"KODE_KOTA\",\"KOTA_BANK\",\"CABANG\",\"DESKRIPSI\",\"PILAR\",\"TPB\",\"KODE_INDIKATOR\",\"KETERANGAN_INDIKATOR\",\"PROKER\",\"INDIKATOR\",\"ID_PROKER\",\"SMAP\",\"YKPP\",\"CHECKLIST_BY\",\"CHECKLIST_DATE\",\"NOMINAL_APPROVED\",\"NOMINAL_FEE\",\"TOTAL_YKPP\",\"STATUS_YKPP\",\"APPROVED_YKPP_BY\",\"APPROVED_YKPP_DATE\",\"SUBMITED_YKPP_BY\",\"SUBMITED_YKPP_DATE\",\"NO_SURAT_YKPP\",\"TGL_SURAT_YKPP\",\"PENYALURAN_KE_OLD\",\"ID_KELAYAKAN\",\"SURAT_YKPP\",\"TAHUN_YKPP\",\"PENYALURAN_KE\" FROM TBL_KELAYAKAN WHERE YKPP = 'Yes' AND TAHUN_YKPP IN ('2023','2024') AND JENIS = 'Aspirasi'"
+    },
+    {
+      "schema": "NR_CSR",
+      "name": "V_YKPP_SUBMIT",
+      "sql": "SELECT NR_CSR.TBL_KELAYAKAN.NO_AGENDA, NR_CSR.TBL_KELAYAKAN.TGL_TERIMA, NR_CSR.TBL_KELAYAKAN.NO_SURAT, NR_CSR.TBL_KELAYAKAN.TGL_SURAT, NR_CSR.TBL_KELAYAKAN.SEBAGAI, NR_CSR.TBL_KELAYAKAN.PROVINSI, NR_CSR.TBL_KELAYAKAN.KABUPATEN, NR_CSR.TBL_KELAYAKAN.KECAMATAN, NR_CSR.TBL_KELAYAKAN.KELURAHAN, NR_CSR.TBL_KELAYAKAN.KODEPOS, NR_CSR.TBL_KELAYAKAN.BANTUAN_UNTUK, NR_CSR.TBL_KELAYAKAN.CONTACT_PERSON, NR_CSR.TBL_KELAYAKAN.NILAI_PENGAJUAN, NR_CSR.TBL_KELAYAKAN.SEKTOR_BANTUAN, NR_CSR.TBL_KELAYAKAN.NAMA_BANK, NR_CSR.TBL_KELAYAKAN.ATAS_NAMA, NR_CSR.TBL_KELAYAKAN.NO_REKENING, NR_CSR.TBL_KELAYAKAN.NILAI_BANTUAN, NR_CSR.TBL_KELAYAKAN.NAMA_ANGGOTA, NR_CSR.TBL_KELAYAKAN.FRAKSI, NR_CSR.TBL_KELAYAKAN.JABATAN, NR_CSR.TBL_KELAYAKAN.PIC, NR_CSR.TBL_KELAYAKAN.ASAL_SURAT, NR_CSR.TBL_KELAYAKAN.KOMISI, NR_CSR.TBL_KELAYAKAN.SIFAT, NR_CSR.TBL_KELAYAKAN.STATUS, NR_CSR.TBL_KELAYAKAN.EMAIL_PENGAJU, NR_CSR.TBL_KELAYAKAN.NAMA_PERSON, NR_CSR.TBL_KELAYAKAN.MATA_UANG_PENGAJUAN, NR_CSR.TBL_KELAYAKAN.MATA_UANG_BANTUAN, NR_CSR.TBL_KELAYAKAN.PROPOSAL, NR_CSR.TBL_KELAYAKAN.CREATE_BY, NR_CSR.TBL_KELAYAKAN.CREATE_DATE, NR_CSR.TBL_KELAYAKAN.PENGIRIM, NR_CSR.TBL_KELAYAKAN.PERIHAL, NR_CSR.TBL_KELAYAKAN.PENGAJU_PROPOSAL, NR_CSR.TBL_KELAYAKAN.ALAMAT, NR_CSR.TBL_KELAYAKAN.CABANG_BANK, NR_CSR.TBL_KELAYAKAN.JENIS, NR_CSR.TBL_KELAYAKAN.HEWAN_KURBAN, NR_CSR.TBL_KELAYAKAN.JUMLAH_HEWAN, NR_CSR.TBL_KELAYAKAN.KODE_BANK, NR_CSR.TBL_KELAYAKAN.KODE_KOTA, NR_CSR.TBL_KELAYAKAN.KOTA_BANK, NR_CSR.TBL_KELAYAKAN.CABANG, NR_CSR.TBL_KELAYAKAN.DESKRIPSI, NR_CSR.TBL_KELAYAKAN.ID_PROKER, NR_CSR.TBL_PROKER.PROKER, NR_CSR.TBL_PROKER.PRIORITAS, NR_CSR.TBL_PROKER.PILAR, NR_CSR.TBL_PROKER.GOLS, NR_CSR.TBL_KELAYAKAN.SMAP, NR_CSR.TBL_KELAYAKAN.YKPP, NR_CSR.TBL_KELAYAKAN.CHECKLIST_BY, NR_CSR.TBL_KELAYAKAN.CHECKLIST_DATE, NR_CSR.TBL_KELAYAKAN.NOMINAL_APPROVED, NR_CSR.TBL_KELAYAKAN.NOMINAL_FEE, NR_CSR.TBL_KELAYAKAN.TOTAL_YKPP, NR_CSR.TBL_KELAYAKAN.STATUS_YKPP, NR_CSR.TBL_KELAYAKAN.APPROVED_YKPP_BY, NR_CSR.TBL_KELAYAKAN.APPROVED_YKPP_DATE, NR_CSR.TBL_KELAYAKAN.SUBMITED_YKPP_BY, NR_CSR.TBL_KELAYAKAN.SUBMITED_YKPP_DATE, NR_CSR.TBL_KELAYAKAN.NO_SURAT_YKPP, NR_CSR.TBL_KELAYAKAN.TGL_SURAT_YKPP, NR_CSR.TBL_KELAYAKAN.PENYALURAN_KE, NR_CSR.TBL_KELAYAKAN.ID_KELAYAKAN, NR_CSR.TBL_KELAYAKAN.SURAT_YKPP, NR_CSR.TBL_KELAYAKAN.TAHUN_YKPP FROM NR_CSR.TBL_KELAYAKAN INNER JOIN NR_CSR.TBL_PROKER ON NR_CSR.TBL_KELAYAKAN.ID_PROKER = NR_CSR.TBL_PROKER.ID_PROKER WHERE NR_CSR.TBL_KELAYAKAN.YKPP = 'Yes' AND NR_CSR.TBL_KELAYAKAN.STATUS_YKPP IN ('Submited')"
+    }
+  ]
+}

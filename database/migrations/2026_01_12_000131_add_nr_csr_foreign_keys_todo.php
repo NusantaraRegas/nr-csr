@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+
+class AddNrCsrForeignKeysTodo extends Migration
+{
+    public function up()
+    {
+        // TODO: The provided SQL dump does not include referenced table/columns for FKs.
+        // Fill these once references are confirmed.
+        // FK_ID_PERUSAHAAN_ANGGARAN: NR_CSR.TBL_ANGGARAN.ID_PERUSAHAAN -> ???
+        // FK_ID_APPROVER: NR_CSR.TBL_BAST_DANA.APPROVER_ID -> ???
+        // FK_ID_KELAYAKAN_BAST: NR_CSR.TBL_BAST_DANA.ID_KELAYAKAN -> ???
+        // FK_ID_HIRARKI: NR_CSR.TBL_DETAIL_APPROVAL.ID_HIRARKI -> ???
+        // FK_ID_MAKER_LOG: NR_CSR.TBL_DETAIL_APPROVAL.CREATED_BY -> ???
+        // FK_ID_USER_APPROVAL: NR_CSR.TBL_DETAIL_APPROVAL.ID_USER -> ???
+        // FK_ID_KELAYAKAN_EVALUASI: NR_CSR.TBL_EVALUASI.ID_KELAYAKAN -> ???
+        // FK_ID_USER_EVALUASI: NR_CSR.TBL_EVALUASI.CREATED_BY -> ???
+        // FK_HIRARKI_LEVEL: NR_CSR.TBL_HIRARKI.ID_LEVEL -> ???
+        // FK_HIRARKI_USER: NR_CSR.TBL_HIRARKI.ID_USER -> ???
+        // FK_ID_LEMBAGA: NR_CSR.TBL_KELAYAKAN.ID_LEMBAGA -> ???
+        // FK_ID_PENGIRIM: NR_CSR.TBL_KELAYAKAN.ID_PENGIRIM -> ???
+        // FK_ID_PROKER: NR_CSR.TBL_KELAYAKAN.ID_PROKER -> ???
+        // FK_ID_USER: NR_CSR.TBL_KELAYAKAN.CREATED_BY -> ???
+        // FK_LAMPIRAN_KELAYAKAN: NR_CSR.TBL_LAMPIRAN.ID_KELAYAKAN -> ???
+        // FK_MAKER_ID: NR_CSR.TBL_LAMPIRAN.CREATED_BY -> ???
+        // FK_CREATED_BY: NR_CSR.TBL_LOG.CREATED_BY -> ???
+        // FK_ID_KELAYAKAN: NR_CSR.TBL_LOG.ID_KELAYAKAN -> ???
+        // FK_ID_KELAYAKAN_PEMBAYARAN: NR_CSR.TBL_PEMBAYARAN.ID_KELAYAKAN -> ???
+        // SYS_C002684983: NR_CSR.TBL_PEMBAYARAN_copy1.ID_KELAYAKAN -> ???
+        // FK_PENGIRIM_PERUSAHAAN: NR_CSR.TBL_PENGIRIM.ID_PERUSAHAAN -> ???
+        // FK_PIC_USER: NR_CSR.TBL_PERUSAHAAN.PIC -> ???
+        // FK_ID_KELAYAKAN_SURVEI: NR_CSR.TBL_SURVEI.ID_KELAYAKAN -> ???
+        // FK_ID_USER_SURVEI: NR_CSR.TBL_SURVEI.CREATED_BY -> ???
+        // FK_ID_PERUSAHAAN: NR_CSR.TBL_USER.ID_PERUSAHAAN -> ???
+    }
+
+    public function down()
+    {
+    }
+}
