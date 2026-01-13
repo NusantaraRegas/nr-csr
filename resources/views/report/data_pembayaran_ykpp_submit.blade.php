@@ -389,15 +389,16 @@
 @endsection
 
 @section('footer')
-    <script
-        src="{{ asset('template/assets/node_modules/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js') }}">
-    </script>
-
     <script>
-        $('.mdate').bootstrapMaterialDatePicker({
-            maxDate: new Date(),
-            format: 'DD-MM-YYYY',
-            time: false
+        // Use bootstrap-datepicker instead of bootstrap-material-datetimepicker
+        $(document).ready(function() {
+            $('.mdate').datepicker({
+                format: 'dd-mm-yyyy',
+                autoclose: true,
+                todayHighlight: true,
+                endDate: new Date(),
+                orientation: 'bottom auto'
+            });
         });
     </script>
 

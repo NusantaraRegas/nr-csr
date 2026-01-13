@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ViewYKPP extends Model
 {
-    protected $table = "V_YKPP";
+    protected $table = "nr_csr.v_ykpp";
 
     public function proker()
     {

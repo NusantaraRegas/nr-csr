@@ -3675,11 +3675,11 @@ class KelayakanController extends Controller
             DB::beginTransaction();
 
             Pembayaran::whereIn('id_pembayaran', $request->id_pembayaran)->update([
-                'STATUS_YKPP' => 'Submited',
-                'SUBMITED_YKPP_BY' => $user,
-                'SUBMITED_YKPP_DATE' => $tanggalNow,
-                'PENYALURAN_KE' => $request->penyaluran,
-                'TAHUN_YKPP' => $request->tahun,
+                'status_ykpp' => 'Submited',
+                'submited_ykpp_by' => $user,
+                'submited_ykpp_date' => $tanggalNow,
+                'penyaluran_ke' => $request->penyaluran,
+                'tahun_ykpp' => $request->tahun,
             ]);
 
             DB::commit();

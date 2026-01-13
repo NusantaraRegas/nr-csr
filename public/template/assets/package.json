@@ -18,7 +18,10 @@
     "datatables.net-bs4": "^1.13.1",
     "jquery-validation": "^1.19.5",
     "toastr": "^2.1.4",
-    "sticky-kit": "^1.1.3"
+    "sticky-kit": "^1.1.3",
+    "jquery-steps": "^1.1.0",
+    "raphael": "^2.3.0",
+    "peity": "^3.3.0"
   },
   "devDependencies": {},
   "scripts": {

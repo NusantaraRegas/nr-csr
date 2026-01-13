@@ -565,15 +565,15 @@ class ReportController extends Controller
         $tahun = $request->input('tahun', date("Y"));
         $penyaluran      = $request->input('penyaluran');
 
-        $kelayakan = ViewYKPP::where('STATUS_YKPP', 'Submited')
-            // ->where('TAHUN_YKPP', $tahun)
+        $kelayakan = ViewYKPP::where('status_ykpp', 'Submited')
+            // ->where('tahun_ykpp', $tahun)
             ->when($tahun, function ($q) use ($tahun) {
                 return $q->where('tahun_ykpp', $tahun);
             })
             ->when($penyaluran, function ($q) use ($penyaluran) {
                 return $q->where('penyaluran_ke', $penyaluran);
             })
-            ->orderBy('PENYALURAN_KE')
+            ->orderBy('penyaluran_ke')
             ->get()
             ->groupBy(function ($item) {
                 return $item->penyaluran_ke; // gunakan properti laravel-style (snake_case)
@@ -632,9 +632,9 @@ class ReportController extends Controller
             abort(404);
         }
 
-        $data = ViewYKPP::where('STATUS_YKPP', 'Submited')
-            ->where('PENYALURAN_KE', $penyaluranKe)
-            ->where('TAHUN_YKPP', $tahun)
+        $data = ViewYKPP::where('status_ykpp', 'Submited')
+            ->where('penyaluran_ke', $penyaluranKe)
+            ->where('tahun_ykpp', $tahun)
             ->get();
 
         if ($data->isEmpty()) {

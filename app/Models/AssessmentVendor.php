@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class AssessmentVendor extends Model
 {
-    protected $table = "TBL_ASSESSMENT_VENDOR";
-    protected $primaryKey = "ASSESSMENT_ID";
-    protected $guarded = ["ASSESSMENT_ID"];
+    protected $table = "tbl_assessment_vendor";
+    protected $primaryKey = "assessment_id";
+    protected $guarded = ["assessment_id"];
 
     public $timestamps = false;
 }

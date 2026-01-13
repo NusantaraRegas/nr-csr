@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Log extends Model
 {
-    protected $table = "TBL_LOG";
-    protected $primaryKey = "ID";
-    protected $guarded = ["ID"];
+    protected $table = "tbl_log";
+    protected $primaryKey = "id";
+    protected $guarded = ["id"];
 
     public $timestamps = false;
 

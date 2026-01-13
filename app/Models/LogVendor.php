@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class LogVendor extends Model
 {
-    protected $table = "TBL_LOG_VENDOR";
-    protected $primaryKey = "LOG_ID";
-    protected $guarded = ["LOG_ID"];
+    protected $table = "tbl_log_vendor";
+    protected $primaryKey = "lod_id";
+    protected $guarded = ["log_id"];
 
     public $timestamps = false;
 }

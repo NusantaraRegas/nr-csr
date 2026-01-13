@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ViewDetailApproval extends Model
 {
-    protected $table = "V_DETAIL_APPROVAL";
+    protected $table = "v_detail_approval";
 
     public function user()
     {

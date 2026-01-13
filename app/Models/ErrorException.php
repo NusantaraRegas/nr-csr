@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class ErrorException extends Model
 {
-    protected $table = "TBL_EXCEPTION";
-    protected $primaryKey = "ERROR_ID";
-    protected $guarded = ["ERROR_ID"];
+    protected $table = "tbl_exception";
+    protected $primaryKey = "error_id";
+    protected $guarded = ["error_id"];
 
     public $timestamps = false;
 }

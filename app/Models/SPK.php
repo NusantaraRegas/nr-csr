@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class SPK extends Model
 {
-    protected $table = "TBL_SPK";
-    protected $primaryKey = "ID_SPK";
-    protected $guarded = ["ID_SPK"];
+    protected $table = "tbl_spk";
+    protected $primaryKey = "id_spk";
+    protected $guarded = ["id_spk"];
 
     public $timestamps = false;
 }

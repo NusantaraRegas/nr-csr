@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class BASTDana extends Model
 {
-    protected $table = "TBL_BAST_DANA";
-    protected $primaryKey = "ID_BAST_DANA";
-    protected $guarded = ["ID_BAST_DANA"];
+    protected $table = "tbl_bast_dana";
+    protected $primaryKey = "id_bast_dana";
+    protected $guarded = ["id_bast_dana"];
 
     public $timestamps = false;
 

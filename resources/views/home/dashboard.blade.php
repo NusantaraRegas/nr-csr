@@ -246,6 +246,9 @@
             lang: {
                 thousandsSep: '.',
                 decimalPoint: ','
+            },
+            accessibility: {
+                enabled: false
             }
         });
 

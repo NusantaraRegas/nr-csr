@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ViewSPPH extends Model
 {
-    protected $table = "V_SPPH";
+    protected $table = "v_spph";
 }

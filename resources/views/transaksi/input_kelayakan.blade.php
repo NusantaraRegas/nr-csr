@@ -172,22 +172,21 @@
 @endsection
 
 @section('footer')
-    <script
-        src="{{ asset('template/assets/node_modules/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js') }}">
-    </script>
-
-    <script src="{{ asset('template/assets/node_modules/bootstrap-maxlength/js/bootstrap-maxlength.min.js') }}"></script>
-
     <script>
-        $('.js-maxlength').maxlength({
-            alwaysShow: true, // selalu tampil
-            separator: ' / ', // format "0 / 255"
-            preText: '',
-            postText: '',
-            warningClass: 'badge badge-success',
-            limitReachedClass: 'badge badge-danger',
-            appendToParent: true, // ditempel ke parent (.form-group)
-            placement: 'bottom' // lalu kita posisikan dengan CSS di atas
+        // Check if maxlength plugin is loaded, otherwise silently skip
+        $(document).ready(function() {
+            if ($.fn.maxlength) {
+                $('.js-maxlength').maxlength({
+                    alwaysShow: true,
+                    separator: ' / ',
+                    preText: '',
+                    postText: '',
+                    warningClass: 'badge badge-success',
+                    limitReachedClass: 'badge badge-danger',
+                    appendToParent: true,
+                    placement: 'bottom'
+                });
+            }
         });
     </script>
 
@@ -226,11 +225,15 @@
     </script>
 
     <script>
-        $('.tgl-surat').bootstrapMaterialDatePicker({
-            weekStart: 0,
-            maxDate: new Date(),
-            format: 'DD-MMM-YYYY',
-            time: false
+        // Use bootstrap-datepicker instead of bootstrap-material-datetimepicker
+        $(document).ready(function() {
+            $('.tgl-surat').datepicker({
+                format: 'dd-M-yyyy',
+                autoclose: true,
+                todayHighlight: true,
+                endDate: new Date(),
+                orientation: 'bottom auto'
+            });
         });
     </script>
 

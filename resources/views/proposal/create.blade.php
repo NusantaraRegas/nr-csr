@@ -82,9 +82,6 @@
 @section('footer')
     <script src="{{ asset('template/assets/node_modules/wizard/jquery.steps.min.js') }}"></script>
     <script src="{{ asset('template/assets/node_modules/wizard/jquery.validate.min.js') }}"></script>
-    <script
-        src="{{ asset('template/assets/node_modules/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js') }}">
-    </script>
 
     <script>
         function initDatepicker() {
@@ -92,28 +89,25 @@
                 const $tglSurat = $('.tgl-surat');
                 const $tglTerima = $('.tgl-terima');
 
-                if ($tglSurat.data('DateTimePicker')) {
-                    $tglSurat.bootstrapMaterialDatePicker('destroy');
-                }
-
-                if ($tglTerima.data('DateTimePicker')) {
-                    $tglTerima.bootstrapMaterialDatePicker('destroy');
-                }
-
-                $tglSurat.bootstrapMaterialDatePicker({
-                    format: 'DD-MMM-YYYY',
-                    weekStart: 0,
-                    maxDate: moment(),
-                    time: false,
+                // Use bootstrap-datepicker instead of bootstrap-material-datetimepicker
+                $tglSurat.datepicker({
+                    format: 'dd-M-yyyy',
+                    autoclose: true,
+                    todayHighlight: true,
+                    endDate: new Date(),
+                    orientation: 'bottom auto'
                 });
 
-                $tglTerima.bootstrapMaterialDatePicker({
-                    format: 'DD-MMM-YYYY',
-                    weekStart: 0,
-                    maxDate: moment(),
-                    time: false,
-                }).on('change', function(e, date) {
-                    $tglSurat.bootstrapMaterialDatePicker('setMaxDate', date);
+                $tglTerima.datepicker({
+                    format: 'dd-M-yyyy',
+                    autoclose: true,
+                    todayHighlight: true,
+                    endDate: new Date(),
+                    orientation: 'bottom auto'
+                }).on('changeDate', function(e) {
+                    if (e.date) {
+                        $tglSurat.datepicker('setEndDate', e.date);
+                    }
                 });
             }, 200);
         }

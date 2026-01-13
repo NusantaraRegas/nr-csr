@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ViewHirarki extends Model
 {
-    protected $table = "V_HIRARKI";
+    protected $table = "v_hirarki";
 }

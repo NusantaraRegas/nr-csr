@@ -1905,7 +1905,7 @@ join tbl_survei    s on s.id_kelayakan = k.id_kelayakan;
 -- ----------------------------
 -- View structure for V_USER
 -- ----------------------------
-create or replace view nr_csr.v_user as select nr_csr.tbl_user.id_user as id_user,nr_csr.tbl_user.username as username,nr_csr.tbl_user.email as email,nr_csr.tbl_user.nama as nama,nr_csr.tbl_user.jabatan as jabatan,nr_csr.tbl_user.password as password,nr_csr.tbl_user.role as role,nr_csr.tbl_role.role_name as role_name,nr_csr.tbl_user.area_kerja as area_kerja,nr_csr.tbl_user.status as status,nr_csr.tbl_user.foto as foto,nr_csr.tbl_user.remember_token as remember_token from (nr_csr.tbl_user join nr_csr.tbl_role on((nr_csr.tbl_user.role = nr_csr.tbl_role.role)));
+create or replace view nr_csr.v_user as select nr_csr.tbl_user.id_user as id_user,nr_csr.tbl_user.username as username,nr_csr.tbl_user.email as email,nr_csr.tbl_user.nama as nama,nr_csr.tbl_user.jabatan as jabatan,nr_csr.tbl_user.password as password,nr_csr.tbl_user.role as role,nr_csr.tbl_role.role_name as role_name,nr_csr.tbl_user.area_kerja as area_kerja,nr_csr.tbl_user.status as status,nr_csr.tbl_user.foto_profile as foto,nr_csr.tbl_user.remember_token as remember_token from (nr_csr.tbl_user join nr_csr.tbl_role on((nr_csr.tbl_user.role = nr_csr.tbl_role.role)));
 
 -- ----------------------------
 -- View structure for V_YKPP

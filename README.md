@@ -4,6 +4,23 @@ Laravel 6 (PHP ^7.2) monolith for CSR proposal intake, evaluation/survey workflo
 
 > This repository previously contained the default Laravel README; it has been replaced with project-specific documentation and charts.
 
+## Table of Contents
+
+- [Tech Stack](#tech-stack)
+- [Business / Domain Map](#business--domain-map)
+- [Architecture Overview](#architecture-overview)
+- [Key Middleware / Authorization](#key-middleware--authorization)
+- [Initialization / Boot Flow](#initialization--boot-flow)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Local Setup (Standard)](#local-setup-standard)
+  - [Docker Setup (PostgreSQL)](#docker-setup-postgresql)
+- [Main Route Areas](#main-route-areas-quick-map)
+- [Project Maintenance](#project-maintenance)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [Notes](#notes)
+
 ## Tech Stack
 
 - **Backend**: Laravel Framework `^6.0`
@@ -165,36 +182,177 @@ sequenceDiagram
   Ctrl-->>Web: Response (View/JSON/Redirect)
 ```
 
-## Local Setup (Initialization Steps)
+## Getting Started
+
+### Prerequisites
+
+- **PHP**: ^7.2 (PHP 7.4 recommended)
+- **Composer**: Latest version
+- **Node.js**: v12+ and npm
+- **Database**: PostgreSQL 12+ (Docker) or Oracle 12c+ (legacy)
+- **Web Server**: Apache/Nginx or use `php artisan serve`
+
+### Local Setup (Standard)
 
 > Exact environment variables are in `.env` (not committed). The steps below describe the typical Laravel 6 + Oracle setup.
 
-1. Install dependencies
-   - `composer install`
-   - `npm install`
-2. Create environment file
-   - copy `.env.example` → `.env`
-   - set at minimum: `APP_NAME`, `APP_ENV`, `APP_KEY`, `APP_URL`
-   - configure **Oracle** connection in `.env` (see `config/database.php` and `config/oracle.php`)
-3. Generate app key
-   - `php artisan key:generate`
-4. Build frontend assets (if needed)
-   - `npm run dev` (or `npm run prod`)
-5. Run the application
-   - `php artisan serve`
-6. (Optional) Run tests
-   - `vendor/bin/phpunit`
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/NusantaraRegas/nr-csr.git
+   cd nr-csr
+   ```
+
+2. **Install dependencies**
+   ```bash
+   composer install
+   npm install
+   ```
+
+3. **Create environment file**
+   ```bash
+   # Windows
+   copy .env.example .env
+   
+   # Linux/macOS
+   cp .env.example .env
+   ```
+   
+   Configure at minimum:
+   - `APP_NAME`, `APP_ENV`, `APP_KEY`, `APP_URL`
+   - **Oracle** connection settings (see `config/database.php` and `config/oracle.php`)
+
+4. **Generate application key**
+   ```bash
+   php artisan key:generate
+   ```
+
+5. **Build frontend assets**
+   ```bash
+   # Development
+   npm run dev
+   
+   # Production
+   npm run prod
+   ```
+
+6. **Run database migrations**
+   ```bash
+   php artisan migrate
+   ```
+
+7. **Start the development server**
+   ```bash
+   php artisan serve
+   ```
+   
+   Access the application at `http://localhost:8000`
+
+8. **(Optional) Run tests**
+   ```bash
+   vendor/bin/phpunit
+   ```
+
+### Docker Setup (PostgreSQL)
+
+This repo can be run fully via Docker using PostgreSQL.
+
+#### Database Schema Source
+
+The repository includes an Oracle → PostgreSQL converted schema dump:
+
+- `tools/NR_CSR.sql`
+
+From that dump we generate Laravel migrations (Postgres) under `database/migrations/2026_01_12_*`.
+
+> **Note**: Some views in the original Oracle schema reference objects under `NR_PAYMENT.*`. In this repo we keep those as **stubs/TODO** so migrations can run in a standalone `NR_CSR` database.
+
+#### Step-by-Step Docker Setup
+
+1. **Bring up containers**
+   ```bash
+   docker compose up -d --build
+   ```
+
+2. **Create `.env` file**
+   ```bash
+   # Windows
+   copy .env.docker.example .env
+   
+   # Linux/macOS
+   cp .env.docker.example .env
+   ```
+   
+   Generate app key:
+   ```bash
+   docker compose exec -T app php artisan key:generate --force
+   ```
+
+3. **Install PHP dependencies**
+   
+   This project includes packages that require extensions used by Oracle (oci8) and Excel exports (gd). If running Postgres-only locally, install dependencies while ignoring platform requirements:
+   
+   ```bash
+   docker compose exec -T app composer install --no-interaction --ignore-platform-req=ext-gd --ignore-platform-req=ext-oci8
+   ```
+
+4. **Run migrations**
+   ```bash
+   docker compose exec -T app php artisan migrate --force
+   ```
+   
+   To rebuild schema from scratch:
+   ```bash
+   docker compose exec -T app php artisan migrate:fresh --force
+   ```
+
+5. **(Optional) Verify schema**
+   
+   List tables created in the NR_CSR schema:
+   ```bash
+   docker compose exec -T db psql -U nr_csr -d nr_csr -c "SELECT schemaname, tablename FROM pg_tables WHERE schemaname IN ('NR_CSR') ORDER BY tablename;"
+   ```
+
+6. **Access the application**
+   
+   Nginx is exposed on:
+   ```
+   http://localhost:8080
+   ```
+
+#### Docker Commands Reference
+
+```bash
+# Start containers
+docker compose up -d
+
+# Stop containers
+docker compose down
+
+# View logs
+docker compose logs -f app
+
+# Access application container shell
+docker compose exec app bash
+
+# Access database
+docker compose exec db psql -U nr_csr -d nr_csr
+
+# Rebuild containers
+docker compose up -d --build --force-recreate
+```
 
 ## Main Route Areas (Quick Map)
 
-- `/auth/*` - login, forgot/reset password, OTP
-- `/dashboard/*` - dashboards
-- `/master/*` - admin master data
-- `/proposal/*` - proposal intake & supporting entities
-- `/anggaran/*` - budgeting and program (Proker) management
-- `/report/*` - reporting, exports, monitoring
-- `/DokumenLegal/*` - BAST/SPK documents
-- `/subsidiary/*` - subsidiary dashboards, budgeting, realization, reporting
+| Route Prefix | Description |
+|--------------|-------------|
+| `/auth/*` | Login, forgot/reset password, OTP |
+| `/dashboard/*` | Dashboards for different user roles |
+| `/master/*` | Admin master data management |
+| `/proposal/*` | Proposal intake & supporting entities |
+| `/anggaran/*` | Budgeting and program (Proker) management |
+| `/report/*` | Reporting, exports, monitoring |
+| `/DokumenLegal/*` | BAST/SPK legal documents |
+| `/subsidiary/*` | Subsidiary dashboards, budgeting, realization, reporting |
 
 ## Project Maintenance
 
@@ -218,74 +376,138 @@ The project includes comprehensive `.gitignore` files to prevent committing unne
 
 These configurations ensure clean repositories by excluding auto-generated files, local configurations, and build artifacts.
 
-## Notes
-
-- This README uses Mermaid diagrams. GitHub renders Mermaid automatically; for other renderers ensure Mermaid is enabled.
-
-## Docker (PostgreSQL) Local Setup
-
-This repo can be run fully via Docker using PostgreSQL.
-
-### Database schema source
-
-The repository includes an Oracle → PostgreSQL converted schema dump:
-
-- `NR_CSR.sql`
-
-From that dump we generate Laravel migrations (Postgres) under `database/migrations/2026_01_12_*`.
-
-> Note: Some views in the original Oracle schema reference objects under `NR_PAYMENT.*`. In this repo we keep those as **stubs/TODO** so migrations can run in a standalone `NR_CSR` database.
-
-### 1) Bring up containers
+### Maintenance Commands
 
 ```bash
-docker compose up -d --build
+# Clear application cache
+php artisan cache:clear
+
+# Clear configuration cache
+php artisan config:clear
+
+# Clear route cache
+php artisan route:clear
+
+# Clear view cache
+php artisan view:clear
+
+# Optimize application for production
+php artisan optimize
+
+# Regenerate autoload files
+composer dump-autoload
 ```
 
-### 2) Create `.env`
+## Troubleshooting
 
+### Common Issues
+
+#### 1. Migration Errors
+
+**Problem**: Migration fails with foreign key constraints
+
+**Solution**: 
 ```bash
-copy .env.docker.example .env
-```
+# Drop all tables and re-run migrations
+php artisan migrate:fresh
 
-Then generate app key:
-
-```bash
-docker compose exec -T app php artisan key:generate --force
-```
-
-### 3) Install PHP dependencies
-
-This project includes packages that require extensions used by Oracle (oci8) and Excel exports (gd). If you are running Postgres-only locally, you can install dependencies while ignoring those platform requirements:
-
-```bash
-docker compose exec -T app composer install --no-interaction --ignore-platform-req=ext-gd --ignore-platform-req=ext-oci8
-```
-
-### 4) Run migrations
-
-```bash
-docker compose exec -T app php artisan migrate --force
-```
-
-If you want to rebuild schema from scratch:
-
-```bash
+# Or for Docker
 docker compose exec -T app php artisan migrate:fresh --force
 ```
 
-### Schema verification (optional)
+#### 2. Permission Errors (Linux/macOS)
 
-List tables created in the NR_CSR schema:
+**Problem**: `storage` or `bootstrap/cache` permission denied
 
+**Solution**:
 ```bash
-docker compose exec -T db psql -U nr_csr -d nr_csr -c "SELECT schemaname, tablename FROM pg_tables WHERE schemaname IN ('NR_CSR') ORDER BY tablename;"
+chmod -R 775 storage bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache
 ```
 
-### 5) Open the app
+#### 3. Oracle Connection Issues
 
-Nginx is exposed on:
+**Problem**: `ORA-12154: TNS:could not resolve the connect identifier`
 
+**Solution**:
+- Verify Oracle connection settings in `.env`
+- Ensure Oracle client is properly installed
+- Check `TNS_ADMIN` environment variable
+
+#### 4. Composer Install Fails
+
+**Problem**: Extensions missing (oci8, gd, etc.)
+
+**Solution**:
+```bash
+# For local development with PostgreSQL, ignore platform requirements
+composer install --ignore-platform-req=ext-gd --ignore-platform-req=ext-oci8
 ```
-http://localhost:8080
+
+#### 5. Frontend Assets Not Loading
+
+**Problem**: CSS/JS not loading after pulling changes
+
+**Solution**:
+```bash
+# Reinstall node modules
+rm -rf node_modules package-lock.json
+npm install
+
+# Rebuild assets
+npm run dev
 ```
+
+#### 6. Docker Container Issues
+
+**Problem**: Containers won't start or database connection fails
+
+**Solution**:
+```bash
+# Rebuild containers from scratch
+docker compose down -v
+docker compose up -d --build --force-recreate
+
+# Check container logs
+docker compose logs -f
+```
+
+## Contributing
+
+1. **Fork the repository**
+2. **Create a feature branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. **Make your changes**
+4. **Commit with descriptive messages**
+   ```bash
+   git commit -m "Add: description of your changes"
+   ```
+5. **Push to your fork**
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+6. **Create a Pull Request**
+
+### Commit Message Conventions
+
+- `Add:` for new features
+- `Fix:` for bug fixes
+- `Update:` for updates to existing features
+- `Refactor:` for code refactoring
+- `Docs:` for documentation changes
+- `Test:` for adding or updating tests
+
+## Notes
+
+- This README uses Mermaid diagrams. GitHub renders Mermaid automatically; for other renderers ensure Mermaid is enabled.
+- For production deployments, ensure all environment variables are properly configured.
+- Regular backups of the database are recommended.
+- Keep dependencies up to date for security patches.
+
+---
+
+**License**: Check with Nusantara Regas for licensing information.
+
+**Support**: For issues or questions, please contact the development team or create an issue in the repository.

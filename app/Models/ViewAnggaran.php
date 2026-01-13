@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ViewAnggaran extends Model
 {
-    protected $table = "V_ANGGARAN";
+    protected $table = "v_anggaran";
 }

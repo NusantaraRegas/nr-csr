@@ -28,14 +28,23 @@ class AnggaranController extends Controller
     {
         $perusahaanID = $request->input('perusahaan', session('user')->id_perusahaan);
 
+        // Validate that perusahaanID exists
+        if (!$perusahaanID) {
+            return redirect()->route('dashboard')->with('gagal', 'ID Perusahaan tidak ditemukan. Silakan hubungi administrator.');
+        }
+
         $data = Anggaran::when($perusahaanID, function ($q) use ($perusahaanID) {
                 return $q->where('id_perusahaan', $perusahaanID);
             })
             ->orderByDesc('tahun')
             ->get();
 
-        // Ambil data perusahaan yang dipilih
-        $company = Perusahaan::findOrFail($perusahaanID);
+        // Ambil data perusahaan yang dipilih dengan error handling
+        $company = Perusahaan::find($perusahaanID);
+        
+        if (!$company) {
+            return redirect()->route('dashboard')->with('gagal', 'Data perusahaan tidak ditemukan. Silakan hubungi administrator.');
+        }
 
         $perusahaan = Perusahaan::orderBy('id_perusahaan')->get();
 

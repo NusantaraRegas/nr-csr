@@ -1,5 +1,9 @@
 
 $(window).on('load', function() {
+	// Check if footable plugin is loaded
+	if (!$.fn.footable) {
+		return;
+	}
 
 	// Row Toggler
 	// -----------------------------------------------------------------

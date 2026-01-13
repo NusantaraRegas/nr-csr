@@ -542,7 +542,10 @@
 
     <script>
         $(document).ready(function() {
-            $('.textarea_editor').wysihtml5();
+            // Check if wysihtml5 plugin is loaded
+            if ($.fn.wysihtml5) {
+                $('.textarea_editor').wysihtml5();
+            }
         });
     </script>
 

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ViewProposal extends Model
 {
-    protected $table = "V_PROPOSAL";
+    protected $table = "v_proposal";
 
     public function proker()
     {

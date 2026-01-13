@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Proker extends Model
 {
-    protected $table = "TBL_PROKER";
-    protected $primaryKey = "ID_PROKER";
-    protected $guarded = ["ID_PROKER"];
+    protected $table = "nr_csr.tbl_proker";
+    protected $primaryKey = "id_proker";
+    protected $guarded = ["id_proker"];
 
     public $timestamps = false;
 
