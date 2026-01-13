@@ -1,5 +1,5 @@
 @extends('layout.master_subsidiary')
-@section('title', 'PGN SHARE | Detail Realisasi')
+@section('title', 'NR SHARE | Detail Realisasi')
 
 @section('content')
     <style>

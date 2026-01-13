@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Monitoring Budget')
+@section('title', 'NR SHARE | Monitoring Budget')
 
 @section('content')
     <?php

@@ -52,7 +52,7 @@
                     <div class="b-bg">
                         <img src="{{ asset('template_vendor/assets/images/logoicon.png') }}" width="30px">
                     </div>
-                    <span class="b-title font-weight-bold">PGN SHARE</span>
+                    <span class="b-title font-weight-bold">NR SHARE</span>
                 </a>
                 <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
             </div>
@@ -110,7 +110,7 @@
                 <div class="b-bg">
                     <img src="{{ asset('template_vendor/assets/images/logoicon.png') }}" width="30px">
                 </div>
-                <span class="b-title">PGN SHARE</span>
+                <span class="b-title">NR SHARE</span>
             </a>
         </div>
         <a class="mobile-menu" id="mobile-header" href="#!">

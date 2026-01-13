@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Realisasi Program Kerja')
+@section('title', 'NR SHARE | Realisasi Program Kerja')
 @section('content')
     <style>
         .card-summary-penyaluran {

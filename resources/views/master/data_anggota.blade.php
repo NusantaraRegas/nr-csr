@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Komisi VI & VII')
+@section('title', 'NR SHARE | Komisi VI & VII')
 
 @section('content')
     <style>

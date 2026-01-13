@@ -21,7 +21,7 @@
 
     <!-- Document Title
     ============================================= -->
-    <title>PGN SHARE - Home</title>
+    <title>NR SHARE - Home</title>
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('template/assets/images/logoicon.png') }}">
 
 </head>

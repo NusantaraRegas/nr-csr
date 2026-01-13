@@ -304,7 +304,7 @@ class TasklistController extends Controller
 //                    Mail::send('mail.approval_evaluator', $dataEmail, function ($message) use ($kadep) {
 //                        $message->to($kadep->email, $kadep->nama)
 //                            ->subject('Evaluasi Proposal')
-//                            ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+//                            ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //                    }),
 
                     #UPDATE EVALUASI
@@ -361,7 +361,7 @@ class TasklistController extends Controller
 //                    Mail::send('mail.approval_evaluator', $dataEmail, function ($message) use ($kadiv) {
 //                        $message->to($kadiv->email, $kadiv->nama)
 //                            ->subject('Evaluasi Proposal')
-//                            ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+//                            ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //                    }),
 
                     #UPDATE EVALUASI
@@ -419,7 +419,7 @@ class TasklistController extends Controller
 //                            $message->to($evaluator1->email, $evaluator1->nama)
 //                                ->cc($evaluator2->email, $evaluator2->nama)
 //                                ->subject('Evaluasi Proposal')
-//                                ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+//                                ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //                        }),
 
                         #UPDATE EVALUASI
@@ -460,7 +460,7 @@ class TasklistController extends Controller
 //                            $message->to($evaluator1->email, $evaluator1->nama)
 //                                ->cc($evaluator2->email, $evaluator2->nama)
 //                                ->subject('Penolakan Evaluasi Proposal')
-//                                ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+//                                ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //                        }),
 
                         #UPDATE EVALUASI

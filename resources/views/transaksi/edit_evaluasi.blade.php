@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Edit Evaluasi')
+@section('title', 'NR SHARE | Edit Evaluasi')
 
 @section('content')
     <style>
@@ -94,8 +94,8 @@
                                         <div class="input-group">
                                             <ul class="icheck-list">
                                                 <?php
-                                                $data1 = \App\Models\DetailKriteria::where('no_agenda', $data->no_agenda)->where('kriteria', 'Wilayah Operasi PGN (Ring I / II / III)')->count();
-                                                $data2 = \App\Models\DetailKriteria::where('no_agenda', $data->no_agenda)->where('kriteria', 'Kelancaran Operasional/asset PGN')->count();
+                                                $data1 = \App\Models\DetailKriteria::where('no_agenda', $data->no_agenda)->where('kriteria', 'Wilayah Operasi NR (Ring I / II / III)')->count();
+                                                $data2 = \App\Models\DetailKriteria::where('no_agenda', $data->no_agenda)->where('kriteria', 'Kelancaran Operasional/asset NR')->count();
                                                 $data3 = \App\Models\DetailKriteria::where('no_agenda', $data->no_agenda)->where('kriteria', 'Menjaga hubungan baik shareholders/stakeholders')->count();
                                                 $data4 = \App\Models\DetailKriteria::where('no_agenda', $data->no_agenda)->where('kriteria', 'Brand images/citra perusahaan')->count();
                                                 $data5 = \App\Models\DetailKriteria::where('no_agenda', $data->no_agenda)->where('kriteria', 'Pengembangan wilayah usaha')->count();
@@ -103,41 +103,41 @@
                                                 @if($data1 > 0)
                                                     <li>
                                                         <input type="checkbox" name="wilayahOperasi"
-                                                               value="Wilayah Operasi PGN (Ring I / II / III)"
+                                                               value="Wilayah Operasi NR (Ring I / II / III)"
                                                                class="check" checked
                                                                id="square-checkbox-1"
                                                                data-checkbox="icheckbox_square-red">
-                                                        <label for="square-checkbox-1">Wilayah Operasi PGN (Ring
+                                                        <label for="square-checkbox-1">Wilayah Operasi NR (Ring
                                                             I/II/III)</label>
                                                     </li>
                                                 @else
                                                     <li>
                                                         <input type="checkbox" name="wilayahOperasi"
-                                                               value="Wilayah Operasi PGN (Ring I / II / III)"
+                                                               value="Wilayah Operasi NR (Ring I / II / III)"
                                                                class="check"
                                                                id="square-checkbox-1"
                                                                data-checkbox="icheckbox_square-red">
-                                                        <label for="square-checkbox-1">Wilayah Operasi PGN (Ring
+                                                        <label for="square-checkbox-1">Wilayah Operasi NR (Ring
                                                             I/II/III)</label>
                                                     </li>
                                                 @endif
                                                 @if($data2 > 0)
                                                     <li>
                                                         <input type="checkbox" name="kelancaranOperasional"
-                                                               value="Kelancaran Operasional/asset PGN" class="check"
+                                                               value="Kelancaran Operasional/asset NR" class="check"
                                                                id="square-checkbox-2" checked
                                                                data-checkbox="icheckbox_square-red">
                                                         <label for="square-checkbox-2">Kelancaran Operasional/Asset
-                                                            PGN</label>
+                                                            NR</label>
                                                     </li>
                                                 @else
                                                     <li>
                                                         <input type="checkbox" name="kelancaranOperasional"
-                                                               value="Kelancaran Operasional/asset PGN" class="check"
+                                                               value="Kelancaran Operasional/asset NR" class="check"
                                                                id="square-checkbox-2"
                                                                data-checkbox="icheckbox_square-red">
                                                         <label for="square-checkbox-2">Kelancaran Operasional/Asset
-                                                            PGN</label>
+                                                            NR</label>
                                                     </li>
                                                 @endif
                                                 @if($data3 > 0)

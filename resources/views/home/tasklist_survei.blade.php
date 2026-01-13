@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Tasklist')
+@section('title', 'NR SHARE | Tasklist')
 
 @section('content')
     <style>

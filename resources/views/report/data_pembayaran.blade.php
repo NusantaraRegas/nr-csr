@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Rekap Realisasi')
+@section('title', 'NR SHARE | Rekap Realisasi')
 @section('content')
     <style>
         .empty-icon {

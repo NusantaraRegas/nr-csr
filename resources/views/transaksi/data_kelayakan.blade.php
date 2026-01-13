@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Laporan Kelayakan Proposal')
+@section('title', 'NR SHARE | Laporan Kelayakan Proposal')
 
 @section('content')
     <div class="container-fluid">

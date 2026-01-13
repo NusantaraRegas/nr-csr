@@ -775,7 +775,7 @@ class SurveiController extends Controller
             Mail::send('mail.approval_surveyor', $dataEmail, function ($message) use ($survei2) {
                 $message->to($survei2->email, $survei2->nama)
                     ->subject('Survei Proposal')
-                    ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
             });
 
             Survei::where('no_agenda', $logID)->update($dataUpdate);

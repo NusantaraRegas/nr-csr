@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Anggaran')
+@section('title', 'NR SHARE | Anggaran')
 @section('content')
     <style>
         .card-summary-penyaluran {

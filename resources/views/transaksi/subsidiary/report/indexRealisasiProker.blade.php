@@ -1,5 +1,5 @@
 @extends('layout.master_subsidiary')
-@section('title', 'PGN SHARE | Realisasi Program Kerja')
+@section('title', 'NR SHARE | Realisasi Program Kerja')
 @section('content')
     <?php
     $sisa = $anggaran - $realisasi;

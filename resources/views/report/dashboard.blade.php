@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Dashboard')
+@section('title', 'NR SHARE | Dashboard')
 @section('content')
     <?php
     $lastYear = $tahun - 1;

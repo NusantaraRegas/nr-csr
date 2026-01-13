@@ -67,7 +67,7 @@ function terbilang($x, $style = 4)
 ?>
 
 @extends('layout.master')
-@section('title', 'PGN SHARE | Update Payment Request')
+@section('title', 'NR SHARE | Update Payment Request')
 @section('content')
     <div class="container-fluid">
         <!-- ============================================================== -->

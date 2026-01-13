@@ -1,5 +1,5 @@
 @extends('layout.master_subsidiary')
-@section('title', 'PGN SHARE | Alokasi Program Kerja')
+@section('title', 'NR SHARE | Alokasi Program Kerja')
 
 @section('content')
     <?php

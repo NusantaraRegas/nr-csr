@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Data Entitas')
+@section('title', 'NR SHARE | Data Entitas')
 
 @section('content')
     <div class="container">
@@ -237,7 +237,7 @@
                             <div class="form-group col-md-6">
                                 <label>Inisial <span class="text-danger">*</span></label>
                                 <input type="text" name="inisial" id="inisial" class="form-control"
-                                    placeholder="Contoh: PGN" value="{{ old('inisial') }}" required>
+                                    placeholder="Contoh: NR" value="{{ old('inisial') }}" required>
                                 @error('inisial')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror

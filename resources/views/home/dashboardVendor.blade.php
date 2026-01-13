@@ -1,5 +1,5 @@
 @extends('layout.master_vendor')
-@section('title', 'PGN SHARE | Dashboard')
+@section('title', 'NR SHARE | Dashboard')
 @section('content')
     <div class="container-fluid">
         <div class="row page-titles">

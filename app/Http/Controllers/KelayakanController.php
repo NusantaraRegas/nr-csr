@@ -652,7 +652,7 @@ class KelayakanController extends Controller
             $dataKriteria = [
                 'no_agenda' => strtoupper($request->noAgenda),
                 'id_kelayakan' => $idKelayakan,
-                'kriteria' => 'Kelancaran Operasional/asset PGN',
+                'kriteria' => 'Kelancaran Operasional/asset NR',
             ];
 
             $dataPembayaran = [
@@ -1107,7 +1107,7 @@ class KelayakanController extends Controller
                         Mail::send('mail.notifikasi_permohonan_persetujuan', $dataEmail, function ($message) use ($receiver, $kelayakan) {
                         $message->to($receiver->email, $receiver->nama)
                             ->subject("Permohonan Persetujuan $kelayakan->status Proposal")
-                            ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                            ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
                         });
                     } catch (\Exception $e) {
                         return redirect()->back()->with('gagalDetail', 'Gagal mengirim email notifikasi.');
@@ -1165,7 +1165,7 @@ class KelayakanController extends Controller
                     //     Mail::send('mail.notifikasi_persetujuan', $dataEmail, function ($message) use ($receiver, $kelayakan) {
                     //     $message->to($receiver->email, $receiver->nama)
                     //         ->subject("Persetujuan $kelayakan->status Proposal")
-                    //         ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                    //         ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
                     //     });
                     // } catch (\Exception $e) {
                     //     return redirect()->back()->with('gagalDetail', 'Gagal mengirim email notifikasi.');
@@ -1260,7 +1260,7 @@ class KelayakanController extends Controller
                     //     Mail::send('mail.notifikasi_permohonan_persetujuan', $dataEmail, function ($message) use ($receiver, $kelayakan) {
                     //     $message->to($receiver->email, $receiver->nama)
                     //         ->subject("Permohonan Persetujuan $kelayakan->status Proposal")
-                    //         ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                    //         ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
                     //     });
                     // } catch (\Exception $e) {
                     //     return redirect()->back()->with('gagalDetail', 'Gagal mengirim email notifikasi.');
@@ -1357,7 +1357,7 @@ class KelayakanController extends Controller
                     //     Mail::send('mail.notifikasi_persetujuan', $dataEmail, function ($message) use ($receiver, $kelayakan) {
                     //     $message->to($receiver->email, $receiver->nama)
                     //         ->subject("Persetujuan $kelayakan->status Proposal")
-                    //         ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                    //         ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
                     //     });
                     // } catch (\Exception $e) {
                     //     return redirect()->back()->with('gagalDetail', 'Gagal mengirim email notifikasi.');
@@ -1630,7 +1630,7 @@ class KelayakanController extends Controller
         Mail::send("mail.$template", $dataEmail, function ($message) use ($receiver, $kelayakan) {
             $message->to($receiver->email, $receiver->nama)
                 ->subject("Persetujuan $kelayakan->status Proposal")
-                ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
         });
     }
 
@@ -3188,7 +3188,7 @@ class KelayakanController extends Controller
 //            Mail::send('mail.approval_evaluator', $dataEmail, function ($message) use ($evaluator2) {
 //                $message->to($evaluator2->email, $evaluator2->nama)
 //                    ->subject('Review Evaluasi Proposal')
-//                    ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+//                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //            });
 
             DB::table('tbl_kelayakan')->insert($dataKelayakan);

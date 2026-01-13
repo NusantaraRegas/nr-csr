@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>PGN SHARE | Print Realisasi Proposal</title>
+    <title>NR SHARE | Print Realisasi Proposal</title>
     <link rel="icon" type="image/png" href="{{ asset('template/assets/images/logoicon.png') }}">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

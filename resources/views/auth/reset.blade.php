@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <title>PGN SHARE | Reset Password</title>
+    <title>NR SHARE | Reset Password</title>
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('template/assets/images/logoicon.png') }}">
 
     <!-- page css -->
@@ -49,7 +49,7 @@
             <div class="card-body">
                 <center>
                     <img class="m-t-20" src="{{ asset('template/assets/images/logo-pertamina-gas-negara.png') }}"
-                         width="200px" alt="Logo PGN">
+                         width="200px" alt="Logo NR">
                     <h5 class="m-t-20 model-huruf-family"><b>RESET PASSWORD</b></h5>
                 </center>
                 <br>
@@ -70,7 +70,7 @@
                     </div>
                     <div class="form-group m-b-0 m-t-25">
                         <div class="col-sm-12 text-center">
-                            <h3 class="card-title model-huruf-family">PGN SHARE</h3>
+                            <h3 class="card-title model-huruf-family">NR SHARE</h3>
                             <h6 class="card-subtitle model-huruf-family">© 2018 - 2021 PT Perusahaan Gas Negara Tbk<br>
                                 All Rights Reserved</h6>
                         </div>

@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Operasional')
+@section('title', 'NR SHARE | Operasional')
 
 @section('content')
     <div class="container">

@@ -1,5 +1,5 @@
 @extends('layout.master_vendor')
-@section('title', 'PGN SHARE | SPPH')
+@section('title', 'NR SHARE | SPPH')
 
 @section('content')
     <div class="pcoded-inner-content">

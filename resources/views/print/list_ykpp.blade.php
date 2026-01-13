@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>PGN SHARE | Print Penyaluran TJSL</title>
+    <title>NR SHARE | Print Penyaluran TJSL</title>
     <link rel="icon" type="image/png" href="{{ asset('template/assets/images/logoicon.png') }}">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

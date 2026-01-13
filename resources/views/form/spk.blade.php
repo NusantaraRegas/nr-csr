@@ -263,7 +263,7 @@ $panjangKegiatan = strlen($data->kegiatan);
                             <tr>
                                 <td colspan="5" style="text-align: justify">
                                     Sehubungan dengan rencana PT Perusahaan Gas Negara Tbk. Corporate Social
-                                    Responsibility Division (“PGN”) melaksanakan {{ $data->kegiatan }}. Dengan
+                                    Responsibility Division (“NR”) melaksanakan {{ $data->kegiatan }}. Dengan
                                     ini kami menugaskan {{ $data->perusahaan }} untuk melaksanakan {{ $data->kegiatan }}
                                     sebagaimana dimaksud dengan rincian sebagai berikut (untuk
                                     selanjutnya disebut “Program”).
@@ -344,7 +344,7 @@ $panjangKegiatan = strlen($data->kegiatan);
                                                                         style="float: left; text-align: right">:&nbsp;
                                                                     </td>
                                                                     <td width="500px">PT Perusahaan Gas Negara Tbk,
-                                                                        Corporate Social Responsibility Division (“PGN”)
+                                                                        Corporate Social Responsibility Division (“NR”)
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -825,11 +825,11 @@ $panjangKegiatan = strlen($data->kegiatan);
                                                                                                         lainnya
                                                                                                         sebagaimana
                                                                                                         diperysaratkan
-                                                                                                        oleh PGN
+                                                                                                        oleh NR
                                                                                                         berdasarkan
                                                                                                         peraturan yang
                                                                                                         berlaku
-                                                                                                        di PGN (apabila
+                                                                                                        di NR (apabila
                                                                                                         diperlukan).
                                                                                                     </td>
                                                                                                 </tr>

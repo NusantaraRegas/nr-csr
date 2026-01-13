@@ -31,7 +31,7 @@
 <!-- ============================================================== -->
 <div class="preloader">
     <div class="loader">
-        <div><img src="{{ asset('template/assets/images/logoicon.png') }}" width="48" height="48" alt="Logo PGN"></div>
+        <div><img src="{{ asset('template/assets/images/logoicon.png') }}" width="48" height="48" alt="Logo NR"></div>
         <p class="loader__label">Loading page</p>
     </div>
 </div>

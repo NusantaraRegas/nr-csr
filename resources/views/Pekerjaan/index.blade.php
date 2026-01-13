@@ -1,5 +1,5 @@
 @extends('layout.master_vendor')
-@section('title', 'PGN SHARE | Project List')
+@section('title', 'NR SHARE | Project List')
 
 @section('content')
     <div class="pcoded-inner-content">

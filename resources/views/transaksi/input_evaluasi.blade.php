@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Evaluasi Proposal')
+@section('title', 'NR SHARE | Evaluasi Proposal')
 
 @section('content')
     <style>
@@ -80,17 +80,17 @@
                                         <ul class="icheck-list">
                                             <li>
                                                 <input type="checkbox" name="wilayahOperasi"
-                                                    value="Wilayah Operasi PGN (Ring I / II / III)" class="check"
+                                                    value="Wilayah Operasi NR (Ring I / II / III)" class="check"
                                                     id="square-checkbox-1" data-checkbox="icheckbox_square-red">
-                                                <label for="square-checkbox-1">Wilayah Operasi PGN (Ring
+                                                <label for="square-checkbox-1">Wilayah Operasi NR (Ring
                                                     I/II/III)</label>
                                             </li>
                                             <li>
                                                 <input type="checkbox" name="kelancaranOperasional"
-                                                    value="Kelancaran Operasional/asset PGN" class="check"
+                                                    value="Kelancaran Operasional/asset NR" class="check"
                                                     id="square-checkbox-2" data-checkbox="icheckbox_square-red">
                                                 <label for="square-checkbox-2">Kelancaran Operasional/Asset
-                                                    PGN</label>
+                                                    NR</label>
                                             </li>
                                             <li>
                                                 <input type="checkbox" name="hubunganBaik"
@@ -149,7 +149,7 @@
                                 <label>Catatan <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <input type="text" class="form-control" maxlength="200" name="catatan"
-                                        placeholder="Catatan Evaluator 1" value="Berada dalam wilayah operasi PGN">
+                                        placeholder="Catatan Evaluator 1" value="Berada dalam wilayah operasi NR">
                                 </div>
                                 @if ($errors->has('catatan'))
                                     <small class="text-danger">Catatan harus diisi</small>

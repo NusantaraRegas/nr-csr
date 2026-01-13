@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Laporan Realisasi Anggaran')
+@section('title', 'NR SHARE | Laporan Realisasi Anggaran')
 @section('content')
     <style>
         .model-huruf-family {

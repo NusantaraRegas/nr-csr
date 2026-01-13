@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Kelayakan Proposal')
+@section('title', 'NR SHARE | Kelayakan Proposal')
 
 @section('content')
     <link href="{{ asset('template/assets/node_modules/wizard/steps.css') }}" rel="stylesheet">

@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Realisasi Prioritas')
+@section('title', 'NR SHARE | Realisasi Prioritas')
 @section('content')
     <style>
         .select2-container--default .select2-selection--single {

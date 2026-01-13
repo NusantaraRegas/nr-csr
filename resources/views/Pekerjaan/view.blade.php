@@ -1,5 +1,5 @@
 @extends('layout.master_vendor')
-@section('title', 'PGN SHARE | Detail Project')
+@section('title', 'NR SHARE | Detail Project')
 
 @section('content')
     <style>

@@ -1,5 +1,5 @@
 @extends('layout.master_subsidiary')
-@section('title', 'PGN SHARE | Anggaran')
+@section('title', 'NR SHARE | Anggaran')
 @section('content')
     <style>
         .model-huruf-family {

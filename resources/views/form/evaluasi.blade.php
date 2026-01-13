@@ -519,7 +519,7 @@
                                                 <?php
                                                 $data1 = DB::table('tbl_detail_kriteria')
                                                     ->select(DB::raw('count(*) as jumlah'))
-                                                    ->where([['no_agenda', '=', $data->no_agenda], ['kriteria', '=', 'Wilayah Operasi PGN (Ring I / II / III)']])
+                                                    ->where([['no_agenda', '=', $data->no_agenda], ['kriteria', '=', 'Wilayah Operasi NR (Ring I / II / III)']])
                                                     ->first();
                                                 ?>
                                                 <td style="width: 300px">
@@ -527,7 +527,7 @@
                                                     <i class="fa fa-check-square-o"></i>@else<i
                                                             class="fa fa-square-o"></i>
                                                     @endif&nbsp;Wilayah
-                                                    Operasi PGN (Ring I / II / III)
+                                                    Operasi NR (Ring I / II / III)
                                                 </td>
                                                 <td style="width: 5px"></td>
                                                 <?php
@@ -555,7 +555,7 @@
                                                 <?php
                                                 $data3 = DB::table('tbl_detail_kriteria')
                                                     ->select(DB::raw('count(*) as jumlah'))
-                                                    ->where([['no_agenda', '=', $data->no_agenda], ['kriteria', '=', 'Kelancaran Operasional/asset PGN']])
+                                                    ->where([['no_agenda', '=', $data->no_agenda], ['kriteria', '=', 'Kelancaran Operasional/asset NR']])
                                                     ->first();
                                                 ?>
                                                 <td style="width: 300px">
@@ -563,7 +563,7 @@
                                                     <i class="fa fa-check-square-o"></i>@else<i
                                                             class="fa fa-square-o"></i>
                                                     @endif&nbsp;Kelancaran
-                                                    Operasional/asset PGN
+                                                    Operasional/asset NR
                                                 </td>
                                                 <td style="width: 5px"></td>
                                                 <?php

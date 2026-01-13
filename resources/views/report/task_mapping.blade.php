@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Mapping Program Kerja')
+@section('title', 'NR SHARE | Mapping Program Kerja')
 @section('content')
     <style>
         .model-huruf-family {

@@ -57,7 +57,7 @@
                                 <div class="form-group col-md-6">
                                     <label>Pengirim <span class="text-danger">*</span></label>
                                     <select class="select2 form-control" name="pengirim" style="width: 100%;">
-                                        <option value="CSR PGN">CSR PGN</option>
+                                        <option value="CSR NR">CSR NR</option>
                                         @foreach ($dataPengirim as $pengirim)
                                             <option value="{{ $pengirim->pengirim }}">{{ $pengirim->pengirim }}</option>
                                         @endforeach
@@ -180,7 +180,7 @@
                             <div class="form-group">
                                 <label>Deskripsi Bantuan <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="deskripsiBantuan"
-                                    value="Santunan PGN Tahun 2022">
+                                    value="Santunan NR Tahun 2022">
                                 @if ($errors->has('deskripsiBantuan'))
                                     <small class="text-danger">Deskripsi bantuan harus diisi</small>
                                 @endif
@@ -241,17 +241,17 @@
                                         <ul class="icheck-list">
                                             <li>
                                                 <input type="checkbox" name="wilayahOperasi"
-                                                    value="Wilayah Operasi PGN (Ring I / II / III)" class="check"
+                                                    value="Wilayah Operasi NR (Ring I / II / III)" class="check"
                                                     id="square-checkbox-1" data-checkbox="icheckbox_square-red">
-                                                <label for="square-checkbox-1">Wilayah Operasi PGN (Ring
+                                                <label for="square-checkbox-1">Wilayah Operasi NR (Ring
                                                     I/II/III)</label>
                                             </li>
                                             <li>
                                                 <input type="checkbox" name="kelancaranOperasional"
-                                                    value="Kelancaran Operasional/asset PGN" class="check"
+                                                    value="Kelancaran Operasional/asset NR" class="check"
                                                     id="square-checkbox-2" data-checkbox="icheckbox_square-red">
                                                 <label for="square-checkbox-2">Kelancaran Operasional/Asset
-                                                    PGN</label>
+                                                    NR</label>
                                             </li>
                                             <li>
                                                 <input type="checkbox" name="hubunganBaik" checked

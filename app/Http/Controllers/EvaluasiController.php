@@ -294,7 +294,7 @@ class EvaluasiController extends Controller
 //                    Mail::send('mail.approval_evaluator', $dataEmail, function ($message) use ($kadep) {
 //                        $message->to($kadep->email, $kadep->nama)
 //                            ->subject('Evaluasi Proposal')
-//                            ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+//                            ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //                    });
 
                     return redirect()->route('detail-kelayakan', encrypt($request->noAgenda))->with('sukses', 'Evaluasi proposal berhasil diubah');
@@ -466,7 +466,7 @@ class EvaluasiController extends Controller
 //                        Mail::send('mail.approval_evaluator', $dataEmail, function ($message) use ($kadep) {
 //                            $message->to($kadep->email, $kadep->nama)
 //                                ->subject('Evaluasi Proposal')
-//                                ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+//                                ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //                        });
 
                         return redirect()->route('detail-kelayakan', encrypt($request->noAgenda))->with('sukses', 'Evaluasi proposal berhasil diubah');
@@ -611,7 +611,7 @@ class EvaluasiController extends Controller
             Mail::send('mail.approval_evaluator', $dataEmail, function ($message) use ($evaluator2) {
                 $message->to($evaluator2->email, $evaluator2->nama)
                     ->subject('Evaluasi Proposal')
-                    ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
             });
 
             Evaluasi::where('no_agenda', $logID)->update($dataUpdate);

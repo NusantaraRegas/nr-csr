@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Log Approval')
+@section('title', 'NR SHARE | Log Approval')
 @section('content')
     <style>
         .model-huruf-family {

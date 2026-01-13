@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Lembaga & Yayasan')
+@section('title', 'NR SHARE | Lembaga & Yayasan')
 
 @section('content')
     <div class="container">

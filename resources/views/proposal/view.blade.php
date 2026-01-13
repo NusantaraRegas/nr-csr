@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Detail Kelayakan Proposal')
+@section('title', 'NR SHARE | Detail Kelayakan Proposal')
 
 @section('content')
     <style>
@@ -2069,8 +2069,8 @@
                             <div class="row">
                                 @php
                                     $kepentinganOptions = [
-                                        'Wilayah Operasi PGN (Ring I / II / III)',
-                                        'Kelancaran Operasional/asset PGN',
+                                        'Wilayah Operasi NR (Ring I / II / III)',
+                                        'Kelancaran Operasional/asset NR',
                                         'Menjaga hubungan baik shareholders/stakeholders',
                                         'Brand images/citra perusahaan',
                                         'Pengembangan wilayah usaha',
@@ -2200,8 +2200,8 @@
                                 <div class="row">
                                     @php
                                         $kepentinganOptions = [
-                                            'Wilayah Operasi PGN (Ring I / II / III)',
-                                            'Kelancaran Operasional/asset PGN',
+                                            'Wilayah Operasi NR (Ring I / II / III)',
+                                            'Kelancaran Operasional/asset NR',
                                             'Menjaga hubungan baik shareholders/stakeholders',
                                             'Brand images/citra perusahaan',
                                             'Pengembangan wilayah usaha',

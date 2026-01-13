@@ -67,7 +67,7 @@ class TasklistLegalController extends Controller
             Mail::send('mail.approve_bast', $dataEmail, function ($message) use ($surveyor) {
                 $message->to($surveyor->email, $surveyor->nama)
                     ->subject('Verifikasi BAST')
-                    ->from('no.reply@pgn.co.id', 'PGN SHARE');
+                    ->from('no.reply@pgn.co.id', 'NR SHARE');
             });
 
             BASTDana::where('no_agenda', $logID)->update($dataUpdate);

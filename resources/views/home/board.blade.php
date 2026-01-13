@@ -1,5 +1,5 @@
 @extends('layout.master_board')
-@section('title', 'PGN SHARE | Dashboard')
+@section('title', 'NR SHARE | Dashboard')
 @section('content')
     <style>
         .model-huruf {
@@ -67,7 +67,7 @@
                                          alt="Second slide">
                                     <div class="carousel-caption d-none d-md-block">
                                         <h3 class="text-white">Peningkatan Kesehatan</h3>
-                                        <p>Pemberian bantuan 1 unit ambulance dari PGN untuk Yayasan Mulya Cendikia
+                                        <p>Pemberian bantuan 1 unit ambulance dari NR untuk Yayasan Mulya Cendikia
                                             Fadillah Kab.Bekasi</p>
                                     </div>
                                 </div>
@@ -76,7 +76,7 @@
                                          alt="Third slide">
                                     <div class="carousel-caption d-none d-md-block">
                                         <h3 class="text-white">Peningkatan Kesehatan</h3>
-                                        <p>Pemberian bantuan 1 unit ambulance dari PGN untuk Yayasan Mulya Cendikia
+                                        <p>Pemberian bantuan 1 unit ambulance dari NR untuk Yayasan Mulya Cendikia
                                             Fadillah Kab.Bekasi</p>
                                     </div>
                                 </div>

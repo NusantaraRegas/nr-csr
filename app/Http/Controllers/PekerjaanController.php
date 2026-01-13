@@ -443,7 +443,7 @@ class PekerjaanController extends Controller
             Mail::send('mail.submit_bakn', $dataEmail, function ($message) use ($vendor, $project) {
                 $message->to($vendor->email, $vendor->nama_perusahaan)
                     ->subject("Berita Acara Klarifikasi dan Negosiasi $project->nama_pekerjaan")
-                    ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
             });
 
             DB::table('tbl_bakn')->insert($dataBAKN);
@@ -709,7 +709,7 @@ class PekerjaanController extends Controller
             Mail::send('mail.submit_bakn', $dataEmail, function ($message) use ($vendor, $project) {
                 $message->to($vendor->email, $vendor->nama_perusahaan)
                     ->subject("Berita Acara Klarifikasi dan Negosiasi $project->nama_pekerjaan")
-                    ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
             });
 
             BAKN::where('bakn_id', $logID)->update($dataBAKN);
@@ -811,7 +811,7 @@ class PekerjaanController extends Controller
             Mail::send('mail.submit_spk', $dataEmail, function ($message) use ($vendor, $project) {
                 $message->to($vendor->email, $vendor->nama_perusahaan)
                     ->subject("Surat Perintah Kerja $project->nama_pekerjaan")
-                    ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
             });
 
             DB::table('tbl_spk')->insert($dataSPK);
@@ -866,7 +866,7 @@ class PekerjaanController extends Controller
             Mail::send('mail.submit_spk', $dataEmail, function ($message) use ($vendor, $project) {
                 $message->to($vendor->email, $vendor->nama_perusahaan)
                     ->subject("Surat Perintah Kerja $project->nama_pekerjaan")
-                    ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
             });
 
             SPK::where('spk_id', $logID)->update($dataSPK);
@@ -1056,7 +1056,7 @@ class PekerjaanController extends Controller
             Mail::send('mail.permintaan_spph', $dataEmail, function ($message) use ($vendor, $project) {
                 $message->to($vendor->email, $vendor->nama_perusahaan)
                     ->subject("Permintaan Penawaran Harga $project->nama_pekerjaan")
-                    ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
             });
 
             SPPH::where('spph_id', $logID)->update($dataSPPH);

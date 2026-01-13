@@ -30,7 +30,7 @@ class KelayakanImport implements ToCollection, WithHeadingRow
                         'pengirim' => ucwords($row['pengirim']),
                         'tgl_terima' => gmdate('Y-m-d', $tglTerima),
                         'sifat' => 'Segera',
-                        'asal_surat' => 'CSR PGN',
+                        'asal_surat' => 'CSR NR',
                         'no_surat' => strtoupper($row['no_surat']),
                         'tgl_surat' => gmdate('Y-m-d', $tglSurat),
                         'perihal' => 'Permohonan Bantuan Dana',

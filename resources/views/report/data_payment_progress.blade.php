@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | List Payment Request')
+@section('title', 'NR SHARE | List Payment Request')
 @section('content')
     <style>
         .model-huruf-family {

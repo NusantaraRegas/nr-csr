@@ -39,7 +39,7 @@ class SuperAdminSeeder extends Seeder
             'nama' => 'Super Admin (Local)',
             'jabatan' => 'Administrator',
             // Default local password. Change after first login.
-            'password' => bcrypt('corp.PGN'),
+            'password' => bcrypt('corp.NR'),
             // Role is used throughout controllers for authorization/redirect.
             'role' => 'Admin',
             'status' => 'Active',

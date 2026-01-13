@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Detail Proposal')
+@section('title', 'NR SHARE | Detail Proposal')
 <?php
 
 $jumlahLegal = DB::table('TBL_SURVEI')

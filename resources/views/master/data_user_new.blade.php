@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | User Management')
+@section('title', 'NR SHARE | User Management')
 
 @section('content')
     <div class="container-fluid">

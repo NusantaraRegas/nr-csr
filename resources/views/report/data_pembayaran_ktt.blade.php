@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'PGN SHARE | Rekap Penyaluran TJSL-YKPP')
+@section('title', 'NR SHARE | Rekap Penyaluran TJSL-YKPP')
 
 @section('content')
     <style>

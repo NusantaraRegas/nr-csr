@@ -312,7 +312,7 @@ class TasklistSurveiController extends Controller
 //            Mail::send('mail.approval_surveyor', $dataEmail, function ($message) use ($kadep) {
 //                $message->to($kadep->email, $kadep->nama)
 //                    ->subject('Approval Survei Proposal')
-//                    ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+//                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //            });
 
             Survei::where('id_survei', $logID)->update($dataUpdate);
@@ -499,7 +499,7 @@ class TasklistSurveiController extends Controller
 //                                ->cc($survei2->email, $survei2->nama)
 //                                //->cc('sigit.sutrisno@pgncom.co.id', 'Sigit Sutrisno')
 //                                ->subject('Persetujuan Survei Proposal')
-//                                ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+//                                ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //                    }),
 
             ]
@@ -659,7 +659,7 @@ class TasklistSurveiController extends Controller
 //                    Mail::send('mail.approval_surveyor', $dataEmail, function ($message) use ($kadiv) {
 //                        $message->to($kadiv->email, $kadiv->nama)
 //                            ->subject('Survei Proposal')
-//                            ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+//                            ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //                    });
 
                     Survei::where('no_agenda', $logID)->update($dataUpdate);
@@ -707,7 +707,7 @@ class TasklistSurveiController extends Controller
 //                        $message->to($survei1->email, $survei1->nama)
 //                            ->cc($survei2->email, $survei2->nama)
 //                            ->subject('Revisi Survei Proposal')
-//                            ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+//                            ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //                    });
 
                     Survei::where('no_agenda', $logID)->update($dataUpdate);
@@ -1120,7 +1120,7 @@ class TasklistSurveiController extends Controller
 //                        $message->to($survei2->email, $survei2->nama)
 //                            ->cc($survei1->email, $survei1->nama)
 //                            ->subject('Survei Proposal')
-//                            ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+//                            ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //                    });
 
                     Kelayakan::where('no_agenda', $logID)->update($updateProposal);
@@ -1176,7 +1176,7 @@ class TasklistSurveiController extends Controller
 //                    Mail::send('mail.reject_survei', $dataEmail, function ($message) use ($survei2) {
 //                        $message->to($survei2->email, $survei2->nama)
 //                            ->subject('Revisi Survei Proposal')
-//                            ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+//                            ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //                    });
 
                     Survei::where('no_agenda', $logID)->update($dataUpdate);
@@ -1243,7 +1243,7 @@ class TasklistSurveiController extends Controller
 //            Mail::send('mail.approved_surveyor', $dataEmail, function ($message) use ($survei1) {
 //                $message->to($survei1->email, $survei1->nama)
 //                    ->subject('Survei Proposal')
-//                    ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+//                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //            });
 
             Survei::where('no_agenda', $logID)->update($dataUpdate);

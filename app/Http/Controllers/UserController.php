@@ -113,7 +113,7 @@ class UserController extends Controller
             'jabatan' => $request->jabatan,
             'id_perusahaan' => $request->perusahaan,
             'role' => $request->role,
-            'password' => bcrypt('corp.PGN'),
+            'password' => bcrypt('corp.NR'),
             'status' => 'Active',
             'remember_token' => Str::random(40),
         ];

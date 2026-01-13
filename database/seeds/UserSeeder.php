@@ -12,6 +12,6 @@ class UserSeeder extends Seeder
     public function run()
     {
         DB::table('T_USER')
-            ->update(['password' => bcrypt('corp.PGN')]);
+            ->update(['password' => bcrypt('corp.NR')]);
     }
 }

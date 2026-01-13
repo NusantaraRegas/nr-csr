@@ -139,8 +139,8 @@ class LoginController extends Controller
         try {
             Mail::send('mail.notifikasi_otp', $dataEmail, function ($message) use ($receiver) {
                 $message->to($receiver->email, $receiver->nama)
-                    ->subject('Kode OTP Login PGN SHARE')
-                    ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                    ->subject('Kode OTP Login NR SHARE')
+                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
             });
         } catch (\Exception $e) {
             return redirect()->back()->with('gagal', 'Gagal mengirim OTP ke email.');
@@ -215,8 +215,8 @@ class LoginController extends Controller
 
             Mail::send('mail.notifikasi_otp', $dataEmail, function ($message) use ($receiver) {
                 $message->to($receiver->email, $receiver->nama)
-                    ->subject('Kode OTP Login PGN SHARE')
-                    ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                    ->subject('Kode OTP Login NR SHARE')
+                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
             });
 
             return redirect()->route('showOtp')->with('sukses', 'Kode OTP baru telah dikirim.');
@@ -357,7 +357,7 @@ class LoginController extends Controller
                 Mail::send('mail.reset-password', $dataEmail, function ($message) use ($data) {
                     $message->to($data->email, $data->nama)
                         ->subject('Reset Password Aplikasi SHARE')
-                        ->from('pgn.no.reply@pertamina.com', 'PGN SHARE');
+                        ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
                 });
                 return redirect()->back()->with('sukses', 'Cek email anda untuk mengatur ulang kata sandi');
             } catch (Exception $e) {
