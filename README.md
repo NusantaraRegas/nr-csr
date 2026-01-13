@@ -196,6 +196,28 @@ sequenceDiagram
 - `/DokumenLegal/*` - BAST/SPK documents
 - `/subsidiary/*` - subsidiary dashboards, budgeting, realization, reporting
 
+## Project Maintenance
+
+### Git Ignore Configuration
+
+The project includes comprehensive `.gitignore` files to prevent committing unnecessary files:
+
+**Root `.gitignore`:**
+- Laravel/PHP: vendor dependencies, IDE helpers, test coverage, Homestead configs
+- Node/Frontend: node_modules, build artifacts, npm/yarn cache and logs
+- IDEs: .idea/, .vscode/, editor swap and backup files
+- Operating Systems: macOS (.DS_Store), Windows (Thumbs.db), Linux (.directory)
+- Docker: local volumes, docker-compose overrides
+- Process files: PIDs, lock files
+
+**`public/template/assets/.gitignore`:**
+- Node dependencies (node_modules/, bower_components/)
+- Build output (dist/, build/, minified files)
+- Cache and log files
+- OS and editor-specific files
+
+These configurations ensure clean repositories by excluding auto-generated files, local configurations, and build artifacts.
+
 ## Notes
 
 - This README uses Mermaid diagrams. GitHub renders Mermaid automatically; for other renderers ensure Mermaid is enabled.
