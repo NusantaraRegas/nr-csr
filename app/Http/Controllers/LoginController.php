@@ -77,6 +77,15 @@ class LoginController extends Controller
         }
 
         // 4. Coba login via LDAP
+        // Guard: PHP LDAP extension might not be installed in local Docker.
+        // Without it, calling ldap_connect() would fatal with "Call to undefined function".
+        if (!function_exists('ldap_connect')) {
+            return redirect()->back()->with(
+                'gagal',
+                'LDAP login tidak tersedia (PHP LDAP extension belum terpasang di environment ini).'
+            );
+        }
+
         $domain   = 'pertamina\\';
         $ldapHost = '10.129.1.4';
         $ldapPort = 389;

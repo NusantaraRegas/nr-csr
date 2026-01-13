@@ -6,18 +6,24 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    protected $table = "TBL_USER";
-    protected $primaryKey = "ID_USER";
-    protected $guarded = ["ID_USER"];
-    protected $hidden = ['PASSWORD', 'REMEMBER_TOKEN'];
+    // Postgres normalized schema uses lowercase, unquoted identifiers
+    protected $table = "tbl_user";
+    protected $primaryKey = "id_user";
+    protected $guarded = ["id_user"];
+    protected $hidden = ['password', 'remember_token'];
 
     public $timestamps = false;
-    public $incrementing = false;
-    protected $keyType = 'string';
+    public $incrementing = true;
+    protected $keyType = 'int';
+
+    // Cast id_perusahaan to integer to prevent decimal issues
+    protected $casts = [
+        'id_perusahaan' => 'integer',
+    ];
 
     public function hirarki()
     {
-        return $this->hasOne(Hirarki::class, 'ID_USER', 'ID_USER');
+        return $this->hasOne(Hirarki::class, 'id_user', 'id_user');
     }
 
     public function perusahaan()

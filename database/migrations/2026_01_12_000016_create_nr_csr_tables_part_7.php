@@ -8,19 +8,19 @@ class CreateNrCsrTablesPart7 extends Migration
 {
     public function up()
     {
-        Schema::create('NR_CSR.TBL_WILAYAH', function (Blueprint $table) {
-                    $table->increments('ID_WILAYAH');
-                    $table->string('PROVINCE', 50)->nullable();
-                    $table->string('CITY', 50)->nullable();
-                    $table->string('CITY_NAME', 50)->nullable();
-                    $table->string('SUB_DISTRICT', 50)->nullable();
-                    $table->string('VILLAGE', 50)->nullable();
-                    $table->string('POSTAL_CODE', 5)->nullable();
+        Schema::create('nr_csr.tbl_wilayah', function (Blueprint $table) {
+                    $table->increments('id_wilayah');
+                    $table->string('province', 50)->nullable();
+                    $table->string('city', 50)->nullable();
+                    $table->string('city_name', 50)->nullable();
+                    $table->string('sub_district', 50)->nullable();
+                    $table->string('village', 50)->nullable();
+                    $table->string('postal_code', 5)->nullable();
                 });
     }
 
     public function down()
     {
-        Schema::dropIfExists('NR_CSR.TBL_WILAYAH');
+        Schema::dropIfExists('nr_csr.tbl_wilayah');
     }
 }

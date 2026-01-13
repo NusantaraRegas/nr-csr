@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class LevelHirarki extends Model
 {
-    protected $table = "TBL_LEVEL_HIRARKI";
-    protected $primaryKey = "ID";
-    protected $guarded = ["ID"];
+    protected $table = "tbl_level_hirarki";
+    protected $primaryKey = "id";
+    protected $guarded = ["id"];
 
     public $timestamps = false;
 
     public function hirarki()
-{
-    return $this->hasOne(Hirarki::class, 'ID_LEVEL', 'ID');
-}
+    {
+        return $this->hasOne(Hirarki::class, 'id_level', 'id');
+    }
 }

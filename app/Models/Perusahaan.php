@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Perusahaan extends Model
 {
-    protected $table = "TBL_PERUSAHAAN";
-    protected $primaryKey = "ID_PERUSAHAAN";
-    protected $guarded = ["ID_PERUSAHAAN"];
-    protected $fillable = ['ID_PERUSAHAAN', 'NAMA_PERUSAHAAN', 'KODE', 'FOTO_PROFILE', 'ALAMAT', 'NO_TELP', 'PIC'];
+    protected $table = "tbl_perusahaan";
+    protected $primaryKey = "id_perusahaan";
+    protected $guarded = ["id_perusahaan"];
+    protected $fillable = ['id_perusahaan', 'nama_perusahaan', 'kode', 'foto_profile', 'alamat', 'no_telp', 'pic'];
 
     public $timestamps = false;
 

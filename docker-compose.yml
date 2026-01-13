@@ -37,12 +37,18 @@ services:
     environment:
       APP_ENV: local
       APP_DEBUG: "true"
+      # Ensure Laravel can encrypt/decrypt cookies (sessions) correctly
+      # so custom middleware (cred.login) sees session('user') after login.
+      APP_KEY: ${APP_KEY}
+      APP_URL: ${APP_URL}
       DB_CONNECTION: pgsql
       DB_HOST: db
       DB_PORT: 5432
       DB_DATABASE: nr_csr
       DB_USERNAME: nr_csr
       DB_PASSWORD: nr_csr
+      SESSION_DRIVER: ${SESSION_DRIVER}
+      SESSION_LIFETIME: ${SESSION_LIFETIME}
     depends_on:
       - db
 
@@ -68,6 +74,7 @@ services:
       - "5432:5432"
     volumes:
       - nr_csr_pgdata:/var/lib/postgresql/data
+      - ./docker/db/init.sql:/docker-entrypoint-initdb.d/99-set-search-path.sql:ro
 
 volumes:
   nr_csr_pgdata:

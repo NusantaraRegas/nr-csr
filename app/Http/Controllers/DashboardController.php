@@ -41,7 +41,7 @@ class DashboardController extends Controller
             ->where('tahun', $tahun)
             ->first(); 
 
-        $totalRealisasi = $realisasi->total;
+        $totalRealisasi = $realisasi->total ?? 0;
         $sisa = $budget->nominal - $totalRealisasi;
 
         $prokerPilar = DB::table('tbl_proker')
@@ -152,7 +152,7 @@ class DashboardController extends Controller
             $realisasiData[] = isset($realisasiAP[$row->id_perusahaan])
                 ? (int) $realisasiAP[$row->id_perusahaan]->nilai_realisasi
                 : 0;
-        }    
+        }
 
         return view('home.dashboard')
             ->with([

@@ -8,153 +8,153 @@ class CreateNrCsrTablesPart5 extends Migration
 {
     public function up()
     {
-        Schema::create('NR_CSR.TBL_PENGALAMAN_KERJA', function (Blueprint $table) {
-                    $table->increments('PENGALAMAN_ID');
-                    $table->string('ID_VENDOR', 255)->nullable();
-                    $table->string('NO_KONTRAK', 255)->nullable();
-                    $table->string('TGL_KONTRAK', 255)->nullable();
-                    $table->string('PEKERJAAN', 255)->nullable();
-                    $table->string('PEMBERI_KERJA', 255)->nullable();
-                    $table->string('LOKASI', 255)->nullable();
-                    $table->string('FILE', 255)->nullable();
-                    $table->string('CREATED_BY', 255)->nullable();
-                    $table->timestamp('CREATED_DATE')->nullable();
-                    $table->decimal('NILAI', 18, 2)->nullable();
+        Schema::create('nr_csr.tbl_pengalaman_kerja', function (Blueprint $table) {
+                    $table->increments('pengalaman_id');
+                    $table->string('id_vendor', 255)->nullable();
+                    $table->string('no_kontrak', 255)->nullable();
+                    $table->string('tgl_kontrak', 255)->nullable();
+                    $table->string('pekerjaan', 255)->nullable();
+                    $table->string('pemberi_kerja', 255)->nullable();
+                    $table->string('lokasi', 255)->nullable();
+                    $table->string('file', 255)->nullable();
+                    $table->string('created_by', 255)->nullable();
+                    $table->timestamp('created_date')->nullable();
+                    $table->decimal('nilai', 18, 2)->nullable();
                 });
 
-        Schema::create('NR_CSR.TBL_PENGEMBALIAN_ANGGARAN', function (Blueprint $table) {
-                    $table->increments('ID');
-                    $table->decimal('ANGGARAN_ID', 18, 2)->nullable();
-                    $table->string('PENGEMBALIAN', 255)->nullable();
-                    $table->string('CREATED_BY', 255)->nullable();
-                    $table->timestamp('CREATED_DATE')->nullable();
+        Schema::create('nr_csr.tbl_pengembalian_anggaran', function (Blueprint $table) {
+                    $table->increments('id');
+                    $table->decimal('anggaran_id', 18, 2)->nullable();
+                    $table->string('pengembalian', 255)->nullable();
+                    $table->string('created_by', 255)->nullable();
+                    $table->timestamp('created_date')->nullable();
                 });
 
-        Schema::create('NR_CSR.TBL_PENGIRIM', function (Blueprint $table) {
-                    $table->increments('ID_PENGIRIM');
-                    $table->string('PENGIRIM', 50)->nullable();
-                    $table->timestamp('CREATED_AT')->nullable();
-                    $table->timestamp('UPDATED_AT')->nullable();
-                    $table->string('PERUSAHAAN', 100)->nullable();
-                    $table->decimal('ID_PERUSAHAAN', 18, 2)->nullable();
-                    $table->string('STATUS', 10)->nullable();
+        Schema::create('nr_csr.tbl_pengirim', function (Blueprint $table) {
+                    $table->increments('id_pengirim');
+                    $table->string('pengirim', 50)->nullable();
+                    $table->timestamp('created_at')->nullable();
+                    $table->timestamp('updated_at')->nullable();
+                    $table->string('perusahaan', 100)->nullable();
+                    $table->decimal('id_perusahaan', 18, 2)->nullable();
+                    $table->string('status', 10)->nullable();
                 });
 
-        Schema::create('NR_CSR.TBL_PERUSAHAAN', function (Blueprint $table) {
-                    $table->increments('ID_PERUSAHAAN');
-                    $table->string('NAMA_PERUSAHAAN', 100)->nullable();
-                    $table->string('KATEGORI', 20)->nullable();
-                    $table->string('KODE', 10)->nullable();
-                    $table->string('FOTO_PROFILE', 255)->nullable();
-                    $table->string('ALAMAT', 500)->nullable();
-                    $table->string('NO_TELP', 15)->nullable();
-                    $table->decimal('PIC', 18, 2)->nullable();
-                    $table->string('STATUS', 20)->nullable();
+        Schema::create('nr_csr.tbl_perusahaan', function (Blueprint $table) {
+                    $table->increments('id_perusahaan');
+                    $table->string('nama_perusahaan', 100)->nullable();
+                    $table->string('kategori', 20)->nullable();
+                    $table->string('kode', 10)->nullable();
+                    $table->string('foto_profile', 255)->nullable();
+                    $table->string('alamat', 500)->nullable();
+                    $table->string('no_telp', 15)->nullable();
+                    $table->decimal('pic', 18, 2)->nullable();
+                    $table->string('status', 20)->nullable();
                 });
 
-        Schema::create('NR_CSR.TBL_PILAR', function (Blueprint $table) {
-                    $table->bigIncrements('ID_PILAR');
-                    $table->string('KODE', 255)->nullable();
-                    $table->string('NAMA', 255)->nullable();
+        Schema::create('nr_csr.tbl_pilar', function (Blueprint $table) {
+                    $table->bigIncrements('id_pilar');
+                    $table->string('kode', 255)->nullable();
+                    $table->string('nama', 255)->nullable();
                 });
 
-        Schema::create('NR_CSR.TBL_PROKER', function (Blueprint $table) {
-                    $table->increments('ID_PROKER');
-                    $table->string('PROKER', 1000)->nullable();
-                    $table->string('ID_INDIKATOR', 100)->nullable();
-                    $table->string('TAHUN', 4)->nullable();
-                    $table->decimal('ANGGARAN', 18, 2)->nullable();
-                    $table->string('PRIORITAS', 255)->nullable();
-                    $table->string('EB', 255)->nullable();
-                    $table->string('PILAR', 255)->nullable();
-                    $table->string('GOLS', 255)->nullable();
-                    $table->string('PERUSAHAAN', 255)->nullable();
-                    $table->decimal('ID_PERUSAHAAN', 18, 2)->nullable();
-                    $table->string('KODE_TPB', 255)->nullable();
+        Schema::create('nr_csr.tbl_proker', function (Blueprint $table) {
+                    $table->increments('id_proker');
+                    $table->string('proker', 1000)->nullable();
+                    $table->string('id_indikator', 100)->nullable();
+                    $table->string('tahun', 4)->nullable();
+                    $table->decimal('anggaran', 18, 2)->nullable();
+                    $table->string('prioritas', 255)->nullable();
+                    $table->string('eb', 255)->nullable();
+                    $table->string('pilar', 255)->nullable();
+                    $table->string('gols', 255)->nullable();
+                    $table->string('perusahaan', 255)->nullable();
+                    $table->decimal('id_perusahaan', 18, 2)->nullable();
+                    $table->string('kode_tpb', 255)->nullable();
                 });
 
-        Schema::create('NR_CSR.TBL_PROVINSI', function (Blueprint $table) {
-                    $table->bigInteger('ID_PROVINSI');
-                    $table->string('KODE_PROVINSI', 10)->nullable();
-                    $table->string('PROVINSI', 100)->nullable();
+        Schema::create('nr_csr.tbl_provinsi', function (Blueprint $table) {
+                    $table->bigInteger('id_provinsi');
+                    $table->string('kode_provinsi', 10)->nullable();
+                    $table->string('provinsi', 100)->nullable();
                 });
 
-        Schema::create('NR_CSR.TBL_REALISASI_AP', function (Blueprint $table) {
-                    $table->bigIncrements('ID_REALISASI');
-                    $table->string('NO_PROPOSAL', 255)->nullable();
-                    $table->timestamp('TGL_PROPOSAL')->nullable();
-                    $table->string('PENGIRIM', 255)->nullable();
-                    $table->timestamp('TGL_REALISASI')->nullable();
-                    $table->string('SIFAT', 255)->nullable();
-                    $table->string('PERIHAL', 255)->nullable();
-                    $table->bigInteger('BESAR_PERMOHONAN')->nullable();
-                    $table->string('KATEGORI', 255)->nullable();
-                    $table->bigInteger('NILAI_BANTUAN')->nullable();
-                    $table->string('STATUS', 255)->nullable();
-                    $table->string('PROVINSI', 255)->nullable();
-                    $table->string('KABUPATEN', 255)->nullable();
-                    $table->string('DESKRIPSI', 255)->nullable();
-                    $table->bigInteger('ID_PROKER')->nullable();
-                    $table->string('PROKER', 255)->nullable();
-                    $table->string('PILAR', 255)->nullable();
-                    $table->string('GOLS', 255)->nullable();
-                    $table->string('NAMA_YAYASAN', 255)->nullable();
-                    $table->string('ALAMAT', 255)->nullable();
-                    $table->string('PIC', 255)->nullable();
-                    $table->string('JABATAN', 255)->nullable();
-                    $table->string('NO_TELP', 255)->nullable();
-                    $table->string('NO_REKENING', 255)->nullable();
-                    $table->string('ATAS_NAMA', 255)->nullable();
-                    $table->string('NAMA_BANK', 255)->nullable();
-                    $table->string('KOTA_BANK', 255)->nullable();
-                    $table->string('CABANG_BANK', 255)->nullable();
-                    $table->string('CREATED_BY', 255)->nullable();
-                    $table->timestamp('CREATED_DATE')->nullable();
-                    $table->string('JENIS', 255)->nullable();
-                    $table->string('PERUSAHAAN', 255)->nullable();
-                    $table->string('TAHUN', 4)->nullable();
-                    $table->timestamp('STATUS_DATE')->nullable();
-                    $table->string('PRIORITAS', 255)->nullable();
-                    $table->bigInteger('ID_PERUSAHAAN')->nullable();
-                    $table->string('KECAMATAN', 255)->nullable();
-                    $table->string('KELURAHAN', 255)->nullable();
+        Schema::create('nr_csr.tbl_realisasi_ap', function (Blueprint $table) {
+                    $table->bigIncrements('id_realisasi');
+                    $table->string('no_proposal', 255)->nullable();
+                    $table->timestamp('tgl_proposal')->nullable();
+                    $table->string('pengirim', 255)->nullable();
+                    $table->timestamp('tgl_realisasi')->nullable();
+                    $table->string('sifat', 255)->nullable();
+                    $table->string('perihal', 255)->nullable();
+                    $table->bigInteger('besar_permohonan')->nullable();
+                    $table->string('kategori', 255)->nullable();
+                    $table->bigInteger('nilai_bantuan')->nullable();
+                    $table->string('status', 255)->nullable();
+                    $table->string('provinsi', 255)->nullable();
+                    $table->string('kabupaten', 255)->nullable();
+                    $table->string('deskripsi', 255)->nullable();
+                    $table->bigInteger('id_proker')->nullable();
+                    $table->string('proker', 255)->nullable();
+                    $table->string('pilar', 255)->nullable();
+                    $table->string('gols', 255)->nullable();
+                    $table->string('nama_yayasan', 255)->nullable();
+                    $table->string('alamat', 255)->nullable();
+                    $table->string('pic', 255)->nullable();
+                    $table->string('jabatan', 255)->nullable();
+                    $table->string('no_telp', 255)->nullable();
+                    $table->string('no_rekening', 255)->nullable();
+                    $table->string('atas_nama', 255)->nullable();
+                    $table->string('nama_bank', 255)->nullable();
+                    $table->string('kota_bank', 255)->nullable();
+                    $table->string('cabang_bank', 255)->nullable();
+                    $table->string('created_by', 255)->nullable();
+                    $table->timestamp('created_date')->nullable();
+                    $table->string('jenis', 255)->nullable();
+                    $table->string('perusahaan', 255)->nullable();
+                    $table->string('tahun', 4)->nullable();
+                    $table->timestamp('status_date')->nullable();
+                    $table->string('prioritas', 255)->nullable();
+                    $table->bigInteger('id_perusahaan')->nullable();
+                    $table->string('kecamatan', 255)->nullable();
+                    $table->string('kelurahan', 255)->nullable();
                 });
 
-        Schema::create('NR_CSR.TBL_RELOKASI', function (Blueprint $table) {
-                    $table->increments('ID_RELOKASI');
-                    $table->string('PROKER_ASAL', 255)->nullable();
-                    $table->decimal('NOMINAL_ASAL', 18, 2)->nullable();
-                    $table->string('PROKER_TUJUAN', 255)->nullable();
-                    $table->decimal('NOMINAL_TUJUAN', 18, 2)->nullable();
-                    $table->string('REQUEST_BY', 255)->nullable();
-                    $table->timestamp('REQUEST_DATE')->nullable();
-                    $table->string('STATUS', 255)->nullable();
-                    $table->string('APPROVER', 255)->nullable();
-                    $table->string('TAHUN', 4)->nullable();
-                    $table->string('PERUSAHAAN', 255)->nullable();
-                    $table->timestamp('STATUS_DATE')->nullable();
-                    $table->decimal('NOMINAL_RELOKASI', 18, 2)->nullable();
-                    $table->decimal('ID_PERUSAHAAN', 18, 2)->nullable();
+        Schema::create('nr_csr.tbl_relokasi', function (Blueprint $table) {
+                    $table->increments('id_relokasi');
+                    $table->string('proker_asal', 255)->nullable();
+                    $table->decimal('nominal_asal', 18, 2)->nullable();
+                    $table->string('proker_tujuan', 255)->nullable();
+                    $table->decimal('nominal_tujuan', 18, 2)->nullable();
+                    $table->string('request_by', 255)->nullable();
+                    $table->timestamp('request_date')->nullable();
+                    $table->string('status', 255)->nullable();
+                    $table->string('approver', 255)->nullable();
+                    $table->string('tahun', 4)->nullable();
+                    $table->string('perusahaan', 255)->nullable();
+                    $table->timestamp('status_date')->nullable();
+                    $table->decimal('nominal_relokasi', 18, 2)->nullable();
+                    $table->decimal('id_perusahaan', 18, 2)->nullable();
                 });
 
-        Schema::create('NR_CSR.TBL_ROLE', function (Blueprint $table) {
-                    $table->bigInteger('ID_ROLE');
-                    $table->string('ROLE', 2);
-                    $table->string('ROLE_NAME', 30)->nullable();
+        Schema::create('nr_csr.tbl_role', function (Blueprint $table) {
+                    $table->bigInteger('id_role');
+                    $table->string('role', 2);
+                    $table->string('role_name', 30)->nullable();
                 });
     }
 
     public function down()
     {
-        Schema::dropIfExists('NR_CSR.TBL_ROLE');
-        Schema::dropIfExists('NR_CSR.TBL_RELOKASI');
-        Schema::dropIfExists('NR_CSR.TBL_REALISASI_AP');
-        Schema::dropIfExists('NR_CSR.TBL_PROVINSI');
-        Schema::dropIfExists('NR_CSR.TBL_PROKER');
-        Schema::dropIfExists('NR_CSR.TBL_PILAR');
-        Schema::dropIfExists('NR_CSR.TBL_PERUSAHAAN');
-        Schema::dropIfExists('NR_CSR.TBL_PENGIRIM');
-        Schema::dropIfExists('NR_CSR.TBL_PENGEMBALIAN_ANGGARAN');
-        Schema::dropIfExists('NR_CSR.TBL_PENGALAMAN_KERJA');
+        Schema::dropIfExists('nr_csr.tbl_role');
+        Schema::dropIfExists('nr_csr.tbl_relokasi');
+        Schema::dropIfExists('nr_csr.tbl_realisasi_ap');
+        Schema::dropIfExists('nr_csr.tbl_provinsi');
+        Schema::dropIfExists('nr_csr.tbl_proker');
+        Schema::dropIfExists('nr_csr.tbl_pilar');
+        Schema::dropIfExists('nr_csr.tbl_perusahaan');
+        Schema::dropIfExists('nr_csr.tbl_pengirim');
+        Schema::dropIfExists('nr_csr.tbl_pengembalian_anggaran');
+        Schema::dropIfExists('nr_csr.tbl_pengalaman_kerja');
     }
 }

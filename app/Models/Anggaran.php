@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Anggaran extends Model
 {
-    protected $table = "tbl_anggaran";
-    protected $primaryKey = "id_anggaran";
-    protected $guarded = ["id_anggaran"];
+    protected $table = 'tbl_anggaran';
+    protected $primaryKey = 'id_anggaran';
+    protected $guarded = ['id_anggaran'];
 
     public $timestamps = false;
 

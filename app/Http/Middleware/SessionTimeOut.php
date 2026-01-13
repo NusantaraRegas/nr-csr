@@ -36,8 +36,11 @@ class SessionTimeout
             }
         }
 
-        // Cek apakah user sudah login
-        if (Auth::check()) {
+        // This application uses a custom session-based login (session('user'))
+        // instead of Laravel's Auth facade.
+        // In local/dev, Auth::check() will typically be false, so we also treat
+        // session('user') as a logged-in indicator.
+        if (Auth::check() || session()->has('user')) {
             $currentTime = Carbon::now()->timestamp;
             $lastActivity = $this->session->get('lastActivityTime');
 
@@ -48,7 +51,9 @@ class SessionTimeout
                 // Simpan URL terakhir sebelum logout
                 $this->session->put('url.intended', $request->fullUrl());
 
+                // Clear both auth and the custom session user.
                 Auth::logout();
+                $this->session->forget('user');
 
                 return redirect()->route('login')
                     ->with('session', 'Sesi anda sudah habis, silakan login kembali.');
