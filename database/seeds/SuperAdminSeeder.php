@@ -21,7 +21,7 @@ class SuperAdminSeeder extends Seeder
         $username = 'superadmin';
 
         // Postgres local DB: we normalize to lowercase table name.
-        $table = 'NR_CSR.tbl_user';
+        $table = 'nr_csr.tbl_user';
 
         $exists = DB::table($table)
             ->whereRaw('LOWER(username) = ?', [$username])

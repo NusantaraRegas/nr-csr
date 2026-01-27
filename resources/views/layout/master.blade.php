@@ -10,41 +10,40 @@
 
     <title>@yield('title')</title>
 
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('template/assets/images/logoicon.png') }}">
-    <link href="{{ asset('template/assets/node_modules/icheck/skins/all.css') }}" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/logoicon.png') }}">
+    <link href="{{ asset('assets/node_modules/icheck/skins/all.css') }}" rel="stylesheet">
     <link
-        href="{{ asset('template/assets/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css') }}"
+        href="{{ asset('assets/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css') }}"
         rel="stylesheet">
-    <link href="{{ asset('template/assets/node_modules/wizard/steps.css') }}" rel="stylesheet">
-    <link href="{{ asset('template/assets/node_modules/css-chart/css-chart.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/node_modules/jquery-steps/demo/css/jquery.steps.css') }}" rel="stylesheet">
+{{-- <link href="{{ asset('assets/node_modules/css-chart/css-chart.css') }}" rel="stylesheet"> --}}
 
     <!-- Page plugins css -->
     <link href="{{ asset('template/dist/css/pages/form-icheck.css') }}" rel="stylesheet">
-    <link href="{{ asset('template/assets/node_modules/clockpicker/dist/jquery-clockpicker.min.css') }}"
+    <link href="{{ asset('assets/node_modules/clockpicker/dist/jquery-clockpicker.css') }}"
         rel="stylesheet">
-    <link href="{{ asset('template/assets/node_modules/footable/css/footable.core.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/node_modules/footable/css/footable.core.css') }}" rel="stylesheet">
     <!-- Color picker plugins css -->
-    <link href="{{ asset('template/assets/node_modules/jquery-asColorPicker-master/css/asColorPicker.css') }}"
+    <link href="{{ asset('assets/node_modules/jquery-asColorPicker/dist/css/asColorPicker.css') }}"
         rel="stylesheet">
     <!-- Date picker plugins css -->
-    <link href="{{ asset('template/assets/node_modules/bootstrap-datepicker/bootstrap-datepicker.min.css') }}"
+    <link href="{{ asset('assets/node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}"
         rel="stylesheet" type="text/css" />
     <!-- Daterange picker plugins css -->
-    <link href="{{ asset('template/assets/node_modules/timepicker/bootstrap-timepicker.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('template/assets/node_modules/bootstrap-daterangepicker/daterangepicker.css') }}"
+    <link href="{{ asset('assets/node_modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/node_modules/daterangepicker/daterangepicker.css') }}"
         rel="stylesheet">
     <!-- alerts CSS -->
-    <link href="{{ asset('template/assets/node_modules/sweetalert/sweetalert.css') }}" rel="stylesheet"
-        type="text/css">
+{{-- <link href="{{ asset('assets/node_modules/sweetalert/sweetalert.css') }}" rel="stylesheet" type="text/css"> --}}
     <!-- Toastr -->
-    <link rel="stylesheet" href="{{ asset('template/assets/node_modules/toast-master/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/node_modules/toastr/build/toastr.css') }}">
     <!-- Select 2 css -->
-    <link href="{{ asset('template/assets/node_modules/bootstrap-datepicker/bootstrap-datepicker.min.css') }}"
+    <link href="{{ asset('assets/node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}"
         rel="stylesheet" type="text/css" />
-    <link href="{{ asset('template/assets/node_modules/select2/dist/css/select2.min.css') }}" rel="stylesheet"
+    <link href="{{ asset('assets/node_modules/select2/dist/css/select2.min.css') }}" rel="stylesheet"
         type="text/css" />
     <!-- wysihtml5 CSS -->
-    <link rel="stylesheet" href="{{ asset('template/assets/node_modules/html5-editor/bootstrap-wysihtml5.css') }}" />
+{{-- <link rel="stylesheet" href="{{ asset('assets/node_modules/html5-editor/bootstrap-wysihtml5.css') }}" /> --}}
     <!-- page css -->
     <link href="{{ asset('template/dist/css/pages/ribbon-page.css') }}" rel="stylesheet">
     <link href="{{ asset('template/dist/css/pages/contact-app-page.css') }}" rel="stylesheet">
@@ -80,7 +79,7 @@
 
     <div class="preloader">
         <div class="loader">
-            <div><img src="{{ asset('template/assets/images/logoicon.png') }}" width="48" height="48"
+            <div><img src="{{ asset('assets/images/logoicon.png') }}" width="48" height="48"
                     alt="Logo NR"></div>
             <p class="loader__label">Loading page</p>
         </div>
@@ -96,7 +95,7 @@
                         <!-- Logo icon -->
                         <b>
                             <!-- Light Logo icon -->
-                            <img src="{{ asset('template/assets/images/logo-pertamina-gas-negara.png') }}"
+                            <img src="{{ asset('assets/images/logo-pertamina-gas-negara.png') }}"
                                 width="180px" alt="homepage" class="light-logo" />
                         </b>
                         <!--End Logo icon -->
@@ -451,11 +450,11 @@
     </div>
 
     <!-- All Jquery -->
-    <script src="{{ asset('template/assets/node_modules/jquery/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/jquery/dist/jquery.js') }}"></script>
 
     <!-- Bootstrap tether Core JavaScript -->
-    <script src="{{ asset('template/assets/node_modules/popper/popper.min.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/popper.js/dist/umd/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
     <!-- slimscrollbar scrollbar JavaScript -->
     <script src="{{ asset('template/dist/js/perfect-scrollbar.jquery.min.js') }}"></script>
@@ -473,67 +472,67 @@
     <script src="{{ asset('template/dist/js/custom.min.js') }}"></script>
 
     <!--stickey kit -->
-    <script src="{{ asset('template/assets/node_modules/sticky-kit-master/dist/sticky-kit.min.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/sparkline/jquery.sparkline.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/sticky-kit/dist/sticky-kit.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
 
     <!-- This is data table -->
-    <script src="{{ asset('template/assets/node_modules/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 
     <!-- Sweet-Alert  -->
-    <script src="{{ asset('template/assets/node_modules/sweetalert/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/sweetalert/dist/sweetalert.min.js') }}"></script>
 
     <!-- Toastr -->
-    <script src="{{ asset('template/assets/node_modules/toast-master/toastr.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/toastr/toastr.js') }}"></script>
 
     <!-- Plugin JavaScript -->
-    <script src="{{ asset('template/assets/node_modules/moment/moment.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/moment/moment.js') }}"></script>
 
-    <script src="{{ asset('template/assets/node_modules/select2/dist/js/select2.full.min.js') }}" type="text/javascript">
+    <script src="{{ asset('assets/node_modules/select2/dist/js/select2.full.min.js') }}" type="text/javascript">
     </script>
 
     <!-- Clock Plugin JavaScript -->
-    <script src="{{ asset('template/assets/node_modules/clockpicker/dist/jquery-clockpicker.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/clockpicker/dist/jquery-clockpicker.min.js') }}"></script>
     <!-- Color Picker Plugin JavaScript -->
-    <script src="{{ asset('template/assets/node_modules/jquery-asColorPicker-master/libs/jquery-asColor.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/jquery-asColorPicker-master/libs/jquery-asGradient.js') }}">
+    <script src="{{ asset('assets/node_modules/jquery-asColor/dist/jquery-asColor.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/jquery-asGradient/dist/jquery-asGradient.min.js') }}">
     </script>
     <script
-        src="{{ asset('template/assets/node_modules/jquery-asColorPicker-master/dist/jquery-asColorPicker.min.js') }}">
+        src="{{ asset('assets/node_modules/jquery-asColorPicker/dist/jquery-asColorPicker.min.js') }}">
     </script>
     <!-- Date Picker Plugin JavaScript -->
-    <script src="{{ asset('template/assets/node_modules/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
     <!-- Date range Plugin JavaScript -->
-    <script src="{{ asset('template/assets/node_modules/timepicker/bootstrap-timepicker.min.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/daterangepicker/daterangepicker.js') }}"></script>
     <!-- icheck -->
-    <script src="{{ asset('template/assets/node_modules/icheck/icheck.min.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/icheck/icheck.init.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/icheck/icheck.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/node_modules/icheck/icheck.init.js') }}"></script> --}}
 
     <!--Morris JavaScript -->
-    <script src="{{ asset('template/assets/node_modules/raphael/raphael-min.js') }}"></script>
-    {{-- <script src="{{ asset('template/assets/node_modules/morrisjs/morris.js') }}"></script> --}}
+    <script src="{{ asset('assets/node_modules/raphael/raphael.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/node_modules/morrisjs/morris.js') }}"></script> --}}
     {{-- <script src="{{ asset('template/dist/js/pages/morris-data.js') }}"></script> --}}
 
     <!--Custom JavaScript -->
-    <script src="{{ asset('template/assets/node_modules/moment/min/moment.min.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/wizard/jquery.steps.min.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/wizard/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/wizard/steps.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/html5-editor/wysihtml5-0.3.0.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/html5-editor/bootstrap-wysihtml5.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/moment/min/moment.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/jquery-steps/build/jquery.steps.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/jquery-validation/dist/jquery.validate.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/node_modules/wizard/steps.js') }}"></script> --}}
+{{-- <script src="{{ asset('assets/node_modules/html5-editor/wysihtml5-0.3.0.js') }}"></script> --}}
+{{-- <script src="{{ asset('assets/node_modules/html5-editor/bootstrap-wysihtml5.js') }}"></script> --}}
 
     <!-- EASY PIE CHART JS -->
-    <script src="{{ asset('template/assets/node_modules/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js') }}">
+    <script src="{{ asset('assets/node_modules/easy-pie-chart/dist/jquery.easypiechart.min.js') }}">
     </script>
-    <script src="{{ asset('template/assets/node_modules/jquery.easy-pie-chart/easy-pie-chart.init.js') }}"></script>
+{{-- <script src="{{ asset('assets/node_modules/jquery.easy-pie-chart/easy-pie-chart.init.js') }}"></script> --}}
 
     <!-- Chart JS -->
-    <script src="{{ asset('template/assets/node_modules/peity/jquery.peity.min.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/peity/jquery.peity.init.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/peity/jquery.peity.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/node_modules/peity/jquery.peity.init.js') }}"></script> --}}
 
     <!-- Footable -->
-    <script src="{{ asset('template/assets/node_modules/footable/js/footable.all.min.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/bootstrap-select/bootstrap-select.min.js') }}"
+    <script src="{{ asset('assets/node_modules/footable/dist/footable.all.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/bootstrap-select/dist/js/bootstrap-select.min.js') }}"
         type="text/javascript"></script>
     <!--FooTable init-->
     <script src="{{ asset('template/dist/js/pages/footable-init.js') }}"></script>

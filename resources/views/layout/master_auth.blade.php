@@ -10,10 +10,9 @@
 
     <title>@yield('title')</title>
 
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('template/assets/images/logoicon.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/logoicon.png') }}">
     <link href="{{ asset('template/dist/css/style.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('template/assets/node_modules/sweetalert/sweetalert.css') }}" rel="stylesheet">
-    <link href="{{ asset('template/assets/node_modules/toast-master/toastr.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/node_modules/toastr/build/toastr.css') }}" rel="stylesheet">
     <link href="{{ asset('template/dist/css/custom.css') }}" rel="stylesheet">
 
     <style>
@@ -24,7 +23,7 @@
         }
 
         .login-left {
-            background-image: url('{{ asset('template/assets/images/background/csr-bg.jpg') }}');
+            background-image: url('{{ asset('assets/images/background/csr-bg.jpg') }}');
             background-size: cover;
             background-position: center;
         }
@@ -74,10 +73,10 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('template/assets/node_modules/jquery/jquery-3.2.1.min.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/sweetalert/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/toast-master/toastr.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/jquery/dist/jquery.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/bootstrap/dist/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/sweetalert/dist/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/toastr/toastr.js') }}"></script>
 
     <script>
         @if (Session::has('session'))

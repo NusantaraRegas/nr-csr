@@ -27,7 +27,7 @@
                     <div class="card-body">
                         <center class="m-t-30">
                             @if($data->foto == "")
-                                <img src="{{ asset('template/assets/images/user.png') }}"
+                                <img src="{{ asset('assets/images/user.png') }}"
                                      class="img-circle" width="180"/>
                             @else
                                 <img src="{{ asset('avatar/'.$data->foto.'.jpg') }}"

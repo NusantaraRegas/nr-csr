@@ -22,7 +22,7 @@
 
     <div class="login-box">
         <center>
-            <img src="{{ asset('template/assets/images/logo-pertamina-gas-negara.png') }}" width="200px" alt="Logo NR">
+            <img src="{{ asset('assets/images/logo-pertamina-gas-negara.png') }}" width="200px" alt="Logo NR">
             <h4 class="mt-4 mb-4"><strong>LOGIN SESSION</strong></h4>
         </center>
         <form method="post" action="{{ action('LoginController@login') }}">

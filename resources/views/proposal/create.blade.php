@@ -2,7 +2,7 @@
 @section('title', 'NR SHARE | Kelayakan Proposal')
 
 @section('content')
-    <link href="{{ asset('template/assets/node_modules/wizard/steps.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/node_modules/jquery-steps/demo/css/jquery.steps.css') }}" rel="stylesheet">
 
     <style>
         label.text-danger {
@@ -80,8 +80,8 @@
 @endsection
 
 @section('footer')
-    <script src="{{ asset('template/assets/node_modules/wizard/jquery.steps.min.js') }}"></script>
-    <script src="{{ asset('template/assets/node_modules/wizard/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/jquery-steps/build/jquery.steps.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/jquery-validation/dist/jquery.validate.min.js') }}"></script>
 
     <script>
         function initDatepicker() {

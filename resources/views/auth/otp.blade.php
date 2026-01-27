@@ -77,7 +77,7 @@
 
     <div class="login-box">
         <center>
-            <img src="{{ asset('template/assets/images/logo-pertamina-gas-negara.png') }}" width="200px" alt="Logo NR">
+            <img src="{{ asset('assets/images/logo-pertamina-gas-negara.png') }}" width="200px" alt="Logo NR">
             <h4 class="mt-4"><strong>Masukkan Kode OTP</strong></h4>
             <p class="text-muted text-center mb-4">
                 Kami telah mengirimkan kode verifikasi ke email Anda. Silakan masukkan 6 digit kode OTP di bawah ini.

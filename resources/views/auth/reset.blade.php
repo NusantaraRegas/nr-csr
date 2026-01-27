@@ -10,14 +10,14 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <title>NR SHARE | Reset Password</title>
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('template/assets/images/logoicon.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/logoicon.png') }}">
 
     <!-- page css -->
     <link href="{{ asset('template/dist/css/pages/login-register-lock.css') }}" rel="stylesheet">
     <!--alerts CSS -->
-    <link href="{{ asset('template/assets/node_modules/sweetalert/sweetalert.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/node_modules/sweetalert/sweetalert.css') }}" rel="stylesheet" type="text/css">
     <!-- Toastr -->
-    <link rel="stylesheet" href="{{ asset('template/assets/node_modules/toast-master/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/node_modules/toast-master/toastr.min.css') }}">
 
     <!-- Custom CSS -->
     <link href="{{ asset('template/dist/css/style.min.css') }}" rel="stylesheet">
@@ -36,7 +36,7 @@
 <!-- ============================================================== -->
 <div class="preloader">
     <div class="loader">
-        <div><img src="{{ asset('template/assets/images/logoicon.png') }}" width="48" height="48" alt="Lucid"></div>
+        <div><img src="{{ asset('assets/images/logoicon.png') }}" width="48" height="48" alt="Lucid"></div>
         <p class="loader__label">Loading page</p>
     </div>
 </div>
@@ -44,11 +44,11 @@
 <!-- Main wrapper - style you can find in pages.scss -->
 <!-- ============================================================== -->
 <section id="wrapper">
-    <div class="login-register" style="background-image:url({{ asset('template/assets/images/background/bg.jpg') }});">
+    <div class="login-register" style="background-image:url({{ asset('assets/images/background/bg.jpg') }});">
         <div class="login-box card">
             <div class="card-body">
                 <center>
-                    <img class="m-t-20" src="{{ asset('template/assets/images/logo-pertamina-gas-negara.png') }}"
+                    <img class="m-t-20" src="{{ asset('assets/images/logo-pertamina-gas-negara.png') }}"
                          width="200px" alt="Logo NR">
                     <h5 class="m-t-20 model-huruf-family"><b>RESET PASSWORD</b></h5>
                 </center>
@@ -87,15 +87,15 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
-<script src="{{ asset('template/assets/node_modules/jquery/jquery-3.2.1.min.js') }}"></script>
+<script src="{{ asset('assets/node_modules/jquery/jquery-3.2.1.min.js') }}"></script>
 <!-- Bootstrap tether Core JavaScript -->
-<script src="{{ asset('template/assets/node_modules/popper/popper.min.js') }}"></script>
-<script src="{{ asset('template/assets/node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/node_modules/popper/popper.min.js') }}"></script>
+<script src="{{ asset('assets/node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 <!-- Sweet-Alert  -->
-<script src="{{ asset('template/assets/node_modules/sweetalert/sweetalert.min.js') }}"></script>
-<script src="{{ asset('template/assets/node_modules/sweetalert/jquery.sweet-alert.custom.js') }}"></script>
+<script src="{{ asset('assets/node_modules/sweetalert/sweetalert.min.js') }}"></script>
+<script src="{{ asset('assets/node_modules/sweetalert/jquery.sweet-alert.custom.js') }}"></script>
 <!-- Toastr -->
-<script src="{{ asset('template/assets/node_modules/toast-master/toastr.min.js') }}"></script>
+<script src="{{ asset('assets/node_modules/toast-master/toastr.min.js') }}"></script>
 
 <!--Custom JavaScript -->
 <script src="{{ asset('template/dist/js/custom.min.js') }}"></script>
