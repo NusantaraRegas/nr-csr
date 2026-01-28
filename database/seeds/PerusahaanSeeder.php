@@ -17,7 +17,7 @@ class PerusahaanSeeder extends Seeder
 
             DB::table('nr_csr.tbl_perusahaan')->insert([
                 'id_perusahaan' => 1,
-                'nama_perusahaan' => 'PT Perusahaan Gas Negara Tbk',
+                'nama_perusahaan' => 'PT Nusantara Regas',
                 'kategori' => 'Holding',
                 'kode' => 'PGN',
                 'status' => 'Active'

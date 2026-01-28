@@ -191,8 +191,8 @@ class DashboardController extends Controller
 
         $company = session('user')->perusahaan;
         $anggaran = Anggaran::where('perusahaan', $company)->where('tahun', $tahun)->first();
-        $anggaranAP = Anggaran::whereNotIn('perusahaan', ['PT Perusahaan Gas Negara Tbk'])->where('tahun', $tahun)->get();
-        $jumlahAnggaranAP = Anggaran::whereNotIn('perusahaan', ['PT Perusahaan Gas Negara Tbk'])->where('tahun', $tahun)->count();
+        $anggaranAP = Anggaran::whereNotIn('perusahaan', ['PT Nusantara Regas'])->where('tahun', $tahun)->get();
+        $jumlahAnggaranAP = Anggaran::whereNotIn('perusahaan', ['PT Nusantara Regas'])->where('tahun', $tahun)->count();
         $username = session('user')->username;
 
         $perusahaan = Perusahaan::whereIn('kategori', ['Subholding'])->orderBy('id_perusahaan', 'ASC')->get();
@@ -779,7 +779,7 @@ class DashboardController extends Controller
             'perusahaan' => 'required',
         ]);
 
-        if ($request->perusahaan == 'PT Perusahaan Gas Negara Tbk') {
+        if ($request->perusahaan == 'PT Nusantara Regas') {
             return redirect()->route('dashboardAnnual', ['year' => encrypt($request->tahun)]);
         } else {
             return redirect()->route('dashboardSubsidiaryAnnual', ['year' => encrypt($request->tahun), 'company' => $request->perusahaan]);

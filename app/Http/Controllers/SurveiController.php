@@ -60,7 +60,7 @@ class SurveiController extends Controller
         $kelayakan = Kelayakan::where('no_agenda', $logID)->first();
         $evaluasi = Evaluasi::where('no_agenda', $logID)->first();
         $vendor = Vendor::all();
-        $proker = Proker::where('perusahaan', 'PT Perusahaan Gas Negara Tbk')->where('tahun', $tahun)->orderBy('id_proker', 'ASC')->get();
+        $proker = Proker::where('perusahaan', 'PT Nusantara Regas')->where('tahun', $tahun)->orderBy('id_proker', 'ASC')->get();
         $user = User::where([
             ['username', '!=', session('user')->username],
             ['status', '=', 'Active'],

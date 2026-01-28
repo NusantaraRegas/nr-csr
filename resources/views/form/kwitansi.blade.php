@@ -51,7 +51,7 @@
                                             <tr>
                                                 <td style="width: 200px">&nbsp;Sudah terima dari</td>
                                                 <td style="width: 5px; padding-right: 5px; vertical-align: top">:</td>
-                                                <td>PT Perusahaan Gas Negara Tbk</td>
+                                                <td>PT Nusantara Regas</td>
                                             </tr>
                                         </table>
                                     </td>

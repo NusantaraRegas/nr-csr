@@ -71,7 +71,7 @@
                     <div class="form-group m-b-0 m-t-25">
                         <div class="col-sm-12 text-center">
                             <h3 class="card-title model-huruf-family">NR SHARE</h3>
-                            <h6 class="card-subtitle model-huruf-family">© 2018 - 2021 PT Perusahaan Gas Negara Tbk<br>
+                            <h6 class="card-subtitle model-huruf-family">© 2018 - 2021 PT Nusantara Regas<br>
                                 All Rights Reserved</h6>
                         </div>
                     </div>

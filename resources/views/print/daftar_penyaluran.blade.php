@@ -86,7 +86,7 @@
                     TAHUN {{ $tahun }}
                 </div>
                 <div class="font-bold" style="font-size: 14px;">
-                    PT Perusahaan Gas Negara Tbk
+                    PT Nusantara Regas
                 </div>
                 <div class="font-bold" style="font-size: 12px;">CSR Division</div>
             </td>

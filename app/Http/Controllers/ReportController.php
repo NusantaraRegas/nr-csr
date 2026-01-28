@@ -161,7 +161,7 @@ class ReportController extends Controller
             'perusahaan' => 'required',
         ]);
 
-        if ($request->perusahaan == 'PT Perusahaan Gas Negara Tbk') {
+        if ($request->perusahaan == 'PT Nusantara Regas') {
             return redirect()->route('dashboardAnnual', ['year' => encrypt($request->tahun)]);
         } else {
             return redirect()->route('dashboardSubsidiaryAnnual', ['year' => encrypt($request->tahun), 'company' => $request->perusahaan]);
@@ -184,7 +184,7 @@ class ReportController extends Controller
         $provinsi = Provinsi::orderBy('provinsi', 'ASC')->get();
         $kabupaten = DB::table('TBL_WILAYAH')->select('city_name')->groupBy('city_name')->get();
         $pilar = Pilar::orderBy('id_pilar', 'ASC')->get();
-        $perusahaan = Perusahaan::whereNotIn('nama_perusahaan', ['PT Perusahaan Gas Negara Tbk'])->where('status', 'Active')->orderBy('id_perusahaan', 'ASC')->get();
+        $perusahaan = Perusahaan::whereNotIn('nama_perusahaan', ['PT Nusantara Regas'])->where('status', 'Active')->orderBy('id_perusahaan', 'ASC')->get();
 
         $anggaran = Anggaran::where('tahun', $tahun)->where('perusahaan', $company)->first();
 

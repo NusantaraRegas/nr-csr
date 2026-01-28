@@ -244,7 +244,7 @@ $hewanKurban = \App\Models\Kelayakan::where('no_agenda', $data->no_agenda)->firs
                                 <td style="padding: 0px 0 0px 3px ;text-align: left; width: 150px">Jabatan</td>
                                 <td style="padding: 4px 0 4px 0 ;text-align: center; width: 10px">:</td>
                                 <td style="padding: 4px 0 4px 0 ;text-align: left; width: 500px">Division Head Corporate
-                                    Social Responsibility PT Perusahaan Gas Negara Tbk
+                                    Social Responsibility PT Nusantara Regas
                                 </td>
                             </tr>
                             <tr>
@@ -259,7 +259,7 @@ $hewanKurban = \App\Models\Kelayakan::where('no_agenda', $data->no_agenda)->firs
                             </tr>
                             <tr>
                                 <td style="padding: 4px 0 4px 3px ;text-align: justify" colspan="3">
-                                    Dalam hal ini bertindak untuk dan atas nama PT Perusahaan Gas Negara Tbk,
+                                    Dalam hal ini bertindak untuk dan atas nama PT Nusantara Regas,
                                     selanjutnya disebut “Pihak Pertama”.
                                 </td>
                             </tr>
@@ -334,7 +334,7 @@ $hewanKurban = \App\Models\Kelayakan::where('no_agenda', $data->no_agenda)->firs
                                         </tr>
                                         <tr style="text-align: center">
                                             <td>{{ ucwords($data->proposal_dari) }}</td>
-                                            <td>PT Perusahaan Gas Negara Tbk,</td>
+                                            <td>PT Nusantara Regas,</td>
                                         </tr>
                                         <tr style="text-align: center">
                                             <td height="170px">&nbsp;</td>

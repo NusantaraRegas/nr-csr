@@ -262,7 +262,7 @@ $panjangKegiatan = strlen($data->kegiatan);
                             </tr>
                             <tr>
                                 <td colspan="5" style="text-align: justify">
-                                    Sehubungan dengan rencana PT Perusahaan Gas Negara Tbk. Corporate Social
+                                    Sehubungan dengan rencana PT Nusantara Regas. Corporate Social
                                     Responsibility Division (“NR”) melaksanakan {{ $data->kegiatan }}. Dengan
                                     ini kami menugaskan {{ $data->perusahaan }} untuk melaksanakan {{ $data->kegiatan }}
                                     sebagaimana dimaksud dengan rincian sebagai berikut (untuk
@@ -343,7 +343,7 @@ $panjangKegiatan = strlen($data->kegiatan);
                                                                     <td width="20px"
                                                                         style="float: left; text-align: right">:&nbsp;
                                                                     </td>
-                                                                    <td width="500px">PT Perusahaan Gas Negara Tbk,
+                                                                    <td width="500px">PT Nusantara Regas,
                                                                         Corporate Social Responsibility Division (“NR”)
                                                                     </td>
                                                                 </tr>
@@ -1100,7 +1100,7 @@ $panjangKegiatan = strlen($data->kegiatan);
                                                     <tr style="text-align: center">
                                                         <td>{{ ucwords($data->perusahaan) }}
                                                             <br>{{ ucwords($data->jabatan) }}</td>
-                                                        <td>PT Perusahaan Gas Negara Tbk<br>{{ $data->jabatan_pejabat }}
+                                                        <td>PT Nusantara Regas<br>{{ $data->jabatan_pejabat }}
                                                         </td>
                                                     </tr>
                                                     <tr style="text-align: center">

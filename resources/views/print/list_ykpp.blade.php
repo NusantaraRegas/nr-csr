@@ -41,7 +41,7 @@
                                 </td>
                                 <td align="center">
                                     <b style="font-size:18px;">TASKLIST PENYALURAN TJSL-YKPP</b><br>
-                                    <b style="font-size:18px;">PT Perusahaan Gas Negara Tbk</b><br>
+                                    <b style="font-size:18px;">PT Nusantara Regas</b><br>
                                     <b style="font-size:16px;">CSR Division</b>
                                 </td>
                                 <td width="200px">

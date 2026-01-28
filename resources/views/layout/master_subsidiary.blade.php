@@ -216,7 +216,7 @@
         </div>
 
         <footer class="footer">
-            Copyright © 2018 PT Perusahaan Gas Negara Tbk All Rights Reserved
+            Copyright © 2018 PT Nusantara Regas All Rights Reserved
         </footer>
 
     </div>

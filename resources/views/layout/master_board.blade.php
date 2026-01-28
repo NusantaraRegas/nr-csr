@@ -129,7 +129,7 @@
     <!-- footer -->
     <!-- ============================================================== -->
     <footer class="footer model-huruf-family">
-        Copyright © 2018 - 2021 PT Perusahaan Gas Negara Tbk All Rights Reserved
+        Copyright © 2018 - 2021 PT Nusantara Regas All Rights Reserved
     </footer>
     <!-- ============================================================== -->
     <!-- End footer -->

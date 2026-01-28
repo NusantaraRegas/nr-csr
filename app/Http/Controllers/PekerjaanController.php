@@ -25,7 +25,7 @@ class PekerjaanController extends Controller
         $tahun = date("Y");
         $role = session('user')->role;
 
-        $proker = Proker::where('tahun', $tahun)->where('perusahaan', "PT Perusahaan Gas Negara Tbk")->get();
+        $proker = Proker::where('tahun', $tahun)->where('perusahaan', "PT Nusantara Regas")->get();
 
         if ($role == "Vendor"){
             $vendor = session('user')->perusahaan;
@@ -53,7 +53,7 @@ class PekerjaanController extends Controller
         }
 
         $pekerjaan = ViewPekerjaan::where('pekerjaan_id', $logID)->first();
-        $proker = Proker::where('tahun', $pekerjaan->tahun)->where('perusahaan', "PT Perusahaan Gas Negara Tbk")->get();
+        $proker = Proker::where('tahun', $pekerjaan->tahun)->where('perusahaan', "PT Nusantara Regas")->get();
         $lampiran = LampiranPekerjaan::where('pekerjaan_id', $logID)->orderBy('lampiran_id', 'ASC')->get();
         $jumlahLampiran = LampiranPekerjaan::where('pekerjaan_id', $logID)->count();
         $lampiranApproved = LampiranPekerjaan::where('pekerjaan_id', $logID)->where('status', 'Approved')->orderBy('lampiran_id', 'ASC')->get();
@@ -179,7 +179,7 @@ class PekerjaanController extends Controller
         }
 
         $pekerjaan = ViewPekerjaan::where('pekerjaan_id', $logID)->first();
-        $proker = Proker::where('tahun', $pekerjaan->tahun)->where('perusahaan', "PT Perusahaan Gas Negara Tbk")->get();
+        $proker = Proker::where('tahun', $pekerjaan->tahun)->where('perusahaan', "PT Nusantara Regas")->get();
 
         return view('Pekerjaan.edit')
             ->with([

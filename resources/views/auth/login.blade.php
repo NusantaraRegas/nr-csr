@@ -22,7 +22,7 @@
 
     <div class="login-box">
         <center>
-            <img src="{{ asset('assets/images/logo-pertamina-gas-negara.png') }}" width="200px" alt="Logo NR">
+            <img src="{{ asset('assets/images/logo-pertamina-nusantara-regas.png') }}" width="200px" alt="Logo NR">
             <h4 class="mt-4 mb-4"><strong>LOGIN SESSION</strong></h4>
         </center>
         <form method="post" action="{{ action('LoginController@login') }}">
@@ -48,7 +48,7 @@
 
             <div class="text-center mt-4">
                 <h4 class="card-title">NR SHARE</h4>
-                <p class="card-subtitle">© 2018 - 2025 PT Perusahaan Gas Negara Tbk<br>All Rights Reserved</p>
+                <p class="card-subtitle">© 2018 - 2025 PT Nusantara Regas<br>All Rights Reserved</p>
             </div>
         </form>
     </div>

@@ -143,10 +143,10 @@
         </div>
     </div>
 
-    <form method="post" action="{{ action('PerusahaanController@store') }}">
-        @csrf
-        <div class="modal fade modal-input" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-lg">
+    <div class="modal fade modal-input" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <form method="post" action="{{ action('PerusahaanController@store') }}">
+                @csrf
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title font-bold">Tambah Entitas</h5>
@@ -202,14 +202,14 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
-    </form>
+    </div>
 
-    <form method="post" action="{{ action('PerusahaanController@update') }}">
-        @csrf
-        <div class="modal fade modal-edit" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-lg">
+    <div class="modal fade modal-edit" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <form method="post" action="{{ action('PerusahaanController@update') }}">
+                @csrf
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title font-bold">Edit Entitas</h5>
@@ -266,9 +266,9 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
-    </form>
+    </div>
 @endsection
 
 @section('footer')
@@ -306,7 +306,7 @@
 
     <script>
         $(document).on('click', '.user-edit', function(e) {
-            $('#perusahaanID').val($(this).data('id'));
+            $('#perusahaanID').val($(this).attr('data-id'));
             $('#nama').val($(this).data('nama'));
             $('#alamat').val($(this).data('alamat'));
             $('#inisial').val($(this).data('kode'));
@@ -327,8 +327,8 @@
     @endif
 
     <script>
-        $('.delete').click(function() {
-            var data_id = $(this).data('id');
+        $(document).on('click', '.delete', function() {
+            var data_id = $(this).attr('data-id');
             var data_nama = $(this).data('nama');
 
             if (!data_id) return;

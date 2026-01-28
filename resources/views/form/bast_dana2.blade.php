@@ -156,7 +156,7 @@
                                     <td colspan="4">
                                         <table width="100%">
                                             <tr>
-                                                <td><b>PT Perusahaan Gas Negara Tbk,</b></td>
+                                                <td><b>PT Nusantara Regas,</b></td>
                                             </tr>
                                         </table>
                                     </td>
@@ -177,13 +177,13 @@
                                                         sebagai
                                                         <b>{{ $approver->jabatan }}</b> berdasarkan
                                                         Petikan
-                                                        Keputusan Direksi PT Perusahaan Gas Negara Tbk Nomor:
+                                                        Keputusan Direksi PT Nusantara Regas Nomor:
                                                         {{ $approver->no_sk }} tanggal
                                                         {{ \App\Helper\formatTanggal::tanggal_indo(date('Y-m-d', strtotime($approver->tgl_sk))) }},
                                                         dengan
                                                         demikian
                                                         berwenang bertindak untuk dan atas nama
-                                                        PT Perusahaan Gas Negara Tbk, untuk selanjutnya disebut
+                                                        PT Nusantara Regas, untuk selanjutnya disebut
                                                         sebagai
                                                         “<b>PIHAK
                                                             PERTAMA</b>”; dan
@@ -199,13 +199,13 @@
                                                         sebagai
                                                         <b>{{ $approver->jabatan }}</b> berdasarkan
                                                         Petikan
-                                                        Keputusan Direksi PT Perusahaan Gas Negara Tbk Nomor:
+                                                        Keputusan Direksi PT Nusantara Regas Nomor:
                                                         {{ $approver->no_sk }} tanggal
                                                         {{ \App\Helper\formatTanggal::tanggal_indo(date('Y-m-d', strtotime($approver->tgl_sk))) }},
                                                         dengan
                                                         demikian
                                                         berwenang bertindak untuk dan atas nama
-                                                        PT Perusahaan Gas Negara Tbk, untuk selanjutnya disebut
+                                                        PT Nusantara Regas, untuk selanjutnya disebut
                                                         sebagai
                                                         “<b>PIHAK
                                                             PERTAMA</b>”; dan
@@ -901,7 +901,7 @@
                                             </tr>
                                             <tr style="text-align: center">
                                                 <td>{{ ucwords($data->nama_lembaga) }}</td>
-                                                <td>PT Perusahaan Gas Negara Tbk,</td>
+                                                <td>PT Nusantara Regas,</td>
                                             </tr>
                                             <tr style="text-align: center">
                                                 <td style="vertical-align: middle" height="170px">

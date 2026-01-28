@@ -95,7 +95,7 @@
                         <!-- Logo icon -->
                         <b>
                             <!-- Light Logo icon -->
-                            <img src="{{ asset('assets/images/logo-pertamina-gas-negara.png') }}"
+                            <img src="{{ asset('assets/images/logo-pertamina-nusantara-regas.png') }}"
                                 width="180px" alt="homepage" class="light-logo" />
                         </b>
                         <!--End Logo icon -->
@@ -444,7 +444,7 @@
         </div>
 
         <footer class="footer">
-            Copyright © 2018 - 2025 PT Perusahaan Gas Negara Tbk All Rights Reserved
+            Copyright © 2018 - 2025 PT Nusantara Regas All Rights Reserved
         </footer>
 
     </div>
