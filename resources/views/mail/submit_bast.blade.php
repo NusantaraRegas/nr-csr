@@ -39,7 +39,7 @@
             </td>
         </tr>
     </table>
-    <p>Silahkan login <a href='https://share.pgn.co.id'>https://share.pgn.co.id</a> untuk melakukan verifikasi pada menu
+    <p>Silahkan login <a href='{{ url('/') }}'>{{ url('/') }}</a> untuk melakukan verifikasi pada menu
         tasklist anda.</p>
     <p>
         Catatan :<br>

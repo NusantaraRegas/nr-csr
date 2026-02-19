@@ -40,7 +40,7 @@
         </tr>
     </table>
     <p>Mohon untuk dilengkapi Nomor dan Tanggal BAST untuk kebutuhan lampiran permohonan pembayaran.</p>
-    <p>Silahkan login <a href='https://share.pgn.co.id'>https://share.pgn.co.id</a> untuk melakukan verifikasi pada menu
+    <p>Silahkan login <a href='{{ url('/') }}'>{{ url('/') }}</a> untuk melakukan verifikasi pada menu
         tasklist anda.</p>
     <p>
         Catatan :<br>

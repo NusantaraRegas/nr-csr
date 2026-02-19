@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://share.pgn.co.id'),
+    'url' => env('APP_URL', 'http://tjsl.nusantararegas.com'),
 
     'asset_url' => env('ASSET_URL', null),
 

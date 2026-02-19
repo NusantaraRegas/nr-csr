@@ -87,7 +87,7 @@
             </td>
         </tr>
     </table>
-    <p>Silahkan login <a href='https://share.pgn.co.id'>https://share.pgn.co.id</a> untuk melakukan revisi evaluasi.</p>
+    <p>Silahkan login <a href='{{ url('/') }}'>{{ url('/') }}</a> untuk melakukan revisi evaluasi.</p>
     <p>
         Catatan :<br>
         Email ini dikirim secara otomatis by system<br>

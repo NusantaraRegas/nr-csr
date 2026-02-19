@@ -1199,14 +1199,14 @@ class PembayaranController extends Controller
         $fileEvaluasi = [
             'ID_PAYMENT_REQUEST' => $paymentID,
             'DOC_NAME' => 'FORM EVALUASI',
-            'ATTRIBUTE3' => 'https://share.pgn.co.id/Form/Evaluasi/' . $data->id_kelayakan,
+            'ATTRIBUTE3' => config('app.url') . '/Form/Evaluasi/' . $data->id_kelayakan,
             'DESCRIPTION' => 'FORM EVALUASI',
         ];
 
         $fileSurvei = [
             'ID_PAYMENT_REQUEST' => $paymentID,
             'DOC_NAME' => 'LEMBAR SURVEY',
-            'ATTRIBUTE3' => 'https://share.pgn.co.id/Form/Survei/' . $data->id_kelayakan,
+            'ATTRIBUTE3' => config('app.url') . '/Form/Survei/' . $data->id_kelayakan,
             'DESCRIPTION' => 'LEMBAR SURVEY',
         ];
 
@@ -1224,7 +1224,7 @@ class PembayaranController extends Controller
                 DB::table('PGN_PAYMENT.T_DOCUMENT')->insert([
                     'ID_PAYMENT_REQUEST' => $paymentID,
                     'DOC_NAME' => $lampiran->nama,
-                    'ATTRIBUTE3' => 'https://share.pgn.co.id/attachment/' . $lampiran->lampiran,
+                    'ATTRIBUTE3' => config('app.url') . '/attachment/' . $lampiran->lampiran,
                     'DESCRIPTION' => $lampiran->nama,
                 ])
             ];

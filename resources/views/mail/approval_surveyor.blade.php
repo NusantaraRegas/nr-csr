@@ -61,7 +61,7 @@
             <td>&nbsp;{{ $survei2 }}</td>
         </tr>
     </table>
-    <p>Silahkan login <a href='https://share.pgn.co.id'>https://share.pgn.co.id</a> untuk melakukan persetujuan pada menu tasklist anda.</p>
+    <p>Silahkan login <a href='{{ url('/') }}'>{{ url('/') }}</a> untuk melakukan persetujuan pada menu tasklist anda.</p>
     <p>
         Catatan :<br>
         Email ini dikirim secara otomatis by system<br>

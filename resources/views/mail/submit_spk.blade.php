@@ -36,7 +36,7 @@
             <td style="vertical-align: top">{{ \App\Helper\formatTanggal::tanggal_indo(date('Y-m-d', strtotime($dueDate))) }}</td>
         </tr>
     </table>
-    <p>Untuk detailnya silahkan lihat pada Aplikasi <a href='https://share.pgn.co.id'>https://share.pgn.co.id</a>.</p>
+    <p>Untuk detailnya silahkan lihat pada Aplikasi <a href='{{ url('/') }}'>{{ url('/') }}</a>.</p>
     <p>
         Catatan :<br>
         Email ini dikirim secara otomatis by system<br>

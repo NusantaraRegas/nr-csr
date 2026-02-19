@@ -21,7 +21,7 @@
             <td>&nbsp;{{ $namaProyek }}</td>
         </tr>
     </table>
-    <p>Mohon untuk melakukan respon permintaan tersebut pada Menu My Task di Aplikasi <a href='https://share.pgn.co.id'>https://share.pgn.co.id</a>.</p>
+    <p>Mohon untuk melakukan respon permintaan tersebut pada Menu My Task di Aplikasi <a href='{{ url('/') }}'>{{ url('/') }}</a>.</p>
     <p>
         Catatan :<br>
         Email ini dikirim secara otomatis by system<br>

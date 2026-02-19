@@ -114,7 +114,7 @@ class ProkerController extends Controller
 
         // Dropdowns
         $perusahaan = Perusahaan::orderBy('id_perusahaan')->get();
-        $pilar = Pilar::orderBy('id_pilar')->get();
+        $pilar = Pilar::orderBy('kode')->get();
         $dataAnggaran = Anggaran::where('id_perusahaan', $perusahaanID)
             ->orderByDesc('tahun')
             ->get();

@@ -26,7 +26,7 @@
             <td style="vertical-align: top">{{ "Rp. ".number_format($nilaiKesepakatan,0,',','.') }}</td>
         </tr>
     </table>
-    <p>Untuk detailnya silahkan lihat pada Aplikasi <a href='https://share.pgn.co.id'>https://share.pgn.co.id</a>.</p>
+    <p>Untuk detailnya silahkan lihat pada Aplikasi <a href='{{ url('/') }}'>{{ url('/') }}</a>.</p>
     <p>
         Catatan :<br>
         Email ini dikirim secara otomatis by system<br>

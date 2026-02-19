@@ -11,7 +11,7 @@ class PilarController extends Controller
 {
     public function index()
     {
-        $data = Pilar::orderBy('id_pilar', 'ASC')->get();
+        $data = Pilar::orderBy('kode', 'ASC')->get();
         return view('master.data_pilar')
             ->with([
                 'dataPilar' => $data,
