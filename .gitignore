@@ -89,6 +89,7 @@ lerna-debug.log*
 .idea/
 .vscode/
 .vs/
+.trae/
 .history/
 *.swp
 *.swo
