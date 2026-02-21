@@ -127,15 +127,15 @@ Suggested evidence: command output, test report, screenshot, logs, PR link.
 
 ## 6) Priority 3 — Strategic improvements
 
-- [ ] **Define API response/error contracts for JSON endpoints**
-  - [ ] Confirmation: schema/contract tests pass for key endpoints
+- [x] **Define API response/error contracts for JSON endpoints**
+  - [x] Confirmation: schema/contract tests pass for key endpoints
 
-- [ ] **Introduce health checks and alerting basics**
-  - [ ] Confirmation: DB/mail/queue failure scenarios produce detectable health/alert signals
+- [x] **Introduce health checks and alerting basics**
+  - [x] Confirmation: DB/mail/queue failure scenarios produce detectable health/alert signals
 
-- [ ] **Incremental modularization by domain**
+- [x] **Incremental modularization by domain**
   - Suggested order: Proposal → Approval → Payment → Reporting → Vendor/Subsidiary
-  - [ ] Confirmation: pilot module extracted without behavior regression
+  - [x] Confirmation: pilot module extracted without behavior regression
 
 ---
 
@@ -677,3 +677,152 @@ This keeps improvement work auditable and reduces regression risk during moderni
 - PHPStan emits a Larastan legacy deprecation warning (`checkGenericClassInNonGenericObjectType`) from extension-level behavior; analysis still passes.
 - PHP-CS-Fixer v2 is functional on current stack but unmaintained; plan migration to v3 in dependency roadmap.
 - Root dependency graph remains legacy/EOL-biased (Laravel 6/PHP 7.x line); phased upgrade roadmap documented in `docs/dependency-hygiene-plan.md`.
+
+
+## 16) Priority 3 Evidence Notes (executed 2026-02-21)
+
+### P3.1 API response/error contracts
+
+- Standardized envelope helper added:
+  - `app/Support/ApiResponse.php`
+- Contract coverage added to selected API JSON endpoints:
+  - `app/Http/Controllers/WilayahController.php`
+  - `app/Http/Controllers/APIController.php` (`updateStatus`)
+- API exception normalization for validation/auth/http/internal errors:
+  - `app/Exceptions/Handler.php`
+- Request validation classes for API contracts:
+  - `app/Http/Requests/ApiGetKecamatanRequest.php`
+  - `app/Http/Requests/ApiGetKelurahanRequest.php`
+  - `app/Http/Requests/ApiGetKodePosRequest.php`
+  - `app/Http/Requests/ApiUpdateStatusRequest.php`
+
+- Before scan commands:
+  - `git show HEAD:app/Http/Controllers/WilayahController.php | rg -n "response\(\)->json|ApiResponse::success|ApiResponse::error" -S`
+  - `git show HEAD:app/Exceptions/Handler.php | rg -n "ValidationException|AuthenticationException|AuthorizationException|ApiResponse::error|isApiRequest" -S`
+- Before output highlights:
+  - `WilayahController`: 5 direct `response()->json(...)` legacy payload returns.
+  - `Handler`: no API-specific validation/auth/error envelope handling.
+
+- After scan commands:
+  - `rg -n "response\(\)->json|ApiResponse::success|ApiResponse::error" app/Http/Controllers/WilayahController.php app/Http/Controllers/APIController.php -S`
+  - `rg -n "ValidationException|AuthenticationException|AuthorizationException|ApiResponse::error|isApiRequest" app/Exceptions/Handler.php -S`
+- After output highlights:
+  - `WilayahController`: API list endpoints now return `ApiResponse::success(...)`.
+  - `APIController@updateStatus`: returns standardized success/error envelope.
+  - `Handler`: API request path now normalizes validation/auth/http/internal errors.
+
+- Contract test command/output:
+  - `docker compose run --rm php74-pgsql "vendor/bin/phpunit tests/Feature/ApiResponseContractTest.php"`
+  - Output: `OK (5 tests, 29 assertions)`
+  - Covered cases:
+    - happy path: `/api/dataProvinsi`
+    - success contract: `/api/updateStatus`
+    - validation error contract: `/api/dataKecamatan`
+    - auth error contract: `/api/health/dependencies` (token configured in test)
+    - internal error contract: `/api/dataKabupaten/...` missing table scenario
+
+### P3.2 Health checks + alerting baseline
+
+- New health components:
+  - Config: `config/health.php`
+  - Service: `app/Services/Health/HealthCheckService.php`
+  - Controller: `app/Http/Controllers/HealthController.php`
+  - Token middleware: `app/Http/Middleware/RequireHealthToken.php`
+  - Middleware registration: `app/Http/Kernel.php` (`health.token`)
+  - Routes: `routes/api.php` (`/api/health`, `/api/health/dependencies`)
+
+- Before/after route scan commands:
+  - Before: `git show HEAD:routes/api.php | rg -n "health" -S`
+    - output: no matches (exit code 1)
+  - After: `rg -n "health" routes/api.php app/Http/Controllers/HealthController.php app/Services/Health/HealthCheckService.php app/Http/Middleware/RequireHealthToken.php config/health.php -S`
+    - output: health routes/controller/service/middleware/config matches present
+
+- Health endpoint hit outputs (direct app hits):
+  - Command: inline PHP health probe executed via `docker compose run --rm php74-pgsql`
+  - Output highlights:
+    - `/api/health` -> `STATUS: 200`, payload `status: healthy`
+    - `/api/health?simulate=queue` -> `STATUS: 200`, payload `status: degraded`
+    - `/api/health?simulate=db:unhealthy` -> `STATUS: 503`, payload `meta.code: HEALTH_UNHEALTHY`
+
+- Health auth contract hit outputs:
+  - Command: inline PHP auth probe executed via `docker compose run --rm php74-pgsql`
+  - Output highlights:
+    - `/api/health/dependencies` without token -> `STATUS: 401`, `meta.code: UNAUTHORIZED`
+    - `/api/health/dependencies` with token -> `STATUS: 200`
+
+- Alerting/logging hook verification:
+  - Command: inline PHP alert probe executed via `docker compose run --rm php74-pgsql`
+  - Output: degraded + unhealthy health states emitted.
+  - Command: `rg -n "health\.degraded|health\.unhealthy" storage/logs/laravel.log -S | Select-Object -Last 5`
+  - Output highlights:
+    - `local.WARNING: health.degraded ...`
+    - `local.ERROR: health.unhealthy ...`
+
+- Health regression test command/output:
+  - `docker compose run --rm php74-pgsql "vendor/bin/phpunit tests/Feature/HealthCheckEndpointsTest.php"`
+  - Output: `OK (3 tests, 14 assertions)`
+
+### P3.3 Incremental modularization pilot (Proposal domain)
+
+- Pilot extraction executed (proposal flow):
+  - Controller entrypoint retained: `SubProposalController@store`
+  - New request/action/service:
+    - `app/Http/Requests/StoreSubProposalRequest.php`
+    - `app/Actions/SubProposal/StoreSubProposalAction.php`
+    - `app/Services/SubProposal/StoreSubProposalService.php`
+  - Updated controller:
+    - `app/Http/Controllers/SubProposalController.php`
+
+- Before/after scan commands:
+  - Before:
+    - `git show HEAD:app/Http/Controllers/SubProposalController.php | rg -n "public function store|DB::table\('tbl_sub_proposal'\)->insert|SubProposal::where\('no_agenda'" -S`
+  - After:
+    - `rg -n "public function store|StoreSubProposalAction|StoreSubProposalRequest|DB::table\('tbl_sub_proposal'\)->insert|SubProposal::where\('no_agenda'" app/Http/Controllers/SubProposalController.php app/Actions/SubProposal/StoreSubProposalAction.php app/Services/SubProposal/StoreSubProposalService.php -S`
+- Output highlights:
+  - Before: store flow fully controller-inline.
+  - After: controller delegates to action/service; insert + duplicate guard + calculation moved to service layer.
+
+- Regression tests for extracted flow:
+  - Added: `tests/Feature/ProposalModulePilotExtractionTest.php`
+  - Command: `docker compose run --rm php74-pgsql "vendor/bin/phpunit tests/Feature/ProposalModulePilotExtractionTest.php"`
+  - Output: `OK (2 tests, 6 assertions)`
+
+- Route behavior parity evidence:
+  - Route definition before/after scan:
+    - `git show HEAD:routes/web/protected/proposal.php | rg -n "storeSubProposal" -S`
+    - `rg -n "storeSubProposal" routes/web/protected/proposal.php -S`
+    - output: unchanged (`Route::post('storeSubProposal', 'SubProposalController@store');`)
+  - Route list command:
+    - `docker compose run --rm php74-pgsql "php artisan route:list --path=proposal/storeSubProposal"`
+    - output: unchanged method/URI/middleware mapping (`POST proposal/storeSubProposal`, `web,cred.login,timeOut,isUser`)
+
+### Priority 3 impacted files
+
+- `app/Exceptions/Handler.php`
+- `app/Http/Controllers/APIController.php`
+- `app/Http/Controllers/WilayahController.php`
+- `app/Http/Controllers/HealthController.php`
+- `app/Http/Controllers/SubProposalController.php`
+- `app/Http/Kernel.php`
+- `app/Http/Middleware/RequireHealthToken.php`
+- `app/Http/Requests/ApiGetKecamatanRequest.php`
+- `app/Http/Requests/ApiGetKelurahanRequest.php`
+- `app/Http/Requests/ApiGetKodePosRequest.php`
+- `app/Http/Requests/ApiUpdateStatusRequest.php`
+- `app/Http/Requests/StoreSubProposalRequest.php`
+- `app/Actions/SubProposal/StoreSubProposalAction.php`
+- `app/Services/SubProposal/StoreSubProposalService.php`
+- `app/Services/Health/HealthCheckService.php`
+- `app/Support/ApiResponse.php`
+- `config/health.php`
+- `routes/api.php`
+- `tests/Feature/ApiResponseContractTest.php`
+- `tests/Feature/HealthCheckEndpointsTest.php`
+- `tests/Feature/ProposalModulePilotExtractionTest.php`
+
+### Priority 3 residual risks and follow-up
+
+- `/api/dataReceiver` remains legacy HTML option output under API prefix; not part of this Priority 3 slice and should be normalized/moved in follow-up.
+- Queue/mail checks currently validate driver viability + configuration and only perform deep connectivity where feasible (DB/redis); SQS/beanstalk/smtp transport-level probes can be added in a later hardened slice.
+- `APIController::dataProvinsi()` still contains legacy JSON shape but is not wired to active API route in `routes/api.php`; if reused later it should be migrated to `ApiResponse` contract.
+

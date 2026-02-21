@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\SubProposal\StoreSubProposalAction;
 use App\Exports\PaymentExport;
 use App\Exports\SubProposalExport;
+use App\Http\Requests\StoreSubProposalRequest;
 use App\Helper\APIHelper;
 use App\Models\Kelayakan;
 use App\Models\Provinsi;
@@ -61,67 +63,9 @@ class SubProposalController extends Controller
             ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreSubProposalRequest $request, StoreSubProposalAction $action)
     {
-
-        $this->validate($request, [
-            'namaKetua' => 'required',
-            'namaLembaga' => 'required',
-            'alamat' => 'required',
-            'provinsi' => 'required',
-            'kabupaten' => 'required',
-        ]);
-
-        $validasi = $nomor = SubProposal::where('no_agenda', $request->noAgenda)->where('nama_lembaga', $request->namaLembaga)->count();
-
-        if ($validasi > 0) {
-            return redirect()->back()->with('gagal', "$request->namaLembaga Sudah ada");
-        } else {
-            $nomor = SubProposal::where('no_agenda', $request->noAgenda)->count();
-            $nomorUrut = $nomor + 1;
-            $nomorSubAgenda = $request->noAgenda . '.' . $nomorUrut;
-
-            $hargaKambing = str_replace(".", "", $request->hargaKambing);
-            $hargaSapi = str_replace(".", "", $request->hargaSapi);
-
-            $totalKambing = $request->kambing * $hargaKambing;
-            $totalSapi = $request->sapi * $hargaSapi;
-
-            $subTotal = $totalKambing + $totalSapi;
-            $fee = $subTotal * 10 / 100;
-            $ppn = $fee * 10 / 100;
-            $grandTotal = $subTotal + $fee + $ppn;
-
-            //dd("Total Kambing =  $totalKambing", "Total SAPI =  $totalSapi" ,"Sub Total =  $subTotal", "Fee =  $fee", "GrandTotal =  $grandTotal");
-
-            $dataSubProposal = [
-                'no_agenda' => $request->noAgenda,
-                'no_sub_agenda' => $nomorSubAgenda,
-                'nama_ketua' => $request->namaKetua,
-                'nama_lembaga' => $request->namaLembaga,
-                'kambing' => $request->kambing,
-                'harga_kambing' => $hargaKambing,
-                'sapi' => $request->sapi,
-                'harga_sapi' => $hargaSapi,
-                'total' => $subTotal,
-                'fee' => $fee,
-                'ppn' => $ppn,
-                'subtotal' => $grandTotal,
-                'alamat' => $request->alamat,
-                'provinsi' => $request->provinsi,
-                'kabupaten' => $request->kabupaten,
-            ];
-
-            //dd($dataSubProposal);
-
-            try {
-                DB::table('tbl_sub_proposal')->insert($dataSubProposal);
-                return redirect()->route('dataSubProposal', encrypt($request->noAgenda))->with('sukses', 'Sub Proposal berhasil disimpan');
-            } catch (Exception $e) {
-                return redirect()->back()->with('gagal', 'Sub Proposal gagal disimpan');
-            }
-        }
-
+        return $action->execute($request);
     }
 
     public function ubah($loginID)

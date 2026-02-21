@@ -21,3 +21,6 @@ Route::post('dataKodePos', "WilayahController@getKodePos");
 
 Route::get('dataReceiver', 'APIController@dataReceiver');
 Route::post('updateStatus', 'APIController@updateStatus');
+
+Route::get('health', 'HealthController@show');
+Route::get('health/dependencies', 'HealthController@dependencies')->middleware('health.token');

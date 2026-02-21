@@ -18,6 +18,7 @@ Laravel 6 (PHP ^7.2) monolith for CSR proposal intake, evaluation/survey workflo
 - [Main Route Areas](#main-route-areas-quick-map)
 - [Project Maintenance](#project-maintenance)
   - [Quality Gates (Priority 2)](#quality-gates-priority-2)
+  - [Strategic Baseline (Priority 3)](#strategic-baseline-priority-3)
   - [Dependency Hygiene Plan](#dependency-hygiene-plan)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
@@ -433,6 +434,93 @@ php tools/security_guardrail_check.php
 composer run quality:static
 composer run quality:style
 composer run quality:test:critical
+```
+
+### Strategic Baseline (Priority 3)
+
+Priority 3 strategic improvements are now available in incremental form:
+
+1. API response/error contracts for key `/api/*` JSON endpoints
+2. Health checks + alerting baseline
+3. Proposal-domain modularization pilot (`storeSubProposal`)
+
+#### API Response Contract
+
+Standard envelope helper:
+
+- `app/Support/ApiResponse.php`
+
+Representative endpoints already normalized:
+
+- `GET /api/dataProvinsi`
+- `GET /api/dataKabupaten/{prov}`
+- `POST /api/dataKecamatan`
+- `POST /api/dataKelurahan`
+- `POST /api/dataKodePos`
+- `POST /api/updateStatus`
+
+Envelope shape:
+
+```json
+{
+  "success": true,
+  "message": "OK",
+  "data": {},
+  "errors": null,
+  "meta": {}
+}
+```
+
+API exception rendering for validation/auth/http/internal errors is centralized in:
+
+- `app/Exceptions/Handler.php`
+
+Contract tests:
+
+```bash
+docker compose run --rm php74-pgsql "vendor/bin/phpunit tests/Feature/ApiResponseContractTest.php"
+```
+
+#### Health Checks + Alerting
+
+Endpoints:
+
+- `GET /api/health`
+- `GET /api/health/dependencies` (optional token via `X-Health-Token`)
+
+Configuration:
+
+- `config/health.php`
+- `HEALTH_ALLOW_SIMULATION` (default: `false`)
+- `HEALTH_CHECK_TOKEN` (optional)
+- `HEALTH_ALERTING_ENABLED` (default: `true`)
+- `HEALTH_ALERT_LOG_CHANNEL` (default: `LOG_CHANNEL`)
+
+Checks covered:
+
+- Database connectivity
+- Queue dependency status (healthy/degraded/unhealthy based on driver/runtime conditions)
+- Mail dependency status (healthy/degraded based on driver/configuration)
+
+Health tests:
+
+```bash
+docker compose run --rm php74-pgsql "vendor/bin/phpunit tests/Feature/HealthCheckEndpointsTest.php"
+```
+
+#### Proposal Modularization Pilot
+
+Pilot extraction applied to proposal flow `POST /proposal/storeSubProposal`:
+
+- `app/Http/Controllers/SubProposalController.php` (entrypoint kept stable)
+- `app/Http/Requests/StoreSubProposalRequest.php`
+- `app/Actions/SubProposal/StoreSubProposalAction.php`
+- `app/Services/SubProposal/StoreSubProposalService.php`
+
+Regression tests:
+
+```bash
+docker compose run --rm php74-pgsql "vendor/bin/phpunit tests/Feature/ProposalModulePilotExtractionTest.php"
 ```
 
 ### Dependency Hygiene Plan

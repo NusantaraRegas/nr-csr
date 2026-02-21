@@ -13,8 +13,10 @@ use App\Models\Provinsi;
 use App\Models\SektorBantuan;
 use App\Models\ViewPembayaran;
 use App\Models\ViewProker;
+use App\Http\Requests\ApiUpdateStatusRequest;
 use App\Http\Requests\PostPaymentRequestAnnualRequest;
 use App\Actions\API\PostPaymentRequestAnnualAction;
+use App\Support\ApiResponse;
 use Illuminate\Http\Request;
 use Exception;
 use DB;
@@ -1682,9 +1684,8 @@ class APIController extends Controller
 
     }
 
-    public function updateStatus(Request $request)
+    public function updateStatus(ApiUpdateStatusRequest $request)
     {
-
         $dataPR = [
             'pr_id' => $request->pr_id,
         ];
@@ -1695,9 +1696,15 @@ class APIController extends Controller
             DB::table('tbl_pembayaran')
                 ->where('id_pembayaran', $pembayaranID)
                 ->update($dataPR);
-            return "Data berhasil diubah";
+
+            return ApiResponse::success([
+                'pembayaran_id' => (int) $pembayaranID,
+                'pr_id' => $request->pr_id,
+            ], 'Data berhasil diubah');
         } catch (Exception $e) {
-            return "Data berhasil diubah";
+            report($e);
+
+            return ApiResponse::error('Data gagal diubah', 500, 'UPDATE_STATUS_FAILED');
         }
     }
 

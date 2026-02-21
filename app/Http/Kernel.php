@@ -70,6 +70,7 @@ class Kernel extends HttpKernel
         'isLegal' => \App\Http\Middleware\OnlyLegal::class,
         'isExporter' => \App\Http\Middleware\OnlyExporter::class,
         'isSubsidiary' => \App\Http\Middleware\OnlySubsidiary::class,
+        'health.token' => \App\Http\Middleware\RequireHealthToken::class,
     ];
 
     /**

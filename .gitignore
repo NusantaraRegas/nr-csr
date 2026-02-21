@@ -43,6 +43,13 @@ clover.xml
 # Local verification artifacts (route/test scan snapshots)
 /storage/route-list-*.txt
 /storage/p1-*.txt
+/storage/health-*.txt
+/storage/health-*.json
+
+# Temporary local health probe scripts (diagnostics)
+/tools/health_hit_probe.php
+/tools/health_auth_probe.php
+/tools/health_alert_probe.php
 
 # Compiled framework cache
 /bootstrap/cache/*.php
