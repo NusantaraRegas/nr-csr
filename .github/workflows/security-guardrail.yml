@@ -1,4 +1,4 @@
-name: Security Baseline
+name: Quality Baseline
 
 on:
   push:
@@ -6,8 +6,12 @@ on:
       - "**"
   pull_request:
 
+concurrency:
+  group: quality-baseline-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  security-baseline:
+  quality-baseline:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,14 +21,21 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "7.4"
-          extensions: mbstring, json, dom, fileinfo, pdo, pdo_sqlite
+          extensions: mbstring, json, dom, fileinfo, pdo, pdo_sqlite, gd, zip
+          tools: composer:v2
           coverage: none
 
       - name: Install Composer dependencies
-        run: composer install --no-interaction --prefer-dist --no-progress
+        run: composer install --no-interaction --prefer-dist --no-progress --ignore-platform-req=ext-oci8
 
       - name: Run hardcoded-secret guardrail
         run: php tools/security_guardrail_check.php
 
-      - name: Run Phase A security tests (A3-A5 baseline)
-        run: vendor/bin/phpunit tests/Feature/SecuritySqlInjectionRegressionTest.php tests/Feature/SecurityUploadHardeningTest.php tests/Feature/TransactionBoundaryRollbackTest.php
+      - name: Run static analysis baseline
+        run: composer run quality:static
+
+      - name: Run style baseline
+        run: composer run quality:style
+
+      - name: Run critical-path regression tests (P0/P1/P2)
+        run: composer run quality:test:critical

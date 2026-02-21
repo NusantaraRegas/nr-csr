@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Http\Middleware\OnlyAdmin;
+use App\Http\Middleware\OnlyReport;
+use App\Http\Middleware\OnlyUser;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tests\TestCase;
@@ -113,6 +115,72 @@ class AuthStateConsistencyTest extends TestCase
         $this->app['session.store']->put('user', $this->sessionUser('Manager'));
 
         $middleware = $this->app->make(OnlyAdmin::class);
+
+        try {
+            $middleware->handle($request, function () {
+                return response('ok', 200);
+            });
+            $this->fail('Expected middleware to abort with 403');
+        } catch (HttpException $e) {
+            $this->assertSame(403, $e->getStatusCode());
+        }
+    }
+
+    public function test_only_user_middleware_allows_inputer_role()
+    {
+        $request = Request::create('/dummy-user', 'GET');
+        $request->setLaravelSession($this->app['session.store']);
+        $this->app['session.store']->put('user', $this->sessionUser('Inputer'));
+
+        $middleware = $this->app->make(OnlyUser::class);
+
+        $response = $middleware->handle($request, function () {
+            return response('ok', 200);
+        });
+
+        $this->assertSame(200, $response->getStatusCode());
+    }
+
+    public function test_only_user_middleware_blocks_approver_role()
+    {
+        $request = Request::create('/dummy-user', 'GET');
+        $request->setLaravelSession($this->app['session.store']);
+        $this->app['session.store']->put('user', $this->sessionUser('Approver 1'));
+
+        $middleware = $this->app->make(OnlyUser::class);
+
+        try {
+            $middleware->handle($request, function () {
+                return response('ok', 200);
+            });
+            $this->fail('Expected middleware to abort with 403');
+        } catch (HttpException $e) {
+            $this->assertSame(403, $e->getStatusCode());
+        }
+    }
+
+    public function test_only_report_middleware_allows_finance_role()
+    {
+        $request = Request::create('/dummy-report', 'GET');
+        $request->setLaravelSession($this->app['session.store']);
+        $this->app['session.store']->put('user', $this->sessionUser('Finance'));
+
+        $middleware = $this->app->make(OnlyReport::class);
+
+        $response = $middleware->handle($request, function () {
+            return response('ok', 200);
+        });
+
+        $this->assertSame(200, $response->getStatusCode());
+    }
+
+    public function test_only_report_middleware_blocks_subsidiary_role()
+    {
+        $request = Request::create('/dummy-report', 'GET');
+        $request->setLaravelSession($this->app['session.store']);
+        $this->app['session.store']->put('user', $this->sessionUser('Subsidiary'));
+
+        $middleware = $this->app->make(OnlyReport::class);
 
         try {
             $middleware->handle($request, function () {

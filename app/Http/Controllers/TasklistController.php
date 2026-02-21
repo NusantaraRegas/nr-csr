@@ -13,6 +13,7 @@ use App\Http\Requests\ApproveEvaluasiKadep;
 use App\Http\Requests\ApproveEvaluasiKadiv;
 use DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 use Mail;
 use Exception;
 
@@ -20,10 +21,10 @@ class TasklistController extends Controller
 {
     public function index()
     {
-        date_default_timezone_set("Asia/Jakarta");
+        date_default_timezone_set('Asia/Jakarta');
         function tanggal_indo($tanggal)
         {
-            $bulan = array(1 => 'Januari',
+            $bulan = [1 => 'Januari',
                 'Februari',
                 'Maret',
                 'April',
@@ -34,8 +35,8 @@ class TasklistController extends Controller
                 'September',
                 'Oktober',
                 'November',
-                'Desember'
-            );
+                'Desember',
+            ];
             $split = explode('-', $tanggal);
             return $split[2] . ' ' . $bulan[(int)$split[1]] . ' ' . $split[0];
         }
@@ -173,7 +174,7 @@ class TasklistController extends Controller
     {
         function tanggal_indo($tanggal)
         {
-            $bulan = array(1 => 'Januari',
+            $bulan = [1 => 'Januari',
                 'Februari',
                 'Maret',
                 'April',
@@ -184,8 +185,8 @@ class TasklistController extends Controller
                 'September',
                 'Oktober',
                 'November',
-                'Desember'
-            );
+                'Desember',
+            ];
             $split = explode('-', $tanggal);
             return $split[2] . ' ' . $bulan[(int)$split[1]] . ' ' . $split[0];
         }
@@ -210,7 +211,7 @@ class TasklistController extends Controller
             $jumlahData = ViewEvaluasi::where('kadep', $username)
                 ->where('status', 'Approved 1')
                 ->count();
-        }else{
+        } else {
             $data = ViewEvaluasi::where('kadep', $username)
                 ->where('status', 'Approved 1')
                 ->orderBy('id_evaluasi', 'DESC')
@@ -228,10 +229,10 @@ class TasklistController extends Controller
 
     public function todo()
     {
-        date_default_timezone_set("Asia/Jakarta");
+        date_default_timezone_set('Asia/Jakarta');
         function tanggal_indo($tanggal)
         {
-            $bulan = array(1 => 'Januari',
+            $bulan = [1 => 'Januari',
                 'Februari',
                 'Maret',
                 'April',
@@ -242,8 +243,8 @@ class TasklistController extends Controller
                 'September',
                 'Oktober',
                 'November',
-                'Desember'
-            );
+                'Desember',
+            ];
             $split = explode('-', $tanggal);
             return $split[2] . ' ' . $bulan[(int)$split[1]] . ' ' . $split[0];
         }
@@ -273,8 +274,9 @@ class TasklistController extends Controller
     public function approveEvaluator($evaluasiID, $catatan)
     {
         date_default_timezone_set('Asia/Jakarta');
-        $tanggalMenit = date("Y-m-d");
-        $evaluasiIds = explode(",", $evaluasiID);
+        $tanggalMenit = date('Y-m-d');
+        $evaluasiIds = explode(',', $evaluasiID);
+        $actor = session('user');
 
         $dataEvaluasi = DB::table('v_evaluasi')
             ->select('v_evaluasi.*')
@@ -315,20 +317,44 @@ class TasklistController extends Controller
 //                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //            });
 
-            DB::transaction(function () use ($evaluasiIds, $dataUpdate) {
-                Evaluasi::whereIn('id_evaluasi', $evaluasiIds)->update($dataUpdate);
-            });
+            try {
+                DB::transaction(function () use ($evaluasiIds, $dataUpdate) {
+                    Evaluasi::whereIn('id_evaluasi', $evaluasiIds)->update($dataUpdate);
+                });
+            } catch (Exception $exception) {
+                Log::error('approval.transition_failed', [
+                    'action' => 'approve_evaluator',
+                    'actor_username' => $actor->username ?? null,
+                    'actor_role' => $actor->role ?? null,
+                    'evaluasi_ids' => $evaluasiIds,
+                    'target_status' => $dataUpdate['status'],
+                    'catatan' => $catatan,
+                    'error' => $exception->getMessage(),
+                ]);
+
+                throw $exception;
+            }
+
+            Log::info('approval.transition', [
+                'action' => 'approve_evaluator',
+                'actor_username' => $actor->username ?? null,
+                'actor_role' => $actor->role ?? null,
+                'evaluasi_ids' => $evaluasiIds,
+                'target_status' => $dataUpdate['status'],
+                'catatan' => $catatan,
+                'agenda' => $e->no_agenda,
+            ]);
 
             return redirect()->back()->with('berhasil', 'Evaluasi proposal berhasil disetujui');
         }
-
     }
 
     public function approveKadep($evaluasiID, $catatan, $status)
     {
         date_default_timezone_set('Asia/Jakarta');
-        $tanggalMenit = date("Y-m-d");
-        $evaluasiIds = explode(",", $evaluasiID);
+        $tanggalMenit = date('Y-m-d');
+        $evaluasiIds = explode(',', $evaluasiID);
+        $actor = session('user');
 
         $dataEvaluasi = DB::table('v_evaluasi')
             ->select('v_evaluasi.*')
@@ -370,20 +396,44 @@ class TasklistController extends Controller
 //                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //            });
 
-            DB::transaction(function () use ($evaluasiIds, $dataUpdate) {
-                Evaluasi::whereIn('id_evaluasi', $evaluasiIds)->update($dataUpdate);
-            });
+            try {
+                DB::transaction(function () use ($evaluasiIds, $dataUpdate) {
+                    Evaluasi::whereIn('id_evaluasi', $evaluasiIds)->update($dataUpdate);
+                });
+            } catch (Exception $exception) {
+                Log::error('approval.transition_failed', [
+                    'action' => 'approve_kadep',
+                    'actor_username' => $actor->username ?? null,
+                    'actor_role' => $actor->role ?? null,
+                    'evaluasi_ids' => $evaluasiIds,
+                    'target_status' => $status,
+                    'catatan' => $catatan,
+                    'error' => $exception->getMessage(),
+                ]);
+
+                throw $exception;
+            }
+
+            Log::info('approval.transition', [
+                'action' => 'approve_kadep',
+                'actor_username' => $actor->username ?? null,
+                'actor_role' => $actor->role ?? null,
+                'evaluasi_ids' => $evaluasiIds,
+                'target_status' => $status,
+                'catatan' => $catatan,
+                'agenda' => $e->no_agenda,
+            ]);
 
             return redirect()->back()->with('berhasil', 'Evaluasi proposal berhasil disetujui');
         }
-
     }
 
     public function approveKadiv($evaluasiID, $catatan, $status)
     {
         date_default_timezone_set('Asia/Jakarta');
-        $tanggalMenit = date("Y-m-d");
-        $evaluasiIds = explode(",", $evaluasiID);
+        $tanggalMenit = date('Y-m-d');
+        $evaluasiIds = explode(',', $evaluasiID);
+        $actor = session('user');
 
         $dataEvaluasi = DB::table('v_evaluasi')
             ->select('v_evaluasi.*')
@@ -426,9 +476,34 @@ class TasklistController extends Controller
 //                        ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //                });
 
-                DB::transaction(function () use ($evaluasiIds, $dataUpdate) {
-                    Evaluasi::whereIn('id_evaluasi', $evaluasiIds)->update($dataUpdate);
-                });
+                try {
+                    DB::transaction(function () use ($evaluasiIds, $dataUpdate) {
+                        Evaluasi::whereIn('id_evaluasi', $evaluasiIds)->update($dataUpdate);
+                    });
+                } catch (Exception $exception) {
+                    Log::error('approval.transition_failed', [
+                        'action' => 'approve_kadiv',
+                        'actor_username' => $actor->username ?? null,
+                        'actor_role' => $actor->role ?? null,
+                        'evaluasi_ids' => $evaluasiIds,
+                        'target_status' => $status,
+                        'catatan' => $catatan,
+                        'agenda' => $e->no_agenda,
+                        'error' => $exception->getMessage(),
+                    ]);
+
+                    throw $exception;
+                }
+
+                Log::info('approval.transition', [
+                    'action' => 'approve_kadiv',
+                    'actor_username' => $actor->username ?? null,
+                    'actor_role' => $actor->role ?? null,
+                    'evaluasi_ids' => $evaluasiIds,
+                    'target_status' => $status,
+                    'catatan' => $catatan,
+                    'agenda' => $e->no_agenda,
+                ]);
             } else {
                 $dataEmail = [
                     'no_agenda' => $e->no_agenda,
@@ -464,14 +539,38 @@ class TasklistController extends Controller
 //                        ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
 //                });
 
-                DB::transaction(function () use ($evaluasiIds, $dataUpdate, $e, $dataUpdateProposal) {
-                    Evaluasi::whereIn('id_evaluasi', $evaluasiIds)->update($dataUpdate);
-                    Kelayakan::whereIn('no_agenda', explode(",", $e->no_agenda))->update($dataUpdateProposal);
-                });
+                try {
+                    DB::transaction(function () use ($evaluasiIds, $dataUpdate, $e, $dataUpdateProposal) {
+                        Evaluasi::whereIn('id_evaluasi', $evaluasiIds)->update($dataUpdate);
+                        Kelayakan::whereIn('no_agenda', explode(',', $e->no_agenda))->update($dataUpdateProposal);
+                    });
+                } catch (Exception $exception) {
+                    Log::error('approval.transition_failed', [
+                        'action' => 'approve_kadiv_rejected',
+                        'actor_username' => $actor->username ?? null,
+                        'actor_role' => $actor->role ?? null,
+                        'evaluasi_ids' => $evaluasiIds,
+                        'target_status' => $status,
+                        'catatan' => $catatan,
+                        'agenda' => $e->no_agenda,
+                        'error' => $exception->getMessage(),
+                    ]);
+
+                    throw $exception;
+                }
+
+                Log::info('approval.transition', [
+                    'action' => 'approve_kadiv_rejected',
+                    'actor_username' => $actor->username ?? null,
+                    'actor_role' => $actor->role ?? null,
+                    'evaluasi_ids' => $evaluasiIds,
+                    'target_status' => $status,
+                    'catatan' => $catatan,
+                    'agenda' => $e->no_agenda,
+                ]);
             }
 
             return redirect()->back()->with('berhasil', 'Evaluasi proposal berhasil disetujui');
         }
-
     }
 }

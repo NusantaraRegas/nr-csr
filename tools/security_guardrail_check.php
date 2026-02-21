@@ -26,6 +26,10 @@ $excludedPrefixes = [
     'docs/',
 ];
 
+$excludedFiles = [
+    'tools/security_guardrail_check.php',
+];
+
 $patterns = [
     [
         'name' => 'literal StrongPass123',
@@ -52,6 +56,10 @@ foreach ($output as $file) {
             $skip = true;
             break;
         }
+    }
+
+    if (in_array($file, $excludedFiles, true)) {
+        continue;
     }
 
     if ($skip || !is_file($file)) {

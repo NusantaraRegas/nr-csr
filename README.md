@@ -17,6 +17,8 @@ Laravel 6 (PHP ^7.2) monolith for CSR proposal intake, evaluation/survey workflo
   - [Docker Setup (PostgreSQL)](#docker-setup-postgresql)
 - [Main Route Areas](#main-route-areas-quick-map)
 - [Project Maintenance](#project-maintenance)
+  - [Quality Gates (Priority 2)](#quality-gates-priority-2)
+  - [Dependency Hygiene Plan](#dependency-hygiene-plan)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 - [Notes](#notes)
@@ -411,6 +413,34 @@ The project includes comprehensive `.gitignore` files to prevent committing unne
 
 These configurations ensure clean repositories by excluding auto-generated files, local configurations, and build artifacts.
 
+### Quality Gates (Priority 2)
+
+Priority 2 reliability baseline is now enforced through the workflow:
+
+- `.github/workflows/security-guardrail.yml` (workflow name: **Quality Baseline**)
+
+It runs these checks on push/PR in this order:
+
+1. Hardcoded-secret guardrail (`php tools/security_guardrail_check.php`)
+2. Static analysis baseline (`composer run quality:static`)
+3. Style baseline (`composer run quality:style`)
+4. Critical-path feature tests (`composer run quality:test:critical`)
+
+Local equivalent command set:
+
+```bash
+php tools/security_guardrail_check.php
+composer run quality:static
+composer run quality:style
+composer run quality:test:critical
+```
+
+### Dependency Hygiene Plan
+
+Phased upgrade planning and compatibility/risk matrix are documented in:
+
+- `docs/dependency-hygiene-plan.md`
+
 ### Maintenance Commands
 
 ```bash
@@ -476,7 +506,7 @@ chown -R www-data:www-data storage bootstrap/cache
 **Solution**:
 ```bash
 # For local development with PostgreSQL, ignore platform requirements
-composer install --ignore-platform-req=ext-gd --ignore-platform-req=ext-oci8
+composer install --ignore-platform-req=ext-gd --ignore-platform-req=ext-zip --ignore-platform-req=ext-oci8
 ```
 
 #### 5. Frontend Assets Not Loading

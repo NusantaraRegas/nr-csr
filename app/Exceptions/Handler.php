@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 
 class Handler extends ExceptionHandler
 {
@@ -34,6 +35,23 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        if ($this->shouldReport($exception)) {
+            $request = request();
+            $sessionUser = null;
+            if ($request && method_exists($request, 'hasSession') && $request->hasSession()) {
+                $sessionUser = $request->session()->get('user');
+            }
+
+            Log::error('critical_exception', [
+                'exception_class' => get_class($exception),
+                'message' => $exception->getMessage(),
+                'url' => $request ? $request->fullUrl() : null,
+                'method' => $request ? $request->method() : null,
+                'actor_username' => is_object($sessionUser) ? ($sessionUser->username ?? null) : null,
+                'actor_role' => is_object($sessionUser) ? ($sessionUser->role ?? null) : null,
+            ]);
+        }
+
         parent::report($exception);
     }
 

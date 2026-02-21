@@ -1,0 +1,12 @@
+includes:
+    - vendor/nunomaduro/larastan/extension.neon
+    - phpstan-baseline.neon
+
+parameters:
+    level: 5
+    paths:
+        - app/Exceptions
+        - app/Http/Middleware
+        - app/Http/Controllers/TasklistController.php
+        - app/Http/Controllers/LampiranController.php
+        - app/Services/Auth

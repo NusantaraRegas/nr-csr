@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use App\Http\Requests\EditLampiran;
 use App\Models\Kelayakan;
 use App\Models\Lampiran;
@@ -14,7 +15,8 @@ use Exception;
 
 class LampiranController extends Controller
 {
-    public function index($loginID){
+    public function index($loginID)
+    {
         try {
             $logID = decrypt($loginID);
         } catch (Exception $e) {
@@ -24,12 +26,12 @@ class LampiranController extends Controller
             ->select(DB::raw('count(*) as jumlah'))
             ->where('no_agenda', $logID)
             ->first();
-        $data = Lampiran::where('no_agenda',$logID)->get();
+        $data = Lampiran::where('no_agenda', $logID)->get();
         return view('report.data_lampiran')
             ->with([
                 'jumlahData' => $jumlahData,
                 'dataLampiran' => $data,
-                'noAgenda' => $logID
+                'noAgenda' => $logID,
             ]);
     }
 
@@ -54,8 +56,8 @@ class LampiranController extends Controller
 
         $kelayakan = Kelayakan::findOrFail($kelayakanID);
 
-        if(empty($kelayakan)){
-            return redirect()->back()->with('gagal', "Kelayakan proposal tidak ditemukan")->withInput();
+        if (empty($kelayakan)) {
+            return redirect()->back()->with('gagal', 'Kelayakan proposal tidak ditemukan')->withInput();
         }
 
         $image = $request->file('lampiran');
@@ -75,8 +77,27 @@ class LampiranController extends Controller
 
         try {
             Lampiran::create($dataLampiran);
+            Log::info('upload.event', [
+                'action' => 'lampiran_store',
+                'actor_username' => session('user')->username ?? null,
+                'actor_role' => session('user')->role ?? null,
+                'kelayakan_id' => $kelayakan->id_kelayakan,
+                'agenda' => $kelayakan->no_agenda,
+                'file_name' => $featured_new_name,
+                'file_type' => $type,
+                'file_size' => $size,
+            ]);
             return redirect()->back()->with('suksesDetail', 'Dokumen pendukung berhasil disimpan');
         } catch (Exception $e) {
+            Log::error('upload.event_failed', [
+                'action' => 'lampiran_store',
+                'actor_username' => session('user')->username ?? null,
+                'actor_role' => session('user')->role ?? null,
+                'kelayakan_id' => $kelayakanID,
+                'file_type' => $type,
+                'file_size' => $size,
+                'error' => $e->getMessage(),
+            ]);
             return redirect()->back()->with('gagalDetail', 'Dokumen pendukung gagal disimpan');
         }
     }
@@ -111,6 +132,8 @@ class LampiranController extends Controller
         if ($request->hasFile('lampiran')) {
             $file = $request->file('lampiran');
             $fileName = $this->storeAttachmentFile($file, $request->nama);
+            $size = $file->getSize();
+            $type = strtolower($file->guessExtension() ?: $file->getClientOriginalExtension() ?: 'bin');
 
             // Hapus file lama jika ada
             if (!empty($lampiran->lampiran) && Storage::disk('attachment')->exists($lampiran->lampiran)) {
@@ -119,6 +142,17 @@ class LampiranController extends Controller
 
             $lampiran->lampiran = $fileName;
             $lampiran->upload_date = now();
+
+            Log::info('upload.event', [
+                'action' => 'lampiran_update_with_file',
+                'actor_username' => session('user')->username ?? null,
+                'actor_role' => session('user')->role ?? null,
+                'lampiran_id' => $lampiran->id_lampiran,
+                'agenda' => $lampiran->no_agenda,
+                'file_name' => $fileName,
+                'file_type' => $type,
+                'file_size' => $size,
+            ]);
         }
 
         $lampiran->created_by = session('user')->id_user;
@@ -182,8 +216,25 @@ class LampiranController extends Controller
 
         try {
             Lampiran::create($dataLampiran);
+            Log::info('upload.event', [
+                'action' => 'dokumentasi_store',
+                'actor_username' => session('user')->username ?? null,
+                'actor_role' => session('user')->role ?? null,
+                'kelayakan_id' => $kelayakan->id_kelayakan,
+                'agenda' => $kelayakan->no_agenda,
+                'file_path' => $path,
+                'file_size' => $file->getSize(),
+                'file_type' => strtolower($file->guessExtension() ?: $file->getClientOriginalExtension() ?: 'bin'),
+            ]);
             return redirect()->back()->with('suksesDetail', 'Dokumentasi bantuan berhasil disimpan');
         } catch (\Exception $e) {
+            Log::error('upload.event_failed', [
+                'action' => 'dokumentasi_store',
+                'actor_username' => session('user')->username ?? null,
+                'actor_role' => session('user')->role ?? null,
+                'kelayakan_id' => $kelayakanID,
+                'error' => $e->getMessage(),
+            ]);
             return redirect()->back()->with('gagalDetail', 'Dokumentasi bantuan gagal disimpan');
         }
     }
@@ -202,5 +253,4 @@ class LampiranController extends Controller
 
         return $fileName;
     }
-
 }

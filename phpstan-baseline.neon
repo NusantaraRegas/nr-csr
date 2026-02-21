@@ -1,0 +1,81 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Left side of && is always true\\.$#"
+			count: 1
+			path: app/Exceptions/Handler.php
+
+		-
+			message: "#^Method App\\\\Exceptions\\\\Handler\\:\\:render\\(\\) should return Illuminate\\\\Http\\\\Response but returns Symfony\\\\Component\\\\HttpFoundation\\\\Response\\.$#"
+			count: 1
+			path: app/Exceptions/Handler.php
+
+		-
+			message: "#^Ternary operator condition is always true\\.$#"
+			count: 2
+			path: app/Exceptions/Handler.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Kelayakan\\|Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<App\\\\Models\\\\Kelayakan\\>\\:\\:\\$id_kelayakan\\.$#"
+			count: 4
+			path: app/Http/Controllers/LampiranController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Kelayakan\\|Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<App\\\\Models\\\\Kelayakan\\>\\:\\:\\$no_agenda\\.$#"
+			count: 4
+			path: app/Http/Controllers/LampiranController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Lampiran\\|Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<App\\\\Models\\\\Lampiran\\>\\:\\:\\$created_by\\.$#"
+			count: 1
+			path: app/Http/Controllers/LampiranController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Lampiran\\|Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<App\\\\Models\\\\Lampiran\\>\\:\\:\\$id_lampiran\\.$#"
+			count: 1
+			path: app/Http/Controllers/LampiranController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Lampiran\\|Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<App\\\\Models\\\\Lampiran\\>\\:\\:\\$lampiran\\.$#"
+			count: 1
+			path: app/Http/Controllers/LampiranController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Lampiran\\|Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<App\\\\Models\\\\Lampiran\\>\\:\\:\\$nama\\.$#"
+			count: 1
+			path: app/Http/Controllers/LampiranController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Lampiran\\|Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<App\\\\Models\\\\Lampiran\\>\\:\\:\\$no_agenda\\.$#"
+			count: 1
+			path: app/Http/Controllers/LampiranController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Lampiran\\|Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<App\\\\Models\\\\Lampiran\\>\\:\\:\\$upload_date\\.$#"
+			count: 1
+			path: app/Http/Controllers/LampiranController.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: app/Http/Controllers/LampiranController.php
+
+		-
+			message: "#^Variable \\$kelayakan in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: app/Http/Controllers/LampiranController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$nama\\.$#"
+			count: 12
+			path: app/Http/Controllers/TasklistController.php
+
+		-
+			message: "#^Inner named functions are not supported by PHPStan\\. Consider refactoring to an anonymous function, class method, or a top\\-level\\-defined function\\. See issue \\#165 \\(https\\://github\\.com/phpstan/phpstan/issues/165\\) for more details\\.$#"
+			count: 3
+			path: app/Http/Controllers/TasklistController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Middleware\\\\Authenticate\\:\\:redirectTo\\(\\) should return string but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Middleware/Authenticate.php
