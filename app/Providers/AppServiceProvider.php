@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\Auth\AuthContext;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(AuthContext::class, function ($app) {
+            return new AuthContext($app['session.store']);
+        });
     }
 
     /**

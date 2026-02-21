@@ -118,28 +118,7 @@ class SurveiController extends Controller
         $sekper = ViewHirarki::where('level', 5)->first();
         $dirut = ViewHirarki::where('level', 6)->first();
 
-        // Hitung persentase & rupiah termin
-        $jumlahTermin = $request->jumlah_termin;
         $nilaiBantuan = $request->nilaiBantuanAsli;
-        $totalPersen = 0;
-        $persenTermin = [];
-        $rupiahTermin = [];
-
-        // for ($i = 1; $i <= $jumlahTermin; $i++) {
-        //     $persen = (int) $request->input("persen_termin_$i", 0);
-
-        //     if ($persen < 0 || $persen > 100) {
-        //         return redirect()->back()->with('gagalDetail', "Persentase termin $i tidak valid")->withInput();
-        //     }
-
-        //     $persenTermin[$i] = $persen;
-        //     $rupiahTermin[$i] = round(($persen / 100) * $nilaiBantuan);
-        //     $totalPersen += $persen;
-        // }
-
-        // if ($totalPersen !== 100) {
-        //     return redirect()->back()->with('gagalDetail', 'Total persentase harus 100%')->withInput();
-        // }
 
         // Siapkan data survei
         $dataSurvei = [
@@ -160,12 +139,6 @@ class SurveiController extends Controller
             'dirut' => $dirut->username,
             'created_by'      => session('user')->id_user,
         ];
-
-        // Tambahkan persen dan rupiah ke array
-        // for ($i = 1; $i <= 4; $i++) {
-        //     $dataSurvei["persen$i"] = $persenTermin[$i] ?? 0;
-        //     $dataSurvei["rupiah$i"] = $rupiahTermin[$i] ?? 0;
-        // }
 
         // Update status kelayakan
         $dataKelayakan = [
@@ -284,75 +257,6 @@ class SurveiController extends Controller
             return redirect()->back()->with('suksesDetail', 'Survei kelayakan proposal berhasil diperbarui.');
         } catch (Exception $e) {
             return redirect()->back()->with('gagalDetail', 'Gagal memperbarui survei kelayakan proposal.');
-        }
-    }
-
-    public function updateTerminOld(Request $request)
-    {
-        try {
-            $surveiID = decrypt($request->surveiID);
-        } catch (Exception $e) {
-            abort(404);
-        }
-
-        $request->validate([
-            'jumlah_termin' => 'required|integer|min:1|max:4',
-        ], [
-            'jumlah_termin.required' => 'Jumlah termin wajib dipilih.',
-        ]);
-
-        $survei = DB::table('tbl_survei')->where('id_survei', $surveiID)->first();
-        if (!$survei) {
-            return redirect()->back()->with('gagalDetail', 'Data survei tidak ditemukan.');
-        }
-
-        $jumlahTermin = $request->jumlah_termin;
-        $nilaiBantuan = $survei->nilai_bantuan;
-
-        $totalPersen = 0;
-        $persenTermin = [];
-        $rupiahTermin = [];
-
-        for ($i = 1; $i <= $jumlahTermin; $i++) {
-            $fieldName = "persen_termin_{$i}";
-            $persen = (int) $request->input($fieldName, 0);
-
-            if ($persen < 0 || $persen > 100) {
-                return redirect()->back()->with('gagalDetail', "Persentase termin $i tidak valid")->withInput();
-            }
-
-            $persenTermin[$i] = $persen;
-            $rupiahTermin[$i] = round(($persen / 100) * $nilaiBantuan);
-            $totalPersen += $persen;
-        }
-
-        if ($totalPersen !== 100) {
-            return redirect()->back()->with('gagalDetail', 'Total persentase harus 100%')->withInput();
-        }
-
-        $update = [
-            'termin' => $jumlahTermin,
-        ];
-
-        for ($i = 1; $i <= 4; $i++) {
-            $update["persen$i"] = $persenTermin[$i] ?? 0;
-            $update["rupiah$i"] = $rupiahTermin[$i] ?? 0;
-        }
-
-        $dataLog = [
-            'id_kelayakan' => $survei->id_kelayakan,
-            'keterangan'   => 'Edit termin pembayaran',
-            'created_by'   => session('user')->id_user,
-            'created_date' => now(),
-        ];
-
-        try {
-            DB::table('tbl_survei')->where('id_survei', $surveiID)->update($update);
-            DB::table('tbl_log')->insert($dataLog);
-
-            return redirect()->back()->with('suksesDetail', 'Termin pembayaran berhasil diperbarui.');
-        } catch (Exception $e) {
-            return redirect()->back()->with('gagalDetail', 'Gagal memperbarui termin pembayaran.');
         }
     }
 

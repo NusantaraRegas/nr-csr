@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Auth\AuthContext;
 use App\Helper\APIHelper;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PembayaranExport;
@@ -9,6 +10,10 @@ use App\Exports\RealisasiProkerExport;
 use App\Exports\RealisasiPilarExport;
 use App\Exports\RealisasiPrioritasExport;
 use App\Http\Requests\ExportPopay;
+use App\Http\Requests\StorePembayaranRequest;
+use App\Http\Requests\UpdatePembayaranRequest;
+use App\Actions\Pembayaran\StorePembayaranAction;
+use App\Actions\Pembayaran\UpdatePembayaranAction;
 use App\Models\Kelayakan;
 use App\Models\Lampiran;
 use App\Models\Pembayaran;
@@ -31,9 +36,19 @@ use Exception;
 
 class PembayaranController extends Controller
 {
+    /**
+     * @var AuthContext
+     */
+    protected $authContext;
+
+    public function __construct(AuthContext $authContext)
+    {
+        $this->authContext = $authContext;
+    }
+
     public function index(Request $request)
     {
-        $perusahaanID = session('user')->id_perusahaan;
+        $perusahaanID = $this->authContext->perusahaanId();
         $tahun = $request->input('tahun', date("Y"));
         $proker      = $request->input('proker');
         $jenis      = $request->input('jenis');
@@ -96,7 +111,7 @@ class PembayaranController extends Controller
 
     public function exportPembayaran(Request $request)
     {
-        $perusahaanID = session('user')->id_perusahaan;
+        $perusahaanID = $this->authContext->perusahaanId();
 
         $tahun      = $request->input('tahun', date("Y"));
         $jenis      = $request->input('jenis');
@@ -147,7 +162,7 @@ class PembayaranController extends Controller
 
     public function indexPilar(Request $request)
     {
-        $perusahaanID = session('user')->id_perusahaan;
+        $perusahaanID = $this->authContext->perusahaanId();
         $tahun = $request->input('tahun', date("Y"));
 
         $dataAnggaran = Anggaran::where('id_perusahaan', $perusahaanID)
@@ -232,7 +247,7 @@ class PembayaranController extends Controller
 
     public function exportRealisasiPilar(Request $request)
     {
-        $perusahaanID = session('user')->id_perusahaan;
+        $perusahaanID = $this->authContext->perusahaanId();
         $tahun = $request->input('tahun', date("Y"));
 
         $dataAnggaran = Anggaran::where('id_perusahaan', $perusahaanID)
@@ -311,7 +326,7 @@ class PembayaranController extends Controller
 
     public function indexPrioritas(Request $request)
     {
-        $perusahaanID = session('user')->id_perusahaan;
+        $perusahaanID = $this->authContext->perusahaanId();
         $tahun = $request->input('tahun', date("Y"));
 
         $dataAnggaran = Anggaran::where('id_perusahaan', $perusahaanID)
@@ -396,7 +411,7 @@ class PembayaranController extends Controller
 
     public function exportRealisasiPrioritas(Request $request)
     {
-        $perusahaanID = session('user')->id_perusahaan;
+        $perusahaanID = $this->authContext->perusahaanId();
         $tahun = $request->input('tahun', date("Y"));
 
         $dataAnggaran = Anggaran::where('id_perusahaan', $perusahaanID)
@@ -479,7 +494,7 @@ class PembayaranController extends Controller
         $pilarFilter = $request->input('pilar');
         $tpbFilter = $request->input('tpb');
 
-        $perusahaanID = session('user')->id_perusahaan;
+        $perusahaanID = $this->authContext->perusahaanId();
 
         $anggaran = Anggaran::where('id_perusahaan', $perusahaanID)
             ->where('tahun', $tahun)
@@ -535,7 +550,7 @@ class PembayaranController extends Controller
         $tahun = $request->input('tahun', date("Y"));
         $pilarFilter = $request->input('pilar');
         $tpbFilter = $request->input('tpb');
-        $perusahaanID = session('user')->id_perusahaan;
+        $perusahaanID = $this->authContext->perusahaanId();
 
         $anggaran = Anggaran::where('id_perusahaan', $perusahaanID)
             ->where('tahun', $tahun)
@@ -655,173 +670,14 @@ class PembayaranController extends Controller
             ]);
     }
 
-    public function store(Request $request)
+    public function store(StorePembayaranRequest $request, StorePembayaranAction $action)
     {
-        try {
-            $kelayakanID = decrypt($request->kelayakanID);
-        } catch (Exception $e) {
-            abort(404);
-        }
-
-        // Validasi
-        $request->validate([
-            'deskripsi' => 'required|string|max:500',
-            'termin' => 'required',
-            'metode' => 'required',
-            'jumlahPembayaranAsli' => 'required|numeric',
-            'fee' => 'required|numeric|min:0|max:100',
-        ], [
-            'deskripsi.required' => 'Deskripsi pembayaran harus diisi',
-            'deskripsi.max' => 'Deskripsi maksimal 500 karakter',
-            'termin.required' => 'Termin pembayaran harus dipilih',
-            'metode.required' => 'Metode harus dipilih',
-            'jumlahPembayaranAsli.required' => 'Jumlah pembayaran harus diisi',
-            'fee.required' => 'Fee pembayaran harus diisi',
-            'fee.max' => 'Fee tidak boleh lebih dari 100%',
-        ]);
-
-        $kelayakan = Kelayakan::findOrFail($kelayakanID);
-
-        if (!$kelayakan) {
-            return redirect()->back()->with('gagalDetail', 'Data kelayakan tidak ditemukan.');
-        }
-
-        $proker = Proker::where('id_proker', $kelayakan->id_proker)->first();
-
-        if (!$proker) {
-            return redirect()->back()->with('gagalDetail', 'Program kerja belum ditambahkan.');
-        }
-
-        // Hitung fee dalam rupiah
-        $feeDalamRupiah = ($request->jumlahPembayaranAsli * $request->fee) / 100;
-        $subTotal = $request->jumlahPembayaranAsli + $feeDalamRupiah;
-
-        $metode = $request->metode;
-
-        if($metode == 'Popay'){
-            $dataPembayaran = [
-                'id_kelayakan' => $kelayakanID,
-                'deskripsi' => $request->deskripsi,
-                'termin' => $request->termin,
-                'metode' => $request->metode,
-                'nilai_approved' => $kelayakan->nominal_approved,
-                'jumlah_pembayaran' => $request->jumlahPembayaranAsli,
-                'fee' => $feeDalamRupiah,
-                'fee_persen' => $request->fee,
-                'subtotal' => $subTotal,
-                'status' => 'Open',
-                'create_date' => now(),
-                'create_by' => session('user')->username,
-            ];
-        }elseif($metode == 'YKPP'){
-            $dataPembayaran = [
-                'id_kelayakan' => $kelayakanID,
-                'deskripsi' => $request->deskripsi,
-                'termin' => $request->termin,
-                'metode' => $request->metode,
-                'nilai_approved' => $kelayakan->nominal_approved,
-                'jumlah_pembayaran' => $request->jumlahPembayaranAsli,
-                'fee' => $feeDalamRupiah,
-                'fee_persen' => $request->fee,
-                'subtotal' => $subTotal,
-                'status' => 'Open',
-                'create_date' => now(),
-                'create_by' => session('user')->username,
-                'status_ykpp' => "Open",
-                'tahun_ykpp' => $proker->tahun,
-            ];
-        }else{
-            return redirect()->back()->with('gagalDetail', 'Metode pembayaran belum ditentukan.');
-        }
-
-        // Cek termin duplikat
-        $exists = DB::table('tbl_pembayaran')
-            ->where('id_kelayakan', $kelayakanID)
-            ->where('termin', $request->termin)
-            ->exists();
-
-        if ($exists) {
-            return redirect()->back()->with('gagalDetail', 'Termin tersebut sudah pernah dibuat.');
-        }
-
-        try {
-            DB::table('tbl_pembayaran')->insert($dataPembayaran);
-            return redirect()->back()->with('suksesDetail', 'Pembayaran berhasil disimpan');
-        } catch (Exception $e) {
-            return redirect()->back()->with('gagalDetail', 'Pembayaran gagal disimpan');
-        }
+        return $action->execute($request, $this->authContext->username());
     }
 
-    public function update(Request $request)
+    public function update(UpdatePembayaranRequest $request, UpdatePembayaranAction $action)
     {
-        try {
-            $pembayaranID = decrypt($request->pembayaranID);
-        } catch (Exception $e) {
-            abort(404);
-        }
-
-        $request->validate([
-            'deskripsi' => 'required|string|max:500',
-            'termin' => 'required',
-            'metode' => 'required',
-            'jumlahPembayaranAsli' => 'required|numeric',
-            'fee' => 'required|numeric|min:0|max:100',
-        ], [
-            'deskripsi.required' => 'Deskripsi pembayaran harus diisi',
-            'deskripsi.max' => 'Deskripsi maksimal 500 karakter',
-            'termin.required' => 'Termin pembayaran harus dipilih',
-            'metode.required' => 'Metode harus dipilih',
-            'jumlahPembayaranAsli.required' => 'Jumlah pembayaran harus diisi',
-            'fee.required' => 'Fee pembayaran harus diisi',
-        ]);
-
-        $pembayaran = DB::table('tbl_pembayaran')->where('id_pembayaran', $pembayaranID)->first();
-
-        if (!$pembayaran) {
-            return redirect()->back()->with('gagalDetail', 'Data pembayaran tidak ditemukan.');
-        }
-
-        $kelayakan = Kelayakan::where('id_kelayakan', $pembayaran->id_kelayakan)->first();
-
-        if (!$kelayakan) {
-            return redirect()->back()->with('gagalDetail', 'Data kelayakan tidak ditemukan.');
-        }
-
-        $proker = Proker::where('id_proker', $kelayakan->id_proker)->first();
-
-        if (!$proker) {
-            return redirect()->back()->with('gagalDetail', 'Program kerja belum ditambahkan.');
-        }
-
-        $status_ykpp = empty($pembayaran->status_ykpp) ? 'Open' : $pembayaran->status_ykpp;
-
-        // Hitung nilai fee dalam rupiah
-        $feeAsli = ($request->jumlahPembayaranAsli * $request->fee) / 100;
-
-        // Hitung subtotal
-        $subTotal = $request->jumlahPembayaranAsli + $feeAsli;
-
-        $dataUpdate = [
-            'deskripsi' => $request->deskripsi,
-            'termin' => $request->termin,
-            'metode' => $request->metode,
-            'jumlah_pembayaran' => $request->jumlahPembayaranAsli,
-            'fee' => $feeAsli,
-            'fee_persen' => $request->fee, // disimpan sebagai persen (misalnya 5)
-            'subtotal' => $subTotal,
-            'status_ykpp' => $status_ykpp,
-            'tahun_ykpp' => $proker->tahun,
-        ];
-
-        try {
-            DB::table('tbl_pembayaran')
-                ->where('id_pembayaran', $pembayaranID)
-                ->update($dataUpdate);
-
-            return redirect()->back()->with('suksesDetail', 'Data pembayaran berhasil diperbarui');
-        } catch (Exception $e) {
-            return redirect()->back()->with('gagalDetail', 'Data pembayaran gagal diperbarui');
-        }
+        return $action->execute($request);
     }
 
     public function delete($id)
@@ -1003,7 +859,7 @@ class PembayaranController extends Controller
         }
 
         $domain = 'corp\\';
-        $maker = session('user')->username;
+        $maker = $this->authContext->username();
 
         $data = ViewPembayaran::where('id_pembayaran', $idPembayaran)->first();
 
@@ -1156,7 +1012,7 @@ class PembayaranController extends Controller
         $dataUpdate = [
             'PR_ID' => $paymentID,
             'STATUS' => 'exported',
-            'EXPORT_BY' => session('user')->username,
+            'EXPORT_BY' => $this->authContext->username(),
             'EXPORT_DATE' => $tanggal,
         ];
 
@@ -1231,12 +1087,6 @@ class PembayaranController extends Controller
         }
 
         return redirect()->back()->with('sukses', 'Data berhasil diexport ke popay');
-//        try {
-//
-//        } catch (Exception $e) {
-//            return redirect()->back()->with('gagal', 'Data gagal diexport ke popay');
-//        }
-
     }
 
     public function deletePopay($loginID)

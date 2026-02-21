@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Auth\AuthContext;
 use Closure;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Session\Store;
 use Carbon\Carbon;
 
@@ -11,6 +11,7 @@ class SessionTimeout
 {
     protected $session;
     protected $timeout;
+    protected $authContext;
 
     // Route yang dikecualikan dari middleware timeout (tanpa login penuh)
     protected $excludedRoutes = [
@@ -21,10 +22,11 @@ class SessionTimeout
         'auth/change-password/*',
     ];
 
-    public function __construct(Store $session)
+    public function __construct(Store $session, AuthContext $authContext)
     {
         $this->session = $session;
         $this->timeout = config('session.lifetime_timeout', 1800); // default 30 menit
+        $this->authContext = $authContext;
     }
 
     public function handle($request, Closure $next)
@@ -36,11 +38,7 @@ class SessionTimeout
             }
         }
 
-        // This application uses a custom session-based login (session('user'))
-        // instead of Laravel's Auth facade.
-        // In local/dev, Auth::check() will typically be false, so we also treat
-        // session('user') as a logged-in indicator.
-        if (Auth::check() || session()->has('user')) {
+        if ($this->authContext->isAuthenticated()) {
             $currentTime = Carbon::now()->timestamp;
             $lastActivity = $this->session->get('lastActivityTime');
 
@@ -52,8 +50,7 @@ class SessionTimeout
                 $this->session->put('url.intended', $request->fullUrl());
 
                 // Clear both auth and the custom session user.
-                Auth::logout();
-                $this->session->forget('user');
+                $this->authContext->logout();
 
                 return redirect()->route('login')
                     ->with('session', 'Sesi anda sudah habis, silakan login kembali.');

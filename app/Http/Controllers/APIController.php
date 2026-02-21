@@ -13,6 +13,8 @@ use App\Models\Provinsi;
 use App\Models\SektorBantuan;
 use App\Models\ViewPembayaran;
 use App\Models\ViewProker;
+use App\Http\Requests\PostPaymentRequestAnnualRequest;
+use App\Actions\API\PostPaymentRequestAnnualAction;
 use Illuminate\Http\Request;
 use Exception;
 use DB;
@@ -863,27 +865,9 @@ class APIController extends Controller
             ]);
     }
 
-    public function postPaymentRequestAnnual(Request $request)
+    public function postPaymentRequestAnnual(PostPaymentRequestAnnualRequest $request, PostPaymentRequestAnnualAction $action)
     {
-        if ($request->checkBookWilayah == '') {
-            $this->validate($request, [
-                'tahun' => 'required',
-            ]);
-
-            return redirect()->route('listRealisasiAllAnnual', ['year' => $request->tahun]);
-        } else {
-            $this->validate($request, [
-                'tahun' => 'required',
-                'provinsi' => 'required',
-                'kabupaten' => 'required',
-            ]);
-
-            if ($request->kabupaten == 'Semua Kabupaten/Kota') {
-                return redirect()->route('listPaymentRequestProvinsi', ['year' => $request->tahun, 'provinsi' => $request->provinsi]);
-            } else {
-                return redirect()->route('listPaymentRequestKabupaten', ['year' => $request->tahun, 'provinsi' => $request->provinsi, 'kabupaten' => $request->kabupaten]);
-            }
-        }
+        return $action->execute($request);
     }
 
     public function listRealisasiAllAnnual($year)

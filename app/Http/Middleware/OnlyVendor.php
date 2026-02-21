@@ -2,10 +2,21 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Auth\AuthContext;
 use Closure;
 
 class OnlyVendor
 {
+    /**
+     * @var AuthContext
+     */
+    protected $authContext;
+
+    public function __construct(AuthContext $authContext)
+    {
+        $this->authContext = $authContext;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -15,10 +26,10 @@ class OnlyVendor
      */
     public function handle($request, Closure $next)
     {
-        if (in_array(session('user')->role, ['Admin', 'Vendor'])) {
+        if ($this->authContext->hasAnyRole(['Admin', 'Vendor'])) {
             return $next($request);
-        } else {
-            abort(403);
         }
+
+        abort(403);
     }
 }

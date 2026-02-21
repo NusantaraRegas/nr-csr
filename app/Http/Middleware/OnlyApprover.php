@@ -2,10 +2,21 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Auth\AuthContext;
 use Closure;
 
 class OnlyApprover
 {
+    /**
+     * @var AuthContext
+     */
+    protected $authContext;
+
+    public function __construct(AuthContext $authContext)
+    {
+        $this->authContext = $authContext;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -15,10 +26,10 @@ class OnlyApprover
      */
     public function handle($request, Closure $next)
     {
-        if (session('user')->role == 'Manager' or session('user')->role == 'Supervisor 1'){
+        if ($this->authContext->hasAnyRole(['Manager', 'Supervisor 1'])) {
             return $next($request);
-        }else{
-            abort(403);
         }
+
+        abort(403);
     }
 }

@@ -2,10 +2,21 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Auth\AuthContext;
 use Closure;
 
 class OnlyLegal
 {
+    /**
+     * @var AuthContext
+     */
+    protected $authContext;
+
+    public function __construct(AuthContext $authContext)
+    {
+        $this->authContext = $authContext;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -15,10 +26,10 @@ class OnlyLegal
      */
     public function handle($request, Closure $next)
     {
-        if (session('user')->role == 'Admin' or session('user')->role == 'Legal'){
+        if ($this->authContext->hasAnyRole(['Admin', 'Legal'])) {
             return $next($request);
-        }else{
-            abort(403);
         }
+
+        abort(403);
     }
 }

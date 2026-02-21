@@ -90,61 +90,6 @@ class ReportController extends Controller
         ]);
     }
 
-    public function indexOld(Request $request)
-    {
-        $tahun    = $request->input('tahun', date("Y"));
-        $perusahaanID = $request->input('perusahaan', session('user')->id_perusahaan);
-
-
-        $company = RealisasiAP::where('tahun', $tahun)->get();
-
-        if (!empty($company)) {
-            $comp = $company[0]->id_perusahaan;
-        } else {
-            $comp = '';
-        }
-
-        $status = "All Data";
-        $tanggal = date("Y-m-d");
-
-        $data = RealisasiAP::where('tahun', $tahun)->where('perusahaan', $comp)->orderBy('tgl_realisasi', 'ASC')->get();
-        $jumlahData = RealisasiAP::where('tahun', $tahun)->where('perusahaan', $comp)->count();
-        $provinsi = Provinsi::orderBy('provinsi', 'ASC')->get();
-        $kabupaten = DB::table('TBL_WILAYAH')->select('city_name')->groupBy('city_name')->get();
-        $pilar = Pilar::orderBy('id_pilar', 'ASC')->get();
-        $perusahaan = Perusahaan::whereNotIn('id_perusahaan', [1])->where('status', 'Active')->orderBy('id_perusahaan', 'ASC')->get();
-
-        $anggaran = Anggaran::where('tahun', $tahun)->where('perusahaan', $comp)->first();
-
-        $dataTotal = DB::table('tbl_realisasi_ap')
-            ->select(DB::raw('SUM(nilai_bantuan) as total'))
-            ->where('tahun', $tahun)
-            ->where('perusahaan', $comp)
-            ->first();
-
-        if (!empty($anggaran)) {
-            $persen = round($dataTotal->total / $anggaran->nominal * 100, 2);
-        } else {
-            $persen = 0;
-        }
-
-        return view('report.data_realisasi_subsidiary')
-            ->with([
-                'comp' => $comp,
-                'dataPerusahaan' => $perusahaan,
-                'tahun' => $tahun,
-                'status' => $status,
-                'tanggal' => $tanggal,
-                'dataRealisasi' => $data,
-                'jumlahData' => $jumlahData,
-                'dataProvinsi' => $provinsi,
-                'dataKabupaten' => $kabupaten,
-                'dataPilar' => $pilar,
-                'total' => $dataTotal->total,
-                'persen' => $persen,
-            ]);
-    }
-
     public function postDetailRealisasiSubsidiaryAnnual(Request $request)
     {
         $this->validate($request, [

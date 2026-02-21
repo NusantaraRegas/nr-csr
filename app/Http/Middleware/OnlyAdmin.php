@@ -2,10 +2,21 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Auth\AuthContext;
 use Closure;
 
 class OnlyAdmin
 {
+    /**
+     * @var AuthContext
+     */
+    protected $authContext;
+
+    public function __construct(AuthContext $authContext)
+    {
+        $this->authContext = $authContext;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -15,11 +26,10 @@ class OnlyAdmin
      */
     public function handle($request, Closure $next)
     {
-        if (session('user')->role == 'Admin'){
+        if ($this->authContext->hasAnyRole(['Admin'])) {
             return $next($request);
-        }else{
-            abort(403);
         }
 
+        abort(403);
     }
 }

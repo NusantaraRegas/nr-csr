@@ -2,20 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Auth\AuthContext;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Log;
-use DB;
 use Mail;
 use Exception;
 
 class LoginController extends Controller
 {
+    /**
+     * @var AuthContext
+     */
+    protected $authContext;
+
+    public function __construct(AuthContext $authContext)
+    {
+        $this->authContext = $authContext;
+    }
+
     public function error()
     {
         return view('errors.404');
@@ -28,7 +34,7 @@ class LoginController extends Controller
 
     public function index()
     {
-        if (!empty(session('user'))) {
+        if ($this->authContext->hasUser()) {
             $intended = session('url.intended', route('dashboard'));
             return redirect($intended);
         }
@@ -65,10 +71,10 @@ class LoginController extends Controller
 
         if (auth()->attempt($credentialUsername)) {
             $data = User::where('username', strtolower($request->username))->first();
-            
-            session(['user' => $data]);
 
-            if (session('user')->role == 'Subsidiary') {
+            $this->authContext->setUser($data);
+
+            if ($this->authContext->role() == 'Subsidiary') {
                 return redirect()->intended(route('dashboardSubsidiary'));
             } else {
                 return redirect()->intended(route('dashboard'));
@@ -179,7 +185,7 @@ class LoginController extends Controller
             }
 
             // Simpan user ke session manual
-            session(['user' => $user]);
+            $this->authContext->setUser($user);
             session()->regenerate(); // aman
 
             Session::forget(['mfa_otp', 'mfa_id_user', 'mfa_otp_created_at']);
@@ -225,104 +231,6 @@ class LoginController extends Controller
         return redirect()->back()->with('credential', 'User tidak ditemukan.');
     }
 
-    public function loginOld(Request $request)
-    {
-
-        $this->validate($request, [
-            'username' => 'required',
-            'password' => 'required',
-        ]);
-
-        $user = DB::table('TBL_USER')
-            ->select(DB::raw('count(*) as jumlah'))
-            ->where([
-                ['username', '=', strtolower($request->username)],
-                ['status', '=', 'Active'],
-            ])
-            ->first();
-
-        if ($user->jumlah == 0) {
-            return redirect()->back()->with('credential', 'Username yang anda masukkan tidak dikenal');
-        } else {
-
-            $credentialUsername = [
-                'username' => strtolower($request->username),
-                'password' => $request->password
-            ];
-
-            if (auth()->attempt($credentialUsername)) {
-                $data = DB::table('TBL_USER')
-                    ->select('TBL_USER.*')
-                    ->where([
-                        ['username', strtolower($request->username)],
-                    ])
-                    ->first();
-
-                session(['user' => $data]);
-                if (session('user')->role == 'Subsidiary') {
-                    return redirect(route('dashboardSubsidiary'));
-                } elseif (session('user')->role == 'Vendor') {
-                    return redirect(route('dashboardVendor'));
-                } else {
-                    return redirect(route('dashboard'));
-                }
-            } else {
-                $domain = 'pertamina\\';
-                $ldap['sAMAccountName'] = strtolower($request->username);
-                $ldap['pass'] = $request->password;
-                $ldap['host'] = '10.129.1.4';
-                $ldap['port'] = 389;
-
-                $ldap['conn'] = ldap_connect($ldap['host'], $ldap['port'])
-                    or die("Could not conenct to {$ldap['host']}");
-
-                ldap_set_option($ldap['conn'], LDAP_OPT_PROTOCOL_VERSION, 3);
-                try {
-                    $ldap['bind'] = ldap_bind($ldap['conn'], $domain . $ldap['sAMAccountName'], $ldap['pass']);
-                } catch (Exception $e) {
-                    $domain = 'corp\\';
-                    $ldap['user'] = strtolower($request->username);
-                    $ldap['pass'] = $request->password;
-                    $ldap['host'] = '10.129.1.3';
-                    $ldap['port'] = 389;
-
-                    $ldap['conn'] = ldap_connect($ldap['host'], $ldap['port'])
-                        or die("Could not conenct to {$ldap['host']}");
-
-                    ldap_set_option($ldap['conn'], LDAP_OPT_PROTOCOL_VERSION, 3);
-                    try {
-                        $ldap['bind'] = ldap_bind($ldap['conn'], $domain . $ldap['user'], $ldap['pass']);
-                    } catch (Exception $e) {
-                        return redirect()->back()->with('credential', 'Kata sandi yang anda masukkan salah');
-                    }
-                    //return redirect()->back()->with('credential', 'Kata sandi yang anda masukkan salah');
-                }
-
-                if (!$ldap['bind']) {
-                    return redirect()->back()->with('credential', 'Username yang anda masukkan tidak dikenal');
-                } else {
-                    $data = DB::table('TBL_USER')
-                        ->select('TBL_USER.*')
-                        ->where([
-                            ['username', strtolower($request->username)],
-
-                        ])
-                        ->first();
-
-                    session(['user' => $data]);
-                    if (session('user')->role == 'Subsidiary') {
-                        return redirect(route('dashboardSubsidiary'));
-                    } elseif (session('user')->role == 'Vendor') {
-                        return redirect(route('dashboardVendor'));
-                    } else {
-                        return redirect(route('dashboard'));
-                    }
-                }
-                ldap_close($ldap['conn']);
-            }
-        }
-    }
-
     public function forgot()
     {
         return view('auth.forgot');
@@ -330,7 +238,7 @@ class LoginController extends Controller
 
     public function logout()
     {
-        auth()->logout();
+        $this->authContext->logout();
         session()->flush();
         return redirect(route('login'));
     }

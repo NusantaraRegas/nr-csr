@@ -2,10 +2,21 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Auth\AuthContext;
 use Closure;
 
 class OnlyFinance
 {
+    /**
+     * @var AuthContext
+     */
+    protected $authContext;
+
+    public function __construct(AuthContext $authContext)
+    {
+        $this->authContext = $authContext;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -15,10 +26,10 @@ class OnlyFinance
      */
     public function handle($request, Closure $next)
     {
-        if (session('user')->role == 'Admin' or session('user')->role == 'Finance' or session('user')->role == 'Budget' or session('user')->role == 'Payment' or session('user')->role == 'Subsidiary'){
+        if ($this->authContext->hasAnyRole(['Admin', 'Finance', 'Budget', 'Payment', 'Subsidiary'])) {
             return $next($request);
-        }else{
-            abort(403);
         }
+
+        abort(403);
     }
 }

@@ -2,10 +2,21 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Auth\AuthContext;
 use Closure;
 
 class OnlySubsidiary
 {
+    /**
+     * @var AuthContext
+     */
+    protected $authContext;
+
+    public function __construct(AuthContext $authContext)
+    {
+        $this->authContext = $authContext;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -15,10 +26,10 @@ class OnlySubsidiary
      */
     public function handle($request, Closure $next)
     {
-        if (session('user')->role == 'Admin' or session('user')->role == 'Subsidiary' or session('user')->role == 'Budget'){
+        if ($this->authContext->hasAnyRole(['Admin', 'Subsidiary', 'Budget'])) {
             return $next($request);
-        }else{
-            abort(403);
         }
+
+        abort(403);
     }
 }

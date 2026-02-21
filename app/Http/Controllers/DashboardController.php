@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Auth\AuthContext;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use App\Helper\APIHelper;
 use App\Http\Requests\InsertPeriode;
+use App\Http\Requests\PostDashboardAnnualRequest;
+use App\Http\Requests\PostDashboardSubsidiaryRequest;
+use App\Actions\Dashboard\PostDashboardAnnualAction;
+use App\Actions\Dashboard\PostDashboardSubsidiaryAction;
 use App\Models\Anggaran;
 use App\Models\DetailApproval;
 use App\Models\Perusahaan;
@@ -19,6 +24,16 @@ use App\Models\Penugasan;
 
 class DashboardController extends Controller
 {
+    /**
+     * @var AuthContext
+     */
+    protected $authContext;
+
+    public function __construct(AuthContext $authContext)
+    {
+        $this->authContext = $authContext;
+    }
+
     public function home()
     {
         return view('home.home');
@@ -26,7 +41,7 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
-        $perusahaanID = session('user')->id_perusahaan;
+        $perusahaanID = $this->authContext->perusahaanId();
         $tahun = $request->input('tahun', date("Y"));
 
         // Ambil data perusahaan yang dipilih
@@ -171,13 +186,9 @@ class DashboardController extends Controller
             ]);
     }
 
-    public function postAnnual(Request $request)
+    public function postAnnual(PostDashboardAnnualRequest $request, PostDashboardAnnualAction $action)
     {
-        $this->validate($request, [
-            'tahun' => 'required',
-        ]);
-
-        return redirect()->route('dashboardAnnual', ['year' => encrypt($request->tahun)]);
+        return $action->execute($request);
     }
 
     public function indexAnnual($year)
@@ -189,11 +200,11 @@ class DashboardController extends Controller
             abort(404);
         }
 
-        $company = session('user')->perusahaan;
+        $company = $this->authContext->perusahaan();
         $anggaran = Anggaran::where('perusahaan', $company)->where('tahun', $tahun)->first();
         $anggaranAP = Anggaran::whereNotIn('perusahaan', ['PT Nusantara Regas'])->where('tahun', $tahun)->get();
         $jumlahAnggaranAP = Anggaran::whereNotIn('perusahaan', ['PT Nusantara Regas'])->where('tahun', $tahun)->count();
-        $username = session('user')->username;
+        $username = $this->authContext->username();
 
         $perusahaan = Perusahaan::whereIn('kategori', ['Subholding'])->orderBy('id_perusahaan', 'ASC')->get();
 
@@ -668,10 +679,11 @@ class DashboardController extends Controller
             })
             ->count();
 
-        if (session('user')->role == 'Manager') {
+        $role = $this->authContext->role();
+        if ($role == 'Manager') {
             $jumlahApproveSurvei = ViewSurvei::where('status', 'Approved 2')->where('kadiv', $username)->count();
             $jumlahApproveEvaluasi = ViewEvaluasi::where('status', 'Approved 2')->where('kadiv', $username)->count();
-        } elseif (session('user')->role == 'Supervisor 1') {
+        } elseif ($role == 'Supervisor 1') {
             $jumlahApproveSurvei = ViewSurvei::where('status', 'Approved 1')->where('kadep', $username)->count();
             $jumlahApproveEvaluasi = ViewEvaluasi::where('status', 'Approved 1')->where('kadep', $username)->count();
         } else {
@@ -782,17 +794,9 @@ class DashboardController extends Controller
             ]);
     }
 
-    public function postSubsidiary(Request $request)
+    public function postSubsidiary(PostDashboardSubsidiaryRequest $request, PostDashboardSubsidiaryAction $action)
     {
-        $this->validate($request, [
-            'perusahaan' => 'required',
-        ]);
-
-        if ($request->perusahaan == 'PT Nusantara Regas') {
-            return redirect()->route('dashboardAnnual', ['year' => encrypt($request->tahun)]);
-        } else {
-            return redirect()->route('dashboardSubsidiaryAnnual', ['year' => encrypt($request->tahun), 'company' => $request->perusahaan]);
-        }
+        return $action->execute($request);
     }
 
     public function indexSubsidiaryAnnual($year, $company)

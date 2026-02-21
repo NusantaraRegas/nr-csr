@@ -153,6 +153,15 @@ Route groups use role-based middleware defined in `app/Http/Kernel.php`:
 - `isAdmin`, `isUser`, `isFinance`, `isReport`, `isLegal`, `isSubsidiary`
 - Session control: `cred.login`, `timeOut`
 
+### Authentication Context (Priority 1)
+
+Authentication/session state is now centralized via:
+
+- `app/Services/Auth/AuthContext.php`
+- Service binding in `app/Providers/AppServiceProvider.php`
+
+Critical middleware and controllers now consume `AuthContext` instead of reading `session('user')` directly in those refactored paths. This keeps login/session-timeout/role-gate behavior consistent while reducing repeated session handling logic.
+
 ## Initialization / Boot Flow
 
 Laravel boot sequence (simplified) for this repository:
@@ -353,6 +362,32 @@ docker compose up -d --build --force-recreate
 | `/report/*` | Reporting, exports, monitoring |
 | `/DokumenLegal/*` | BAST/SPK legal documents |
 | `/subsidiary/*` | Subsidiary dashboards, budgeting, realization, reporting |
+
+### Route File Modularization (Priority 1)
+
+`routes/web.php` now acts as a thin loader and delegates route groups into domain files:
+
+- Public files:
+  - `routes/web/public-auth.php`
+  - `routes/web/public-form.php`
+- Protected wrapper:
+  - `routes/web/protected.php`
+- Protected domains:
+  - `routes/web/protected/dashboard.php`
+  - `routes/web/protected/master.php`
+  - `routes/web/protected/vendor.php`
+  - `routes/web/protected/operasional.php`
+  - `routes/web/protected/proposal.php`
+  - `routes/web/protected/anggaran.php`
+  - `routes/web/protected/report.php`
+  - `routes/web/protected/payment.php`
+  - `routes/web/protected/export-popay.php`
+  - `routes/web/protected/todo.php`
+  - `routes/web/protected/tasklist.php`
+  - `routes/web/protected/tasklist-legal.php`
+  - `routes/web/protected/dokumen-legal.php`
+  - `routes/web/protected/profile.php`
+  - `routes/web/protected/subsidiary.php`
 
 ## Project Maintenance
 

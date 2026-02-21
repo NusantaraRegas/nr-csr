@@ -2,10 +2,21 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Auth\AuthContext;
 use Closure;
 
 class OnlyUser
 {
+    /**
+     * @var AuthContext
+     */
+    protected $authContext;
+
+    public function __construct(AuthContext $authContext)
+    {
+        $this->authContext = $authContext;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -15,11 +26,10 @@ class OnlyUser
      */
     public function handle($request, Closure $next)
     {
-        if (in_array(session('user')->role, ['Admin', 'Manager', 'Inputer', 'Supervisor 1', 'Corporate Secretary', 'Budget', 'Finance', 'Payment', 'Subsidiary']))
-        {
+        if ($this->authContext->hasAnyRole(['Admin', 'Manager', 'Inputer', 'Supervisor 1', 'Corporate Secretary', 'Budget', 'Finance', 'Payment', 'Subsidiary'])) {
             return $next($request);
-        } else {
-            abort(403);
         }
+
+        abort(403);
     }
 }

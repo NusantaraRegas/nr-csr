@@ -2,10 +2,21 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Auth\AuthContext;
 use Closure;
 
 class CredentialLogin
 {
+    /**
+     * @var AuthContext
+     */
+    protected $authContext;
+
+    public function __construct(AuthContext $authContext)
+    {
+        $this->authContext = $authContext;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -15,8 +26,7 @@ class CredentialLogin
      */
     public function handle($request, Closure $next)
     {
-
-        if (!empty(session('user'))) {
+        if ($this->authContext->hasUser()) {
             return $next($request);
         }
 

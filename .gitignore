@@ -36,6 +36,9 @@ clover.xml
 /storage/framework/views/
 /storage/framework/testing/
 /storage/framework/laravel-excel/
+# Local verification artifacts (route/test scan snapshots)
+/storage/route-list-*.txt
+/storage/p1-*.txt
 
 # Compiled framework cache
 /bootstrap/cache/*.php
