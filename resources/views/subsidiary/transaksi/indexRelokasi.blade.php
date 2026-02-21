@@ -194,7 +194,7 @@
                     closeOnConfirm: false
                 },
                 function () {
-                    window.location = "deleteRelokasi/" + proker_id + "";
+                    submitDelete("deleteRelokasi/" + proker_id + "");
                 });
         });
     </script>

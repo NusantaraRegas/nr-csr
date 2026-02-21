@@ -601,7 +601,7 @@
                     closeOnConfirm: false
                 },
                 function() {
-                    window.location = "/anggaran/deleteProker/" + proker_id + "";
+                    submitDelete("/anggaran/deleteProker/" + proker_id + "");
                 });
         });
     </script>

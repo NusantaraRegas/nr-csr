@@ -2522,7 +2522,7 @@ $dataSPK = DB::table('TBL_SPK')
                     closeOnConfirm: false
                 },
                 function() {
-                    window.location = "/proposal/delete-file/" + lampiran_id + "";
+                    submitDelete("/proposal/delete-file/" + lampiran_id + "");
                 });
         });
 
@@ -2539,7 +2539,7 @@ $dataSPK = DB::table('TBL_SPK')
                     closeOnConfirm: false
                 },
                 function() {
-                    window.location = "/DokumenLegal/delete-BAST/" + no_agenda + "";
+                    submitDelete("/DokumenLegal/delete-BAST/" + no_agenda + "");
                 });
         });
 
@@ -2556,7 +2556,7 @@ $dataSPK = DB::table('TBL_SPK')
                     closeOnConfirm: false
                 },
                 function() {
-                    window.location = "/DokumenLegal/delete-SPK/" + no_agenda + "";
+                    submitDelete("/DokumenLegal/delete-SPK/" + no_agenda + "");
                 });
         });
 

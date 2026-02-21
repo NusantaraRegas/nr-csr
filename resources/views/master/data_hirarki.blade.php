@@ -303,7 +303,7 @@
                 showLoaderOnConfirm: true
             }, function() {
                 setTimeout(() => {
-                    window.location = "deleteHirarki/" + data_id;
+                    submitDelete("deleteHirarki/" + data_id);
                 }, 1000);
             });
         });

@@ -172,7 +172,7 @@
                     closeOnConfirm: false
                 },
                 function(){
-                    window.location = "delete-kebijakan/" + kebijakan_id + "";
+                    submitDelete("delete-kebijakan/" + kebijakan_id + "");
                 });
         });
     </script>

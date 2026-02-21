@@ -376,7 +376,7 @@
                 showLoaderOnConfirm: true
             }, function() {
                 setTimeout(() => {
-                    window.location = "deleteLembaga/" + data_id;
+                    submitDelete("deleteLembaga/" + data_id);
                 }, 1000);
             });
         });

@@ -3684,7 +3684,7 @@
                 showLoaderOnConfirm: true
             }, function() {
                 setTimeout(() => {
-                    window.location = "/proposal/deleteDokumen/" + data_id;
+                    submitDelete("/proposal/deleteDokumen/" + data_id);
                 }, 1000);
             });
         });
@@ -3707,7 +3707,7 @@
                 showLoaderOnConfirm: true
             }, function() {
                 setTimeout(() => {
-                    window.location = "/proposal/deleteDokumen/" + data_id;
+                    submitDelete("/proposal/deleteDokumen/" + data_id);
                 }, 1000);
             });
         });
@@ -3730,7 +3730,7 @@
                 showLoaderOnConfirm: true
             }, function() {
                 setTimeout(() => {
-                    window.location = "/DokumenLegal/deleteBAST/" + data_id;
+                    submitDelete("/DokumenLegal/deleteBAST/" + data_id);
                 }, 1000);
             });
         });
@@ -3753,7 +3753,7 @@
                 showLoaderOnConfirm: true
             }, function() {
                 setTimeout(() => {
-                    window.location = "/payment/deletePembayaran/" + data_id;
+                    submitDelete("/payment/deletePembayaran/" + data_id);
                 }, 1000);
             });
         });

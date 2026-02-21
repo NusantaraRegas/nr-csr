@@ -526,7 +526,7 @@
                 showLoaderOnConfirm: true
             }, function() {
                 setTimeout(() => {
-                    window.location = "deletePerusahaan/" + data_id;
+                    submitDelete("deletePerusahaan/" + data_id);
                 }, 1000);
             });
         });

@@ -110,7 +110,7 @@
             })
                 .then((willDelete) => {
                     if (willDelete) {
-                        window.location = "/master/deleteVendor/" + data_id + "";
+                        submitDelete("/master/deleteVendor/" + data_id + "");
                     }
                 });
 

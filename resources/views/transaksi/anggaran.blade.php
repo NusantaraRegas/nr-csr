@@ -327,7 +327,7 @@
                 showLoaderOnConfirm: true
             }, function() {
                 setTimeout(() => {
-                    window.location = "deleteAnggaran/" + data_id;
+                    submitDelete("deleteAnggaran/" + data_id);
                 }, 1000);
             });
         });

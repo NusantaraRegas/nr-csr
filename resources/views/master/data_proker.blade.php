@@ -831,7 +831,7 @@
                     showLoaderOnConfirm: true
                 }, function() {
                     setTimeout(() => {
-                        window.location = "deleteProker/" + data_id;
+                        submitDelete("deleteProker/" + data_id);
                     }, 1000);
                 });
             });

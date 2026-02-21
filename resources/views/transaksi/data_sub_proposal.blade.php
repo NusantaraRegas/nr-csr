@@ -159,7 +159,7 @@
                     closeOnConfirm: false
                 },
                 function () {
-                    window.location = "/proposal/deleteSubProposal/" + data_id + "";
+                    submitDelete("/proposal/deleteSubProposal/" + data_id + "");
                 });
         });
 

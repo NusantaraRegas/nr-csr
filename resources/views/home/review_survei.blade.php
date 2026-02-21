@@ -168,7 +168,7 @@
                     closeOnConfirm: false
                 },
                 function () {
-                    window.location = "delete-kelayakan/" + data_id + "";
+                    submitDelete("delete-kelayakan/" + data_id + "");
                 });
         });
     </script>

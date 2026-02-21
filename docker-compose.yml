@@ -46,7 +46,8 @@ services:
       DB_PORT: 5432
       DB_DATABASE: nrcsr_prod
       DB_USERNAME: nrcsr_user
-      DB_PASSWORD: StrongPass123
+      DB_PASSWORD: ${DB_PASSWORD}
+      DEFAULT_USER_PASSWORD: ${DEFAULT_USER_PASSWORD}
       SESSION_DRIVER: ${SESSION_DRIVER}
       SESSION_LIFETIME: ${SESSION_LIFETIME}
     depends_on:
@@ -69,7 +70,7 @@ services:
     environment:
       POSTGRES_DB: nrcsr_prod
       POSTGRES_USER: nrcsr_user
-      POSTGRES_PASSWORD: StrongPass123
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:

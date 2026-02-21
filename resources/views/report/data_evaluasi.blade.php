@@ -204,7 +204,7 @@
                     closeOnConfirm: false
                 },
                 function() {
-                    window.location = "delete-evaluasi/" + evaluasi_id + "";
+                    submitDelete("delete-evaluasi/" + evaluasi_id + "");
                 });
         });
 

@@ -329,7 +329,7 @@
                 showLoaderOnConfirm: true
             }, function() {
                 setTimeout(() => {
-                    window.location = "deleteKelayakan/" + data_id;
+                    submitDelete("deleteKelayakan/" + data_id);
                 }, 1000);
             });
         });

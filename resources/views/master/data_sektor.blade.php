@@ -191,7 +191,7 @@
                     closeOnConfirm: false
                 },
                 function () {
-                    window.location = "delete-sektor/" + sektor_id + "";
+                    submitDelete("delete-sektor/" + sektor_id + "");
                 });
         });
     </script>

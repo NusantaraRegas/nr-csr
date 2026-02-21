@@ -19,6 +19,11 @@ class SuperAdminSeeder extends Seeder
     public function run()
     {
         $username = 'superadmin';
+        $defaultPassword = env('DEFAULT_USER_PASSWORD');
+
+        if (empty($defaultPassword)) {
+            throw new \RuntimeException('DEFAULT_USER_PASSWORD must be set before running SuperAdminSeeder.');
+        }
 
         // Postgres local DB: we normalize to lowercase table name.
         $table = 'nr_csr.tbl_user';
@@ -38,8 +43,7 @@ class SuperAdminSeeder extends Seeder
             'email' => 'superadmin@local.test',
             'nama' => 'Super Admin (Local)',
             'jabatan' => 'Administrator',
-            // Default local password. Change after first login.
-            'password' => bcrypt('corp.NR'),
+            'password' => bcrypt($defaultPassword),
             // Role is used throughout controllers for authorization/redirect.
             'role' => 'Admin',
             'status' => 'Active',

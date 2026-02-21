@@ -390,7 +390,7 @@
                     closeOnConfirm: false
                 },
                 function () {
-                    window.location = "/report/delete-kelayakan/" + kelayakan_id + "";
+                    submitDelete("/report/delete-kelayakan/" + kelayakan_id + "");
                 });
         });
     </script>

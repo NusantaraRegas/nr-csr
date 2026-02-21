@@ -259,7 +259,7 @@
                 showLoaderOnConfirm: true
             }, function() {
                 setTimeout(() => {
-                    window.location = "deleteRelokasi/" + data_id;
+                    submitDelete("deleteRelokasi/" + data_id);
                 }, 1000);
             });
         });

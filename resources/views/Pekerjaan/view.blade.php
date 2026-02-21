@@ -1260,7 +1260,7 @@
                 })
                 .then((willDelete) => {
                     if (willDelete) {
-                        window.location = "/Pekerjaan/deleteSPPH/" + data_id + "";
+                        submitDelete("/Pekerjaan/deleteSPPH/" + data_id + "");
                     }
                 });
 
@@ -1280,7 +1280,7 @@
                 })
                 .then((willDelete) => {
                     if (willDelete) {
-                        window.location = "/Pekerjaan/deleteBAKN/" + data_id + "";
+                        submitDelete("/Pekerjaan/deleteBAKN/" + data_id + "");
                     }
                 });
 

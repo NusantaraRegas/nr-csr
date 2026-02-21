@@ -134,7 +134,7 @@
                     closeOnConfirm: false
                 },
                 function () {
-                    window.location = "/proposal/delete-file/" + lampiran_id + "";
+                    submitDelete("/proposal/delete-file/" + lampiran_id + "");
                 });
         });
     </script>

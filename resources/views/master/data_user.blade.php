@@ -463,7 +463,7 @@
                 showLoaderOnConfirm: true
             }, function() {
                 setTimeout(() => {
-                    window.location = "deleteUser/" + data_id;
+                    submitDelete("deleteUser/" + data_id);
                 }, 1000);
             });
         });

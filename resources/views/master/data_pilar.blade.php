@@ -184,7 +184,7 @@
                     closeOnConfirm: false
                 },
                 function () {
-                    window.location = "deletePilar/" + data_id + "";
+                    submitDelete("deletePilar/" + data_id + "");
                 });
         });
     </script>

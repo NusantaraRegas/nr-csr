@@ -59,7 +59,7 @@ Route::middleware(['web'])->group(function () {
             Route::get('/data-role', 'RoleController@index')->name('data-role');
             Route::post('input-role', 'RoleController@insertRole');
             Route::post('edit-role', "RoleController@editRole");
-            Route::get('delete-role/{loginID}/{nama}', "RoleController@deleteRole")->name('delete-role');
+            Route::delete('delete-role/{loginID}/{nama}', "RoleController@deleteRole")->name('delete-role');
 
             Route::get('/indexUser', 'UserController@index')->name('indexUser');
             Route::get('/indexUserServerSide', 'UserController@indexServerSide')->name('indexUserServerSide');
@@ -70,66 +70,66 @@ Route::middleware(['web'])->group(function () {
             Route::post('storeUser', 'UserController@store');
             Route::post('updateUser', "UserController@update");
             Route::post('updateFotoUser', 'UserController@updateFoto')->name('updateFotoProfile');
-            Route::get('deleteUser/{userID}', "UserController@delete");
+            Route::delete('deleteUser/{userID}', "UserController@delete");
             Route::get('profileUser/{id}', "UserController@profile")->name('profileUser');
 
             Route::get('/data-pengirim', 'PengirimController@index')->name('data-pengirim');
             Route::post('input-pengirim', 'PengirimController@store');
             Route::post('edit-pengirim', "PengirimController@update");
-            Route::get('delete-pengirim/{loginID}', "PengirimController@delete")->name('delete-pengirim');
+            Route::delete('delete-pengirim/{loginID}', "PengirimController@delete")->name('delete-pengirim');
 
             Route::get('indexVendor', 'VendorController@index')->name('indexVendor');
             Route::get('createVendor', 'VendorController@create')->name('createVendor');
             Route::get('editVendor/{vendorID}', 'VendorController@edit')->name('editVendor');
-            Route::get('deleteVendor/{vendorID}', "VendorController@delete");
+            Route::delete('deleteVendor/{vendorID}', "VendorController@delete");
 
             Route::get('/dataAnggota', 'AnggotaController@index')->name('dataAnggota');
             Route::post('inputAnggota', 'AnggotaController@store');
             Route::post('editAnggota', "AnggotaController@update");
             Route::post('updateFotoAnggota', 'AnggotaController@updateFoto')->name('updateFotoAnggota');
-            Route::get('deleteAnggota/{anggotaID}', "AnggotaController@delete");
+            Route::delete('deleteAnggota/{anggotaID}', "AnggotaController@delete");
             Route::get('profileAnggota/{id}', "AnggotaController@profile")->name('profileAnggota');
 
             Route::get('indexHirarki', 'HirarkiController@index')->name('indexHirarki');
             Route::post('storeHirarki', 'HirarkiController@store')->name('storeHirarki');
             Route::post('updateHirarki', "HirarkiController@update")->name('updateHirarki');
-            Route::get('deleteHirarki/{anggotaID}', "HirarkiController@delete")->name('deleteHirarki');
+            Route::delete('deleteHirarki/{anggotaID}', "HirarkiController@delete")->name('deleteHirarki');
 
             Route::get('/data-sektor', 'SektorController@index')->name('data-sektorBantuan');
             Route::post('input-sektor', 'SektorController@insertSektor');
             Route::post('edit-sektor', "SektorController@editSektor");
-            Route::get('delete-sektor/{loginID}', "SektorController@deleteSektor")->name('delete-sektor');
+            Route::delete('delete-sektor/{loginID}', "SektorController@deleteSektor")->name('delete-sektor');
 
             Route::get('/data-kebijakan', 'KebijakanController@index')->name('data-kebijakan');
             Route::post('input-kebijakan', 'KebijakanController@insertKebijakan');
             Route::post('edit-kebijakan', "KebijakanController@editKebijakan");
-            Route::get('delete-kebijakan/{loginID}', "KebijakanController@deleteKebijakan")->name('delete-kebijakan');
+            Route::delete('delete-kebijakan/{loginID}', "KebijakanController@deleteKebijakan")->name('delete-kebijakan');
 
             Route::get('/dataSDG', 'SDGController@index')->name('dataSDG');
             Route::post('inputSDG', 'SDGController@store');
             Route::post('editSDG', "SDGController@update");
-            Route::get('deleteSDG/{SDGID}', "SDGController@delete");
+            Route::delete('deleteSDG/{SDGID}', "SDGController@delete");
 
             Route::get('/dataPilar', 'PilarController@index')->name('dataPilar');
             Route::post('inputPilar', 'PilarController@store');
             Route::post('editPilar', "PilarController@update");
-            Route::get('deletePilar/{pilarID}', "PilarController@delete");
+            Route::delete('deletePilar/{pilarID}', "PilarController@delete");
 
             Route::get('/dataIndikator', 'SubPilarController@index')->name('dataIndikator');
             Route::post('inputIndikator', 'SubPilarController@store');
             Route::post('editIndikator', "SubPilarController@update");
-            Route::get('deleteIndikator/{indikatorID}', "SubPilarController@delete");
+            Route::delete('deleteIndikator/{indikatorID}', "SubPilarController@delete");
 
             Route::get('indexException', 'ExceptionController@index')->name('indexException');
             Route::post('updateException', "ExceptionController@update");
-            Route::get('deleteException/{exceptionID}', "ExceptionController@delete");
+            Route::delete('deleteException/{exceptionID}', "ExceptionController@delete");
 
             Route::get('indexPerusahaan', 'PerusahaanController@index')->name('indexPerusahaan');
             Route::post('storePerusahaan', 'PerusahaanController@store');
             Route::post('updatePerusahaan', "PerusahaanController@update");
             Route::post('updateProfilePerusahaan', "PerusahaanController@updateProfile");
             Route::post('updateLogo', 'PerusahaanController@updateLogo');
-            Route::get('deletePerusahaan/{perusahaanID}', "PerusahaanController@delete");
+            Route::delete('deletePerusahaan/{perusahaanID}', "PerusahaanController@delete");
             Route::get('profilePerusahaan/{id}', "PerusahaanController@profile")->name('profilePerusahaan');
         });
 
@@ -173,15 +173,15 @@ Route::middleware(['web'])->group(function () {
             //Dokumen Vendor
             Route::post('storeKTP', 'VendorController@storeKTP');
             Route::post('updateKTP', 'VendorController@updateKTP');
-            Route::get('deleteKTP/{ktpID}', 'VendorController@deleteKTP');
+            Route::delete('deleteKTP/{ktpID}', 'VendorController@deleteKTP');
 
             Route::post('storePengalaman', 'VendorController@storePengalaman');
             Route::post('updatePengalaman', 'VendorController@updatePengalaman');
-            Route::get('deletePengalaman/{pengalamanID}', 'VendorController@deletePengalaman');
+            Route::delete('deletePengalaman/{pengalamanID}', 'VendorController@deletePengalaman');
 
             Route::post('storeSIU', 'VendorController@storeSIU');
             Route::post('updateSIU', 'VendorController@updateSIU');
-            Route::get('deleteSIU/{siuID}', 'VendorController@deleteSIU');
+            Route::delete('deleteSIU/{siuID}', 'VendorController@deleteSIU');
 
             Route::post('storeKekayaan', 'VendorController@storeKekayaan');
             Route::post('updateKekayaan', 'VendorController@updateKekayaan');
@@ -216,7 +216,7 @@ Route::middleware(['web'])->group(function () {
             Route::get('ubahSubProposal/{loginID}', 'SubProposalController@ubah')->name('ubahSubProposal');
             Route::post('storeSubProposal', 'SubProposalController@store');
             Route::post('editSubProposal', "SubProposalController@update");
-            Route::get('deleteSubProposal/{loginID}', "SubProposalController@delete");
+            Route::delete('deleteSubProposal/{loginID}', "SubProposalController@delete");
             Route::get('exportSubProposal/{loginID}', "SubProposalController@export")->name('exportSubProposal');
 
             Route::get('indexLembaga', 'LembagaController@index')->name('dataLembaga');
@@ -225,7 +225,7 @@ Route::middleware(['web'])->group(function () {
             Route::post('storeLembaga', 'LembagaController@store');
             Route::post('updateLembaga', "LembagaController@update");
             Route::post('updateInformasiBank', "LembagaController@updateBank");
-            Route::get('deleteLembaga/{lembagaID}', "LembagaController@delete");
+            Route::delete('deleteLembaga/{lembagaID}', "LembagaController@delete");
 
             Route::get('/proposalBulanan', 'KelayakanController@inputKelayakan')->name('input-kelayakan');
 
@@ -249,7 +249,7 @@ Route::middleware(['web'])->group(function () {
 
             Route::post('storeDokumen', "LampiranController@store")->name('storeDokumen');
             Route::post('updateDokumen', "LampiranController@update")->name('updateDokumen');
-            Route::get('deleteDokumen/{id}', "LampiranController@delete");
+            Route::delete('deleteDokumen/{id}', "LampiranController@delete");
 
             Route::post('storeDokumentasi', "LampiranController@storeDokumentasi")->name('storeDokumentasi');
 
@@ -286,13 +286,13 @@ Route::middleware(['web'])->group(function () {
             Route::get('indexBudget', 'AnggaranController@index')->name('indexBudget');
             Route::post('storeAnggaran', 'AnggaranController@store')->name('storeAnggaran');
             Route::post('updateAnggaran', "AnggaranController@update")->name('updateAnggaran');
-            Route::get('deleteAnggaran/{id}', "AnggaranController@delete")->name('deleteAnggaran');
+            Route::delete('deleteAnggaran/{id}', "AnggaranController@delete")->name('deleteAnggaran');
 
             Route::get('/dataProker', 'ProkerController@index')->name('data-proker');
             Route::get('inputProker', 'ProkerController@create')->name('tambahProker');
             Route::post('inputProker', 'ProkerController@store');
             Route::post('editProker', "ProkerController@update");
-            Route::get('deleteProker/{loginID}', "ProkerController@delete")->name('delete-proker');
+            Route::delete('deleteProker/{loginID}', "ProkerController@delete")->name('delete-proker');
 
             Route::get('exportProker', "ProkerController@exportProker")->name('exportProker');
             
@@ -320,21 +320,21 @@ Route::middleware(['web'])->group(function () {
 
             Route::post('input-relokasi', 'AnggaranController@insertRelokasi');
             Route::post('input-alokasi', 'AnggaranController@insertAlokasi');
-            Route::get('delete-alokasi/{loginID}', "AnggaranController@deleteAlokasi")->name('delete-alokasi');
+            Route::delete('delete-alokasi/{loginID}', "AnggaranController@deleteAlokasi")->name('delete-alokasi');
             Route::post('edit-alokasi', "AnggaranController@editAlokasi");
             Route::post('edit-nominal', "AnggaranController@editNominal");
 
             Route::get('indexRelokasi', 'RelokasiController@index')->name('indexRelokasi');
             Route::get('createRelokasi', 'RelokasiController@create')->name('createRelokasi');
             Route::post('storeRelokasi', 'RelokasiController@store');
-            Route::get('deleteRelokasi/{relokasiID}', "RelokasiController@delete");
+            Route::delete('deleteRelokasi/{relokasiID}', "RelokasiController@delete");
         });
 
         Route::group(['prefix' => 'report', 'middleware' => 'isReport'], function () {
             Route::get('dataKelayakan', 'KelayakanController@index')->name('dataKelayakan');
             Route::get('editKelayakan/{id}', 'KelayakanController@edit')->name('editKelayakan');
             Route::post('updateKekayaan', 'KelayakanController@update')->name('updateKelayakan');
-            Route::get('deleteKelayakan/{id}', "KelayakanController@delete")->name('deleteKelayakan');
+            Route::delete('deleteKelayakan/{id}', "KelayakanController@delete")->name('deleteKelayakan');
 
             Route::post('updateProposal', "KelayakanController@updateProposal")->name('updateProposal');
             Route::post('updatePenerima', "KelayakanController@updatePenerima")->name('updatePenerima');
@@ -398,18 +398,18 @@ Route::middleware(['web'])->group(function () {
             Route::post('uploadKelayakan', "LaporanController@uploadKelayakan");
 
             Route::get('/data-Evaluasi', 'EvaluasiController@index')->name('data-evaluasi');
-            Route::get('delete-evaluasi/{loginID}', "EvaluasiController@deleteEvaluasi");
+            Route::delete('delete-evaluasi/{loginID}', "EvaluasiController@deleteEvaluasi");
             Route::get('forward-evaluasi/{loginID}', 'EvaluasiController@forwardEvaluasi');
 
             Route::get('data-Survei', 'SurveiController@index')->name('data-survei');
             Route::get('proposal-Disetujui', 'SurveiController@setuju')->name('proposal-setuju');
 
-            Route::get('delete-survei/{loginID}', "SurveiController@deleteSurvei");
+            Route::delete('delete-survei/{loginID}', "SurveiController@deleteSurvei");
             Route::get('forward-survei/{loginID}', 'SurveiController@forwardSurvei');
             Route::post('updateNilaiSurvei', 'SurveiController@updateNilaiSurvei');
 
             Route::post('exportPopay', 'PembayaranController@exportPopay')->name('export-popay');
-            Route::get('deletePopay/{loginID}', 'PembayaranController@deletePopay');
+            Route::delete('deletePopay/{loginID}', 'PembayaranController@deletePopay');
 
             //LAPORAN REALISASI
             Route::get('listRealisasiAllAnnualToday/{date}', 'APIController@listRealisasiAllToday')->name('listRealisasiAllAnnualToday');
@@ -515,7 +515,7 @@ Route::middleware(['web'])->group(function () {
         Route::group(['prefix' => 'payment', 'middleware' => 'isUser'], function () {
             Route::post('storePembayaran', 'PembayaranController@store')->name('storePembayaran');
             Route::post('updatePembayaran', 'PembayaranController@update')->name('updatePembayaran');
-            Route::get('deletePembayaran/{id}', 'PembayaranController@delete')->name('deletePembayaran');
+            Route::delete('deletePembayaran/{id}', 'PembayaranController@delete')->name('deletePembayaran');
         });
 
         Route::group(['prefix' => 'exportPopay', 'middleware' => 'isFinance'], function () {
@@ -543,7 +543,7 @@ Route::middleware(['web'])->group(function () {
 
             Route::get('viewPaymentRequest/{PR}', 'APIController@viewPaymentRequest')->name('viewPaymentRequest');
 
-            Route::get('deletePaymentRequest/{PR}', 'APIController@deletePaymentRequest');
+            Route::delete('deletePaymentRequest/{PR}', 'APIController@deletePaymentRequest');
 
             Route::post('storePaymentRequestIdulAdha', 'APIController@storePaymentRequestIdulAdha');
         });
@@ -587,7 +587,7 @@ Route::middleware(['web'])->group(function () {
         Route::group(['prefix' => 'DokumenLegal', 'middleware' => 'isReport'], function () {            
             Route::post('storeBASTDana', 'BASTController@store')->name('storeBASTDana');
             Route::post('updateBASTDana', 'BASTController@update')->name('updateBASTDana');
-            Route::get('deleteBAST/{id}', 'BASTController@delete');
+            Route::delete('deleteBAST/{id}', 'BASTController@delete');
 
             Route::get('/ubah-BASTDana/{loginID}', 'BASTController@ubahBASTDana')->name('ubah-bast-dana');
 
@@ -597,14 +597,14 @@ Route::middleware(['web'])->group(function () {
             Route::post('/edit-SPK', 'SPKController@editSPK');
             Route::post('/insert-Header', 'SPKController@insertHeader');
             Route::post('/insert-DetailSPK', 'SPKController@insertDetailSPK');
-            Route::get('/delete-SPK/{loginID}', 'SPKController@deleteSPK');
+            Route::delete('/delete-SPK/{loginID}', 'SPKController@deleteSPK');
         });
 
         Route::group(['prefix' => 'profile', 'middleware' => 'isUser'], function () {
             Route::get('account-setting/{loginID}', 'UserController@profile')->name('profile');
             Route::post('/update-profile', 'UserController@editProfile');
             Route::post('/update-password', 'UserController@editPassword');
-            Route::get('/delete-foto/{loginID}', 'UserController@deleteFotoProfile')->name('delete-foto');
+            Route::delete('/delete-foto/{loginID}', 'UserController@deleteFotoProfile')->name('delete-foto');
         });
 
         Route::group(['prefix' => 'subsidiary'], function () {
@@ -618,12 +618,12 @@ Route::middleware(['web'])->group(function () {
                 Route::get('/indexStakeholder', 'StakeholderSubsidiaryController@index')->name('indexStakeholderSubsidiary');
                 Route::post('createStakeholder', 'StakeholderSubsidiaryController@store');
                 Route::post('updateStakeholder', "StakeholderSubsidiaryController@update");
-                Route::get('deleteStakeholder/{stakeholderID}', "StakeholderSubsidiaryController@delete");
+                Route::delete('deleteStakeholder/{stakeholderID}', "StakeholderSubsidiaryController@delete");
 
                 Route::get('/indexLembaga', 'LembagaSubsidiaryController@index')->name('indexLembagaSubsidiary');
                 Route::post('createLembaga', 'LembagaSubsidiaryController@store');
                 Route::post('updateLembaga', "LembagaSubsidiaryController@update");
-                Route::get('deleteLembaga/{lembagaID}', "LembagaSubsidiaryController@delete");
+                Route::delete('deleteLembaga/{lembagaID}', "LembagaSubsidiaryController@delete");
             });
 
             Route::group(['prefix' => 'anggaran', 'middleware' => 'isSubsidiary'], function () {
@@ -661,7 +661,7 @@ Route::middleware(['web'])->group(function () {
                 Route::post('storeRealisasiProposal', 'RealisasiSubsidiaryController@storeProposal');
                 Route::post('storeRealisasiNonProposal', 'RealisasiSubsidiaryController@storeNonProposal');
 
-                Route::get('deleteRealisasi/{realisasiID}', 'RealisasiSubsidiaryController@delete');
+                Route::delete('deleteRealisasi/{realisasiID}', 'RealisasiSubsidiaryController@delete');
             });
 
             Route::group(['prefix' => 'report', 'middleware' => 'isSubsidiary'], function () {

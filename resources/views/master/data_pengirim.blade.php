@@ -203,7 +203,7 @@
                 showLoaderOnConfirm: true
             }, function() {
                 setTimeout(() => {
-                    window.location = "delete-pengirim/" + data_id;
+                    submitDelete("delete-pengirim/" + data_id);
                 }, 1000);
             });
         });

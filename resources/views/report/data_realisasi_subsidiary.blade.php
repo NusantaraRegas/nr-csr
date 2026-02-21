@@ -482,7 +482,7 @@
                     closeOnConfirm: false
                 },
                 function() {
-                    window.location = "deleteRealisasi/" + data_id + "";
+                    submitDelete("deleteRealisasi/" + data_id + "");
                 });
         });
     </script>

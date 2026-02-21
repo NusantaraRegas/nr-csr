@@ -157,7 +157,7 @@
                     closeOnConfirm: false
                 },
                 function(){
-                    window.location = "deleteStakeholder/" + pengirim_id + "";
+                    submitDelete("deleteStakeholder/" + pengirim_id + "");
                 });
         });
 

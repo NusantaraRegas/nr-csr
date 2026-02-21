@@ -219,7 +219,7 @@
             })
                 .then((willDelete) => {
                     if (willDelete) {
-                        window.location = "/Pekerjaan/deletePekerjaan/" + data_id + "";
+                        submitDelete("/Pekerjaan/deletePekerjaan/" + data_id + "");
                     }
                 });
 

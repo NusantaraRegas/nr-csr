@@ -274,7 +274,7 @@
                     closeOnConfirm: false
                 },
                 function() {
-                    window.location = "/anggaran/delete/" + anggaran_id + "";
+                    submitDelete("/anggaran/delete/" + anggaran_id + "");
                 });
         });
     </script>

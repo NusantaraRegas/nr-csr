@@ -92,7 +92,7 @@
                     closeOnConfirm: false
                 },
                 function () {
-                    window.location = "delete-survei/" + survei_id + "";
+                    submitDelete("delete-survei/" + survei_id + "");
                 });
         });
 

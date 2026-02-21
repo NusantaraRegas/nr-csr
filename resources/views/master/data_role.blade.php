@@ -189,7 +189,7 @@
                     closeOnConfirm: false
                 },
                 function () {
-                    window.location = "delete-role/" + role_id + "/" + role_nama + "";
+                    submitDelete("delete-role/" + role_id + "/" + role_nama + "");
                 });
         });
     </script>

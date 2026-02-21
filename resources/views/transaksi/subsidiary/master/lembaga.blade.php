@@ -222,7 +222,7 @@
                     closeOnConfirm: false
                 },
                 function () {
-                    window.location = "deleteLembaga/" + data_id + "";
+                    submitDelete("deleteLembaga/" + data_id + "");
                 });
         });
     </script>

@@ -241,7 +241,7 @@
                     closeOnConfirm: false
                 },
                 function () {
-                    window.location = "/profile/delete-foto/" + user_id + "";
+                    submitDelete("/profile/delete-foto/" + user_id + "");
                 });
         });
 

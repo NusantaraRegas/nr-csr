@@ -248,7 +248,7 @@
                     closeOnConfirm: false
                 },
                 function () {
-                    window.location = "deleteIndikator/" + data_id + "";
+                    submitDelete("deleteIndikator/" + data_id + "");
                 });
         });
     </script>

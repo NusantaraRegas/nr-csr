@@ -415,7 +415,7 @@
                 showLoaderOnConfirm: true
             }, function() {
                 setTimeout(() => {
-                    window.location = "deleteAnggota/" + data_id;
+                    submitDelete("deleteAnggota/" + data_id);
                 }, 1000);
             });
         });

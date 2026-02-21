@@ -106,6 +106,13 @@ class UserController extends Controller
             'role.required'  => 'Role harus diisi',
         ]);
 
+        $defaultPassword = env('DEFAULT_USER_PASSWORD');
+        if (empty($defaultPassword)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('gagal', 'DEFAULT_USER_PASSWORD belum dikonfigurasi. Hubungi administrator aplikasi.');
+        }
+
         $data = [
             'username' => strtolower($request->username),
             'email' => strtolower($request->email),
@@ -113,7 +120,7 @@ class UserController extends Controller
             'jabatan' => $request->jabatan,
             'id_perusahaan' => $request->perusahaan,
             'role' => $request->role,
-            'password' => bcrypt('corp.NR'),
+            'password' => bcrypt($defaultPassword),
             'status' => 'Active',
             'remember_token' => Str::random(40),
         ];

@@ -570,7 +570,7 @@
                     closeOnConfirm: false
                 },
                 function () {
-                    window.location = "/subsidiary/realisasi/deleteRealisasi/" + data_id + "";
+                    submitDelete("/subsidiary/realisasi/deleteRealisasi/" + data_id + "");
                 });
         });
     </script>

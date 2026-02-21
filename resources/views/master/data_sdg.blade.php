@@ -214,7 +214,7 @@
                     closeOnConfirm: false
                 },
                 function () {
-                    window.location = "deleteSDG/" + data_id + "";
+                    submitDelete("deleteSDG/" + data_id + "");
                 });
         });
     </script>

@@ -543,7 +543,7 @@
                     closeOnConfirm: false
                 },
                 function() {
-                    window.location = "/exportPopay/deletePaymentRequest/" + id + "";
+                    submitDelete("/exportPopay/deletePaymentRequest/" + id + "");
                 });
         });
     </script>

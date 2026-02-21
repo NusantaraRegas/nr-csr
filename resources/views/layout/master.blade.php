@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="Aplikasi Manajemen Tanggung Jawab Sosial dan Lingkungan">
     <meta name="author" content="Sigit Sutrisno">
 
@@ -725,6 +726,29 @@
         function hanyaAngka(evt) {
             var charCode = (evt.which) ? evt.which : event.keyCode;
             return charCode >= 48 && charCode <= 57;
+        }
+    </script>
+
+    <script>
+        function submitDelete(url) {
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = url;
+
+            var token = document.createElement('input');
+            token.type = 'hidden';
+            token.name = '_token';
+            token.value = '{{ csrf_token() }}';
+            form.appendChild(token);
+
+            var method = document.createElement('input');
+            method.type = 'hidden';
+            method.name = '_method';
+            method.value = 'DELETE';
+            form.appendChild(method);
+
+            document.body.appendChild(form);
+            form.submit();
         }
     </script>
 
