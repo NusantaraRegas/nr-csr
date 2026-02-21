@@ -93,6 +93,7 @@ class UserController extends Controller
             'jabatan' => 'required|max:100',
             'perusahaan' => 'required',
             'role' => 'required',
+            'password' => 'required|string|min:8|confirmed',
         ], [
             'username.required' => 'Username harus diisi',
             'username.unique' => 'Username sudah digunakan',
@@ -104,14 +105,10 @@ class UserController extends Controller
             'jabatan.max' => 'Maksimal 100 karakter',
             'perusahaan.required'  => 'Entitas harus diisi',
             'role.required'  => 'Role harus diisi',
+            'password.required' => 'Password harus diisi',
+            'password.min' => 'Password minimal 8 karakter',
+            'password.confirmed' => 'Konfirmasi password tidak sesuai',
         ]);
-
-        $defaultPassword = env('DEFAULT_USER_PASSWORD');
-        if (empty($defaultPassword)) {
-            return redirect()->back()
-                ->withInput()
-                ->with('gagal', 'DEFAULT_USER_PASSWORD belum dikonfigurasi. Hubungi administrator aplikasi.');
-        }
 
         $data = [
             'username' => strtolower($request->username),
@@ -120,7 +117,7 @@ class UserController extends Controller
             'jabatan' => $request->jabatan,
             'id_perusahaan' => $request->perusahaan,
             'role' => $request->role,
-            'password' => bcrypt($defaultPassword),
+            'password' => bcrypt($request->password),
             'status' => 'Active',
             'remember_token' => Str::random(40),
         ];

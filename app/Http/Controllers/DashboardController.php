@@ -657,7 +657,16 @@ class DashboardController extends Controller
         }
 
         $jumlahReviewSurvei = Survei::where('status', 'Forward')->where('survei2', $username)->count();
-        $jumlahCreateSuvei = DB::select("SELECT COUNT(*) AS JUMLAH FROM V_EVALUASI WHERE (EVALUATOR1 = '$username' AND STATUS = 'Survei') OR (EVALUATOR2 = '$username' AND STATUS = 'Survei')");
+        $jumlahCreateSuvei = DB::table('V_EVALUASI')
+            ->where(function ($query) use ($username) {
+                $query->where('EVALUATOR1', $username)
+                    ->where('STATUS', 'Survei');
+            })
+            ->orWhere(function ($query) use ($username) {
+                $query->where('EVALUATOR2', $username)
+                    ->where('STATUS', 'Survei');
+            })
+            ->count();
 
         if (session('user')->role == 'Manager') {
             $jumlahApproveSurvei = ViewSurvei::where('status', 'Approved 2')->where('kadiv', $username)->count();
@@ -753,7 +762,7 @@ class DashboardController extends Controller
                 'jumlahReviewSurvei' => $jumlahReviewSurvei,
                 'jumlahApproveSurvei' => $jumlahApproveSurvei,
                 'jumlahApproveEvaluasi' => $jumlahApproveEvaluasi,
-                'jumlahCreateSurvei' => $jumlahCreateSuvei[0]->jumlah,
+                'jumlahCreateSurvei' => $jumlahCreateSuvei,
                 'totalPlanPendidikan' => $totalPlanPendidikan,
                 'totalPlanLingkungan' => $totalPlanLingkungan,
                 'totalPlanUMK' => $totalPlanUMK,
@@ -904,8 +913,8 @@ class DashboardController extends Controller
                             FROM
                                 TBL_REALISASI_AP 
                             WHERE
-                                PERUSAHAAN = '$company' 
-                                AND TAHUN = '$tahun'");
+                                PERUSAHAAN = ? 
+                                AND TAHUN = ?", [$company, $tahun]);
 
         $bulanan = [];
         foreach ($dataBulanan as $d) {
@@ -989,7 +998,13 @@ class DashboardController extends Controller
             $total = $totalCostProposal;
         }
 
-        $nominalSektor = DB::select("SELECT SEKTOR_BANTUAN, sum(jumlah) as jumlah from V_SUM_SEKTOR2 WHERE TAHUN = '$tahun' AND STATUS = 'PAID' GROUP BY SEKTOR_BANTUAN ORDER BY SEKTOR_BANTUAN ASC");
+        $nominalSektor = DB::table('V_SUM_SEKTOR2')
+            ->select('SEKTOR_BANTUAN', DB::raw('sum(jumlah) as jumlah'))
+            ->where('TAHUN', $tahun)
+            ->where('STATUS', 'PAID')
+            ->groupBy('SEKTOR_BANTUAN')
+            ->orderBy('SEKTOR_BANTUAN', 'ASC')
+            ->get();
 
         $nominalStatus = DB::table('V_SUM_SEKTOR2')
             ->select(DB::raw('sum(JUMLAH) as total'))
@@ -1210,8 +1225,18 @@ class DashboardController extends Controller
         }
 
         //Periode Bulan
-        $nominalProposal = DB::select("SELECT SUM(JUMLAH) AS JUMLAH, BULAN, TAHUN FROM V_BULAN WHERE TAHUN = '$tahun' GROUP BY BULAN, TAHUN ORDER BY BULAN ASC");
-        $grafikProposal = DB::select("SELECT COUNT(*) AS JUMLAH, BULAN, TAHUN FROM V_BULAN WHERE TAHUN = '$tahun' GROUP BY BULAN, TAHUN ORDER BY BULAN ASC");
+        $nominalProposal = DB::table('V_BULAN')
+            ->selectRaw('SUM(JUMLAH) AS jumlah, BULAN, TAHUN')
+            ->where('TAHUN', $tahun)
+            ->groupBy('BULAN', 'TAHUN')
+            ->orderBy('BULAN', 'ASC')
+            ->get();
+        $grafikProposal = DB::table('V_BULAN')
+            ->selectRaw('COUNT(*) AS jumlah, BULAN, TAHUN')
+            ->where('TAHUN', $tahun)
+            ->groupBy('BULAN', 'TAHUN')
+            ->orderBy('BULAN', 'ASC')
+            ->get();
 
         function bulan($bln)
         {
@@ -1385,8 +1410,18 @@ class DashboardController extends Controller
         $persenKambing = round($totalKambing->total / $totalQurban * 100, 2);
 
         //Periode Bulan
-        $nominalProposal = DB::select("SELECT SUM(JUMLAH) AS JUMLAH, BULAN, TAHUN FROM V_BULAN WHERE TAHUN = '$tahun' GROUP BY BULAN, TAHUN ORDER BY BULAN ASC");
-        $grafikProposal = DB::select("SELECT COUNT(*) AS JUMLAH, BULAN, TAHUN FROM V_BULAN WHERE TAHUN = '$tahun' GROUP BY BULAN, TAHUN ORDER BY BULAN ASC");
+        $nominalProposal = DB::table('V_BULAN')
+            ->selectRaw('SUM(JUMLAH) AS jumlah, BULAN, TAHUN')
+            ->where('TAHUN', $tahun)
+            ->groupBy('BULAN', 'TAHUN')
+            ->orderBy('BULAN', 'ASC')
+            ->get();
+        $grafikProposal = DB::table('V_BULAN')
+            ->selectRaw('COUNT(*) AS jumlah, BULAN, TAHUN')
+            ->where('TAHUN', $tahun)
+            ->groupBy('BULAN', 'TAHUN')
+            ->orderBy('BULAN', 'ASC')
+            ->get();
 
         function bulan($bln)
         {

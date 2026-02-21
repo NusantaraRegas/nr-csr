@@ -250,13 +250,23 @@ class TasklistController extends Controller
 
         $username = session('user')->username;
 
-        $data = DB::select("SELECT * FROM V_EVALUASI WHERE (EVALUATOR1 = '$username' AND STATUS = 'Survei') OR (EVALUATOR2 = '$username' AND STATUS = 'Survei')");
-        $jumlahData = DB::select("SELECT COUNT(*) AS JUMLAH FROM V_EVALUASI WHERE (EVALUATOR1 = '$username' AND STATUS = 'Survei') OR (EVALUATOR2 = '$username' AND STATUS = 'Survei')");
+        $todoQuery = DB::table('V_EVALUASI')
+            ->where(function ($query) use ($username) {
+                $query->where('EVALUATOR1', $username)
+                    ->where('STATUS', 'Survei');
+            })
+            ->orWhere(function ($query) use ($username) {
+                $query->where('EVALUATOR2', $username)
+                    ->where('STATUS', 'Survei');
+            });
+
+        $data = $todoQuery->get();
+        $jumlahData = (clone $todoQuery)->count();
 
         return view('home.todo')
             ->with([
                 'dataEvaluasi' => $data,
-                'jumlahData' => $jumlahData[0]->jumlah,
+                'jumlahData' => $jumlahData,
             ]);
     }
 
@@ -264,10 +274,11 @@ class TasklistController extends Controller
     {
         date_default_timezone_set('Asia/Jakarta');
         $tanggalMenit = date("Y-m-d");
+        $evaluasiIds = explode(",", $evaluasiID);
 
         $dataEvaluasi = DB::table('v_evaluasi')
             ->select('v_evaluasi.*')
-            ->whereIn('id_evaluasi', explode(",", $evaluasiID))
+            ->whereIn('id_evaluasi', $evaluasiIds)
             ->get();
 
         foreach ($dataEvaluasi as $e) {
@@ -276,41 +287,37 @@ class TasklistController extends Controller
             $evaluator2 = User::where('username', $e->evaluator2)->first();
             $kadep = User::where('role', 'Supervisor 1')->first();
 
-            $data[] = [
-                [
-                    $dataEmail = [
-                        'no_agenda' => $e->no_agenda,
-                        'pengirim' => $e->pengirim,
-                        'tgl_terima' => $e->tgl_terima,
-                        'dari' => $e->asal_surat,
-                        'no_surat' => $e->no_surat,
-                        'tgl_surat' => $e->tgl_surat,
-                        'sektor' => $e->sektor_bantuan,
-                        'perihal' => $e->perihal,
-                        'permohonan' => $e->nilai_pengajuan,
-                        'bantuan' => $e->nilai_bantuan,
-                        'evaluator1' => $evaluator1->nama,
-                        'evaluator2' => $evaluator2->nama,
-                        'penerima' => $kadep->nama,
-                    ],
-
-                    $dataUpdate = [
-                        'status' => 'Approved 1',
-                        'catatan2' => $catatan,
-                        'approve_date' => $tanggalMenit,
-                    ],
-
-
-//                    Mail::send('mail.approval_evaluator', $dataEmail, function ($message) use ($kadep) {
-//                        $message->to($kadep->email, $kadep->nama)
-//                            ->subject('Evaluasi Proposal')
-//                            ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
-//                    }),
-
-                    #UPDATE EVALUASI
-                    Evaluasi::whereIn('id_evaluasi', explode(",", $evaluasiID))->update($dataUpdate),
-                ]
+            $dataEmail = [
+                'no_agenda' => $e->no_agenda,
+                'pengirim' => $e->pengirim,
+                'tgl_terima' => $e->tgl_terima,
+                'dari' => $e->asal_surat,
+                'no_surat' => $e->no_surat,
+                'tgl_surat' => $e->tgl_surat,
+                'sektor' => $e->sektor_bantuan,
+                'perihal' => $e->perihal,
+                'permohonan' => $e->nilai_pengajuan,
+                'bantuan' => $e->nilai_bantuan,
+                'evaluator1' => $evaluator1->nama,
+                'evaluator2' => $evaluator2->nama,
+                'penerima' => $kadep->nama,
             ];
+
+            $dataUpdate = [
+                'status' => 'Approved 1',
+                'catatan2' => $catatan,
+                'approve_date' => $tanggalMenit,
+            ];
+
+//            Mail::send('mail.approval_evaluator', $dataEmail, function ($message) use ($kadep) {
+//                $message->to($kadep->email, $kadep->nama)
+//                    ->subject('Evaluasi Proposal')
+//                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
+//            });
+
+            DB::transaction(function () use ($evaluasiIds, $dataUpdate) {
+                Evaluasi::whereIn('id_evaluasi', $evaluasiIds)->update($dataUpdate);
+            });
 
             return redirect()->back()->with('berhasil', 'Evaluasi proposal berhasil disetujui');
         }
@@ -321,10 +328,11 @@ class TasklistController extends Controller
     {
         date_default_timezone_set('Asia/Jakarta');
         $tanggalMenit = date("Y-m-d");
+        $evaluasiIds = explode(",", $evaluasiID);
 
         $dataEvaluasi = DB::table('v_evaluasi')
             ->select('v_evaluasi.*')
-            ->whereIn('id_evaluasi', explode(",", $evaluasiID))
+            ->whereIn('id_evaluasi', $evaluasiIds)
             ->get();
 
         foreach ($dataEvaluasi as $e) {
@@ -334,40 +342,37 @@ class TasklistController extends Controller
             $evaluator2 = User::where('username', $e->evaluator2)->first();
             $kadiv = User::where('role', 'Manager')->first();
 
-            $data[] = [
-                [
-                    $dataEmail = [
-                        'no_agenda' => $e->no_agenda,
-                        'pengirim' => $e->pengirim,
-                        'tgl_terima' => $e->tgl_terima,
-                        'dari' => $e->asal_surat,
-                        'no_surat' => $e->no_surat,
-                        'tgl_surat' => $e->tgl_surat,
-                        'sektor' => $e->sektor_bantuan,
-                        'perihal' => $e->perihal,
-                        'permohonan' => $e->nilai_pengajuan,
-                        'bantuan' => $e->nilai_bantuan,
-                        'evaluator1' => $evaluator1->nama,
-                        'evaluator2' => $evaluator2->nama,
-                        'penerima' => $kadiv->nama,
-                    ],
-
-                    $dataUpdate = [
-                        'status' => $status,
-                        'ket_kadin1' => $catatan,
-                        'approve_kadep' => $tanggalMenit,
-                    ],
-
-//                    Mail::send('mail.approval_evaluator', $dataEmail, function ($message) use ($kadiv) {
-//                        $message->to($kadiv->email, $kadiv->nama)
-//                            ->subject('Evaluasi Proposal')
-//                            ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
-//                    }),
-
-                    #UPDATE EVALUASI
-                    Evaluasi::whereIn('id_evaluasi', explode(",", $evaluasiID))->update($dataUpdate),
-                ]
+            $dataEmail = [
+                'no_agenda' => $e->no_agenda,
+                'pengirim' => $e->pengirim,
+                'tgl_terima' => $e->tgl_terima,
+                'dari' => $e->asal_surat,
+                'no_surat' => $e->no_surat,
+                'tgl_surat' => $e->tgl_surat,
+                'sektor' => $e->sektor_bantuan,
+                'perihal' => $e->perihal,
+                'permohonan' => $e->nilai_pengajuan,
+                'bantuan' => $e->nilai_bantuan,
+                'evaluator1' => $evaluator1->nama,
+                'evaluator2' => $evaluator2->nama,
+                'penerima' => $kadiv->nama,
             ];
+
+            $dataUpdate = [
+                'status' => $status,
+                'ket_kadin1' => $catatan,
+                'approve_kadep' => $tanggalMenit,
+            ];
+
+//            Mail::send('mail.approval_evaluator', $dataEmail, function ($message) use ($kadiv) {
+//                $message->to($kadiv->email, $kadiv->nama)
+//                    ->subject('Evaluasi Proposal')
+//                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
+//            });
+
+            DB::transaction(function () use ($evaluasiIds, $dataUpdate) {
+                Evaluasi::whereIn('id_evaluasi', $evaluasiIds)->update($dataUpdate);
+            });
 
             return redirect()->back()->with('berhasil', 'Evaluasi proposal berhasil disetujui');
         }
@@ -378,10 +383,11 @@ class TasklistController extends Controller
     {
         date_default_timezone_set('Asia/Jakarta');
         $tanggalMenit = date("Y-m-d");
+        $evaluasiIds = explode(",", $evaluasiID);
 
         $dataEvaluasi = DB::table('v_evaluasi')
             ->select('v_evaluasi.*')
-            ->whereIn('id_evaluasi', explode(",", $evaluasiID))
+            ->whereIn('id_evaluasi', $evaluasiIds)
             ->get();
 
         foreach ($dataEvaluasi as $e) {
@@ -391,83 +397,77 @@ class TasklistController extends Controller
             $evaluator2 = User::where('username', $e->evaluator2)->first();
 
             if ($status == 'Survei') {
-                $data[] = [
-                    [
-                        $dataEmail = [
-                            'no_agenda' => $e->no_agenda,
-                            'pengirim' => $e->pengirim,
-                            'tgl_terima' => $e->tgl_terima,
-                            'dari' => $e->asal_surat,
-                            'no_surat' => $e->no_surat,
-                            'tgl_surat' => $e->tgl_surat,
-                            'sektor' => $e->sektor_bantuan,
-                            'perihal' => $e->perihal,
-                            'permohonan' => $e->nilai_pengajuan,
-                            'bantuan' => $e->nilai_bantuan,
-                            'evaluator1' => $evaluator1->nama,
-                            'evaluator2' => $evaluator2->nama,
-                            'penerima' => $evaluator1->nama,
-                        ],
-
-                        $dataUpdate = [
-                            'status' => $status,
-                            'ket_kadiv' => $catatan,
-                            'approve_kadiv' => $tanggalMenit,
-                        ],
-
-//                        Mail::send('mail.approved_evaluator', $dataEmail, function ($message) use ($evaluator1, $evaluator2) {
-//                            $message->to($evaluator1->email, $evaluator1->nama)
-//                                ->cc($evaluator2->email, $evaluator2->nama)
-//                                ->subject('Evaluasi Proposal')
-//                                ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
-//                        }),
-
-                        #UPDATE EVALUASI
-                        Evaluasi::whereIn('id_evaluasi', explode(",", $evaluasiID))->update($dataUpdate),
-                    ],
+                $dataEmail = [
+                    'no_agenda' => $e->no_agenda,
+                    'pengirim' => $e->pengirim,
+                    'tgl_terima' => $e->tgl_terima,
+                    'dari' => $e->asal_surat,
+                    'no_surat' => $e->no_surat,
+                    'tgl_surat' => $e->tgl_surat,
+                    'sektor' => $e->sektor_bantuan,
+                    'perihal' => $e->perihal,
+                    'permohonan' => $e->nilai_pengajuan,
+                    'bantuan' => $e->nilai_bantuan,
+                    'evaluator1' => $evaluator1->nama,
+                    'evaluator2' => $evaluator2->nama,
+                    'penerima' => $evaluator1->nama,
                 ];
+
+                $dataUpdate = [
+                    'status' => $status,
+                    'ket_kadiv' => $catatan,
+                    'approve_kadiv' => $tanggalMenit,
+                ];
+
+//                Mail::send('mail.approved_evaluator', $dataEmail, function ($message) use ($evaluator1, $evaluator2) {
+//                    $message->to($evaluator1->email, $evaluator1->nama)
+//                        ->cc($evaluator2->email, $evaluator2->nama)
+//                        ->subject('Evaluasi Proposal')
+//                        ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
+//                });
+
+                DB::transaction(function () use ($evaluasiIds, $dataUpdate) {
+                    Evaluasi::whereIn('id_evaluasi', $evaluasiIds)->update($dataUpdate);
+                });
             } else {
-                $data[] = [
-                    [
-                        $dataEmail = [
-                            'no_agenda' => $e->no_agenda,
-                            'pengirim' => $e->pengirim,
-                            'tgl_terima' => $e->tgl_terima,
-                            'dari' => $e->asal_surat,
-                            'no_surat' => $e->no_surat,
-                            'tgl_surat' => $e->tgl_surat,
-                            'sektor' => $e->sektor_bantuan,
-                            'perihal' => $e->perihal,
-                            'permohonan' => $e->nilai_pengajuan,
-                            'bantuan' => $e->nilai_bantuan,
-                            'evaluator1' => $evaluator1->nama,
-                            'evaluator2' => $evaluator2->nama,
-                            'penerima' => $evaluator1->nama,
-                        ],
-
-                        $dataUpdate = [
-                            'status' => $status,
-                            'ket_kadiv' => $catatan,
-                            'reject_date' => $tanggalMenit,
-                            'reject_by' => session('user')->username,
-                        ],
-
-                        $dataUpdateProposal = [
-                            'status' => $status,
-                        ],
-
-//                        Mail::send('mail.reject_evaluasi', $dataEmail, function ($message) use ($evaluator1, $evaluator2) {
-//                            $message->to($evaluator1->email, $evaluator1->nama)
-//                                ->cc($evaluator2->email, $evaluator2->nama)
-//                                ->subject('Penolakan Evaluasi Proposal')
-//                                ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
-//                        }),
-
-                        #UPDATE EVALUASI
-                        Evaluasi::whereIn('id_evaluasi', explode(",", $evaluasiID))->update($dataUpdate),
-                        Kelayakan::whereIn('no_agenda', explode(",", $e->no_agenda))->update($dataUpdateProposal),
-                    ],
+                $dataEmail = [
+                    'no_agenda' => $e->no_agenda,
+                    'pengirim' => $e->pengirim,
+                    'tgl_terima' => $e->tgl_terima,
+                    'dari' => $e->asal_surat,
+                    'no_surat' => $e->no_surat,
+                    'tgl_surat' => $e->tgl_surat,
+                    'sektor' => $e->sektor_bantuan,
+                    'perihal' => $e->perihal,
+                    'permohonan' => $e->nilai_pengajuan,
+                    'bantuan' => $e->nilai_bantuan,
+                    'evaluator1' => $evaluator1->nama,
+                    'evaluator2' => $evaluator2->nama,
+                    'penerima' => $evaluator1->nama,
                 ];
+
+                $dataUpdate = [
+                    'status' => $status,
+                    'ket_kadiv' => $catatan,
+                    'reject_date' => $tanggalMenit,
+                    'reject_by' => session('user')->username,
+                ];
+
+                $dataUpdateProposal = [
+                    'status' => $status,
+                ];
+
+//                Mail::send('mail.reject_evaluasi', $dataEmail, function ($message) use ($evaluator1, $evaluator2) {
+//                    $message->to($evaluator1->email, $evaluator1->nama)
+//                        ->cc($evaluator2->email, $evaluator2->nama)
+//                        ->subject('Penolakan Evaluasi Proposal')
+//                        ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
+//                });
+
+                DB::transaction(function () use ($evaluasiIds, $dataUpdate, $e, $dataUpdateProposal) {
+                    Evaluasi::whereIn('id_evaluasi', $evaluasiIds)->update($dataUpdate);
+                    Kelayakan::whereIn('no_agenda', explode(",", $e->no_agenda))->update($dataUpdateProposal);
+                });
             }
 
             return redirect()->back()->with('berhasil', 'Evaluasi proposal berhasil disetujui');

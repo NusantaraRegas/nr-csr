@@ -14,6 +14,7 @@ use App\Models\SPPH;
 use App\Models\Vendor;
 use App\Models\ViewPekerjaan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use DB;
 use Exception;
 use Mail;
@@ -69,11 +70,29 @@ class PekerjaanController extends Controller
         $jumlahSPK = SPK::where('pekerjaan_id', $logID)->count();
         $pembayaran = PembayaranVendor::where('pekerjaan_id', $logID)->orderBy('termin', 'ASC')->get();
         $jumlahPembayaran = PembayaranVendor::where('pekerjaan_id', $logID)->count();
-        $vendor = DB::select("SELECT * FROM TBL_VENDOR WHERE VENDOR_ID NOT IN (SELECT ID_VENDOR FROM TBL_SPPH WHERE PEKERJAAN_ID = '$logID')");
+        $vendor = DB::table('TBL_VENDOR')
+            ->whereNotIn('VENDOR_ID', function ($query) use ($logID) {
+                $query->select('ID_VENDOR')
+                    ->from('TBL_SPPH')
+                    ->where('PEKERJAAN_ID', $logID);
+            })
+            ->get();
         $log = LogPekerjaan::where('pekerjaan_id', $logID)->orderBy('log_id', 'DESC')->get();
         $jumlahLog = LogPekerjaan::where('pekerjaan_id', $logID)->count();
-        $dokumenMandatoriProyek = DB::select("SELECT * FROM TBL_DOKUMEN_MANDATORI_PROYEK WHERE NAMA_DOKUMEN NOT IN (SELECT NAMA_DOKUMEN FROM TBL_LAMPIRAN_PEKERJAAN WHERE PEKERJAAN_ID = '$logID')");
-        $pilihanVendor = DB::select("SELECT * FROM TBL_VENDOR WHERE VENDOR_ID IN (SELECT ID_VENDOR FROM TBL_SPH WHERE PEKERJAAN_ID = '$logID')");
+        $dokumenMandatoriProyek = DB::table('TBL_DOKUMEN_MANDATORI_PROYEK')
+            ->whereNotIn('NAMA_DOKUMEN', function ($query) use ($logID) {
+                $query->select('NAMA_DOKUMEN')
+                    ->from('TBL_LAMPIRAN_PEKERJAAN')
+                    ->where('PEKERJAAN_ID', $logID);
+            })
+            ->get();
+        $pilihanVendor = DB::table('TBL_VENDOR')
+            ->whereIn('VENDOR_ID', function ($query) use ($logID) {
+                $query->select('ID_VENDOR')
+                    ->from('TBL_SPH')
+                    ->where('PEKERJAAN_ID', $logID);
+            })
+            ->get();
         $SPHApproved = SPH::where('pekerjaan_id', $logID)->where('status', "Approved")->count();
         $SPKApproved = SPK::where('pekerjaan_id', $logID)->where('status', "Accepted")->count();
 
@@ -113,7 +132,7 @@ class PekerjaanController extends Controller
             'ringkasan' => 'required',
             'proker' => 'required',
             'nilaiPerkiraan' => 'required',
-            'lampiran' => 'required',
+            'lampiran' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx|max:10240',
         ]);
 
         $tanggalMenit = date("Y-m-d H:i:s");
@@ -121,10 +140,8 @@ class PekerjaanController extends Controller
 
         $image = $request->file('lampiran');
         $size = $image->getSize();
-        $type = $image->getClientOriginalExtension();
-        $name = $request->namaDokumen . time() . '.' . $type;
-        $fileName = $name;
-        $image->move(public_path() . '/attachment', $fileName);
+        $type = strtolower($image->guessExtension() ?: $image->getClientOriginalExtension() ?: 'bin');
+        $name = $this->storeAttachmentFile($image, $request->namaDokumen);
 
         $dataPekerjaan = [
             'nama_pekerjaan' => $request->namaPekerjaan,
@@ -201,6 +218,7 @@ class PekerjaanController extends Controller
             'ringkasan' => 'required',
             'proker' => 'required',
             'nilaiPerkiraan' => 'required',
+            'lampiran' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx|max:10240',
         ]);
 
         $tanggalMenit = date("Y-m-d H:i:s");
@@ -209,10 +227,8 @@ class PekerjaanController extends Controller
         if ($request->hasFile('lampiran')) {
             $image = $request->file('lampiran');
             $size = $image->getSize();
-            $type = $image->getClientOriginalExtension();
-            $name = $request->namaDokumen . time() . '.' . $type;
-            $fileName = $name;
-            $image->move(public_path() . '/attachment', $fileName);
+            $type = strtolower($image->guessExtension() ?: $image->getClientOriginalExtension() ?: 'bin');
+            $name = $this->storeAttachmentFile($image, $request->namaDokumen);
 
             $dataPekerjaan = [
                 'nama_pekerjaan' => $request->namaPekerjaan,
@@ -292,7 +308,7 @@ class PekerjaanController extends Controller
             'nomor' => 'required',
             'tanggal' => 'required',
             'namaVendor' => 'required',
-            'lampiran' => 'required',
+            'lampiran' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx|max:10240',
         ]);
 
         $tanggalMenit = date("Y-m-d H:i:s");
@@ -313,10 +329,8 @@ class PekerjaanController extends Controller
 
         $image = $request->file('lampiran');
         $size = $image->getSize();
-        $type = $image->getClientOriginalExtension();
-        $name = $request->namaDokumen . time() . '.' . $type;
-        $fileName = $name;
-        $image->move(public_path() . '/attachment', $fileName);
+        $type = strtolower($image->guessExtension() ?: $image->getClientOriginalExtension() ?: 'bin');
+        $name = $this->storeAttachmentFile($image, $request->namaDokumen);
 
         $dataSPPH = [
             'nomor' => strtoupper($request->nomor),
@@ -377,7 +391,7 @@ class PekerjaanController extends Controller
             'nomor' => 'required',
             'tanggal' => 'required',
             'nilaiKesepakatan' => 'required',
-            'lampiran' => 'required',
+            'lampiran' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx|max:10240',
         ]);
 
         $tanggalMenit = date("Y-m-d H:i:s");
@@ -387,10 +401,8 @@ class PekerjaanController extends Controller
 
         $image = $request->file('lampiran');
         $size = $image->getSize();
-        $type = $image->getClientOriginalExtension();
-        $name = $request->namaDokumen . time() . '.' . $type;
-        $fileName = $name;
-        $image->move(public_path() . '/attachment', $fileName);
+        $type = strtolower($image->guessExtension() ?: $image->getClientOriginalExtension() ?: 'bin');
+        $name = $this->storeAttachmentFile($image, $request->namaDokumen);
 
         $dataBAKN = [
             'nomor' => strtoupper($request->nomor),
@@ -733,7 +745,7 @@ class PekerjaanController extends Controller
             'nomor' => 'required',
             'tanggal' => 'required',
             'durasi' => 'required',
-            'lampiran' => 'required',
+            'lampiran' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx|max:10240',
         ]);
 
         $tanggalMenit = date("Y-m-d H:i:s");
@@ -748,10 +760,8 @@ class PekerjaanController extends Controller
 
         $image = $request->file('lampiran');
         $size = $image->getSize();
-        $type = $image->getClientOriginalExtension();
-        $name = $request->namaDokumen . time() . '.' . $type;
-        $fileName = $name;
-        $image->move(public_path() . '/attachment', $fileName);
+        $type = strtolower($image->guessExtension() ?: $image->getClientOriginalExtension() ?: 'bin');
+        $name = $this->storeAttachmentFile($image, $request->namaDokumen);
 
         $dataSPK = [
             'nomor' => strtoupper($request->nomor),
@@ -922,17 +932,15 @@ class PekerjaanController extends Controller
 
         $this->validate($request, [
             'namaDokumen' => 'required',
-            'lampiran' => 'required',
+            'lampiran' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx|max:10240',
         ]);
 
         $tanggalMenit = date("Y-m-d H:i:s");
 
         $image = $request->file('lampiran');
         $size = $image->getSize();
-        $type = $image->getClientOriginalExtension();
-        $name = $request->namaDokumen . time() . '.' . $type;
-        $fileName = $name;
-        $image->move(public_path() . '/attachment', $fileName);
+        $type = strtolower($image->guessExtension() ?: $image->getClientOriginalExtension() ?: 'bin');
+        $name = $this->storeAttachmentFile($image, $request->namaDokumen);
 
         $dataLampiran = [
             'pekerjaan_id' => $pekerjaanID,
@@ -954,21 +962,38 @@ class PekerjaanController extends Controller
         ];
 
         try {
-            DB::table('tbl_lampiran_pekerjaan')->insert($dataLampiran);
-            DB::table('tbl_log_pekerjaan')->insert($dataLog);
+            DB::transaction(function () use ($dataLampiran, $dataLog, $request, $name, $pekerjaanID) {
+                DB::table('tbl_lampiran_pekerjaan')->insert($dataLampiran);
+                DB::table('tbl_log_pekerjaan')->insert($dataLog);
 
-            if ($request->namaDokumen == "KAK") {
-                $updateKAK = [
-                    'kak' => $name,
-                ];
+                if ($request->namaDokumen == "KAK") {
+                    $updateKAK = [
+                        'kak' => $name,
+                    ];
 
-                Pekerjaan::where('pekerjaan_id', $pekerjaanID)->update($updateKAK);
-            }
+                    Pekerjaan::where('pekerjaan_id', $pekerjaanID)->update($updateKAK);
+                }
+            });
 
             return redirect()->back()->with('sukses', "Dokumen $request->namaDokumen berhasil disimpan");
         } catch (Exception $e) {
             return redirect()->back()->with('gagal', "Dokumen $request->namaDokumen gagal disimpan");
         }
+    }
+
+    private function storeAttachmentFile($file, $context = 'lampiran')
+    {
+        $extension = strtolower($file->guessExtension() ?: $file->getClientOriginalExtension() ?: 'bin');
+        $safeContext = preg_replace('/[^a-z0-9]+/i', '-', (string) $context);
+        $safeContext = trim(strtolower($safeContext), '-');
+        if ($safeContext === '') {
+            $safeContext = 'lampiran';
+        }
+
+        $fileName = sprintf('%s-%s-%s.%s', $safeContext, date('YmdHis'), bin2hex(random_bytes(4)), $extension);
+        Storage::disk('attachment')->putFileAs('', $file, $fileName);
+
+        return $fileName;
     }
 
     public function deleteSPPH($spphID)

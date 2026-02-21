@@ -1,41 +1,55 @@
 #!/bin/bash
-# Script to create admin user inside Docker container
+set -euo pipefail
+
+# Script to create/update a local admin user inside PostgreSQL container.
+# Required:
+#   ADMIN_PASSWORD_HASH -> bcrypt hash (do not put plaintext passwords in this file)
+# Optional:
+#   DB_USER (default: nr_csr)
+#   DB_NAME (default: nr_csr)
+#   ADMIN_USERNAME (default: admin)
+#   ADMIN_EMAIL (default: admin@local.test)
+
+DB_USER="${DB_USER:-nr_csr}"
+DB_NAME="${DB_NAME:-nr_csr}"
+ADMIN_USERNAME="${ADMIN_USERNAME:-admin}"
+ADMIN_EMAIL="${ADMIN_EMAIL:-admin@local.test}"
+ADMIN_PASSWORD_HASH="${ADMIN_PASSWORD_HASH:-}"
+
+if [ -z "$ADMIN_PASSWORD_HASH" ]; then
+  echo "ERROR: ADMIN_PASSWORD_HASH is required (bcrypt hash)."
+  echo "Example: export ADMIN_PASSWORD_HASH='\$2y\$10\$...'"
+  exit 1
+fi
 
 echo "Creating admin user in PostgreSQL database..."
 
-psql -U nr_csr -d nr_csr << 'EOF'
--- Delete existing admin user if exists
-DELETE FROM nr_csr.tbl_user WHERE username = 'admin';
+psql -v ON_ERROR_STOP=1 -U "$DB_USER" -d "$DB_NAME" <<SQL
+DELETE FROM nr_csr.tbl_user WHERE username = '${ADMIN_USERNAME}';
 
--- Insert admin user with password "admin123"
 INSERT INTO nr_csr.tbl_user (
-    id_user, 
-    username, 
-    email, 
-    nama, 
-    jabatan, 
-    password, 
-    role, 
+    id_user,
+    username,
+    email,
+    nama,
+    jabatan,
+    password,
+    role,
     status
 ) VALUES (
     100001,
-    'admin',
-    'admin@local.test',
+    '${ADMIN_USERNAME}',
+    '${ADMIN_EMAIL}',
     'Administrator',
     'System Administrator',
-    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+    '${ADMIN_PASSWORD_HASH}',
     'Admin',
     'Active'
 );
 
--- Verify the user was created
-SELECT id_user, username, email, nama, role, status 
-FROM nr_csr.tbl_user 
-WHERE username = 'admin';
+SELECT id_user, username, email, nama, role, status
+FROM nr_csr.tbl_user
+WHERE username = '${ADMIN_USERNAME}';
+SQL
 
-EOF
-
-echo "Admin user created successfully!"
-echo "Login credentials:"
-echo "  Username: admin"
-echo "  Password: admin123"
+echo "Admin user created/updated successfully for username: ${ADMIN_USERNAME}"

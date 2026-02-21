@@ -55,6 +55,12 @@ return [
             'visibility' => 'public',
         ],
 
+        // Keep legacy "public/attachment" path while using Storage abstraction.
+        'attachment' => [
+            'driver' => 'local',
+            'root' => public_path('attachment'),
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

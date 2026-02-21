@@ -1,11 +1,13 @@
 -- SQL script to create admin user directly in PostgreSQL
--- This bypasses the PHP compatibility issue
+-- SECURITY NOTE:
+-- 1) Do not commit plaintext passwords.
+-- 2) Generate a bcrypt hash externally and replace __ADMIN_PASSWORD_HASH__ below.
+-- 3) Rotate the password after first login.
 
--- First, let's check if the user already exists and delete if needed
+-- First, check if the user already exists and delete if needed.
 DELETE FROM nr_csr.tbl_user WHERE username = 'admin';
 
--- Insert the admin user with bcrypt hashed password for "admin123"
--- Bcrypt hash generated for password "admin123": $2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi
+-- Insert admin user with externally generated bcrypt hash placeholder.
 INSERT INTO nr_csr.tbl_user (
     id_user,
     username,
@@ -27,7 +29,7 @@ INSERT INTO nr_csr.tbl_user (
     'admin@local.test',                                                                 -- email
     'Administrator',                                                                    -- nama
     'System Administrator',                                                             -- jabatan
-    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',                   -- password (admin123)
+    '__ADMIN_PASSWORD_HASH__',                                                         -- replace with bcrypt hash
     'Admin',                                                                            -- role
     'Active',                                                                           -- status
     NULL,                                                                               -- remember_token

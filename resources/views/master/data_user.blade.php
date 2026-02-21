@@ -206,6 +206,21 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Password <span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" name="password" minlength="8"
+                                    autocomplete="new-password">
+                                @error('password')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Konfirmasi Password <span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" name="password_confirmation" minlength="8"
+                                    autocomplete="new-password">
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">

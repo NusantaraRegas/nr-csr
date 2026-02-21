@@ -46,6 +46,7 @@ services:
       DB_PORT: 5432
       DB_DATABASE: nrcsr_prod
       DB_USERNAME: nrcsr_user
+      # Must be provided via environment (.env/.env.docker) and never committed as literal
       DB_PASSWORD: ${DB_PASSWORD}
       DEFAULT_USER_PASSWORD: ${DEFAULT_USER_PASSWORD}
       SESSION_DRIVER: ${SESSION_DRIVER}
@@ -70,7 +71,8 @@ services:
     environment:
       POSTGRES_DB: nrcsr_prod
       POSTGRES_USER: nrcsr_user
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      # Keep aligned with app DB_PASSWORD for the same DB user unless intentionally separated
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:

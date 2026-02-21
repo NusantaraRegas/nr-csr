@@ -322,6 +322,29 @@
     </script>
 
     <script>
+        function submitDelete(url) {
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = url;
+
+            var token = document.createElement('input');
+            token.type = 'hidden';
+            token.name = '_token';
+            token.value = '{{ csrf_token() }}';
+            form.appendChild(token);
+
+            var method = document.createElement('input');
+            method.type = 'hidden';
+            method.name = '_method';
+            method.value = 'DELETE';
+            form.appendChild(method);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+
+    <script>
         // Date Picker
         jQuery('.mydatepicker, #datepicker').datepicker();
         jQuery('.datepicker-autoclose').datepicker({

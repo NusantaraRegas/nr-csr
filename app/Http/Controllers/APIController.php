@@ -325,7 +325,9 @@ class APIController extends Controller
 
             //$dataSubProposal = SubProposal::where('no_agenda', $dataPembayaran->no_agenda)->get();
 
-            $dataSubProposal = DB::select("SELECT * FROM TBL_SUB_PROPOSAL WHERE NO_AGENDA = '$dataPembayaran->no_agenda'");
+            $dataSubProposal = DB::table('TBL_SUB_PROPOSAL')
+                ->where('NO_AGENDA', $dataPembayaran->no_agenda)
+                ->get();
 
             foreach ($dataSubProposal as $sub) {
                 if ($request->ppn == 'include') {
@@ -1765,16 +1767,8 @@ class APIController extends Controller
             //++++++++++++++++++++++++++++++++++++++++++//
         }
 
-        foreach ($dataProker as $d) {
-            $dataProkerRealisasi[] =
-                $d['proker_id'];
-        }
-
-
-        $kalimat = implode(", ", $dataProkerRealisasi);
-
-        $prokerNonRelokasi = DB::select("SELECT * FROM TBL_PROKER WHERE ID_PROKER NOT IN ($kalimat) AND TAHUN = '$tahun' AND PERUSAHAAN = '$company'");
-        $jumlahProkerNonRelokasi = DB::select("SELECT count(*) as TOTAL FROM TBL_PROKER WHERE ID_PROKER NOT IN ($kalimat) AND TAHUN = '$tahun' AND PERUSAHAAN = '$company'");
+        $excludedProkerIds = $this->extractProkerIds((array) $dataProker);
+        [$prokerNonRelokasi, $jumlahProkerNonRelokasi] = $this->fetchNonRelokasiProker($tahun, $company, $excludedProkerIds);
 
         if ($dataProgress['total'] == '') {
             $totalProgress = 0;
@@ -1798,7 +1792,7 @@ class APIController extends Controller
                 'progress' => $totalProgress,
                 'totalRealisasi' => $totalProgress + $totalRealisasi,
                 'dataProker' => $dataProker,
-                'jumlahProkerNonRelokasi' => $jumlahProkerNonRelokasi[0]->total,
+                'jumlahProkerNonRelokasi' => $jumlahProkerNonRelokasi,
                 'prokerNonRelokasi' => $prokerNonRelokasi,
             ]);
     }
@@ -1862,15 +1856,8 @@ class APIController extends Controller
             //++++++++++++++++++++++++++++++++++++++++++//
         }
 
-        foreach ($dataProker as $d) {
-            $dataProkerRealisasi[] =
-                $d['proker_id'];
-        }
-
-        $kalimat = implode(", ", $dataProkerRealisasi);
-
-        $prokerNonRelokasi = DB::select("SELECT * FROM TBL_PROKER WHERE ID_PROKER NOT IN ($kalimat) AND TAHUN = '$tahun' AND PERUSAHAAN = '$company'");
-        $jumlahProkerNonRelokasi = DB::select("SELECT count(*) as TOTAL FROM TBL_PROKER WHERE ID_PROKER NOT IN ($kalimat) AND TAHUN = '$tahun' AND PERUSAHAAN = '$company'");
+        $excludedProkerIds = $this->extractProkerIds((array) $dataProker);
+        [$prokerNonRelokasi, $jumlahProkerNonRelokasi] = $this->fetchNonRelokasiProker($tahun, $company, $excludedProkerIds);
 
         if ($dataProgress['total'] == '') {
             $totalProgress = 0;
@@ -1894,9 +1881,36 @@ class APIController extends Controller
                 'progress' => $totalProgress,
                 'totalRealisasi' => $totalProgress + $totalRealisasi,
                 'dataProker' => $dataProker,
-                'jumlahProkerNonRelokasi' => $jumlahProkerNonRelokasi[0]->total,
+                'jumlahProkerNonRelokasi' => $jumlahProkerNonRelokasi,
                 'prokerNonRelokasi' => $prokerNonRelokasi,
             ]);
+    }
+
+    private function extractProkerIds(array $dataProker)
+    {
+        $ids = [];
+        foreach ($dataProker as $row) {
+            if (isset($row['proker_id']) && is_numeric($row['proker_id'])) {
+                $ids[] = (int) $row['proker_id'];
+            }
+        }
+
+        $ids = array_values(array_unique($ids));
+
+        return empty($ids) ? [0] : $ids;
+    }
+
+    private function fetchNonRelokasiProker($tahun, $company, array $excludedProkerIds)
+    {
+        $baseQuery = DB::table('TBL_PROKER')
+            ->where('TAHUN', $tahun)
+            ->where('PERUSAHAAN', $company)
+            ->whereNotIn('ID_PROKER', $excludedProkerIds);
+
+        $prokerNonRelokasi = $baseQuery->get();
+        $jumlahProkerNonRelokasi = (clone $baseQuery)->count();
+
+        return [$prokerNonRelokasi, $jumlahProkerNonRelokasi];
     }
 
     public function dataProvinsi()

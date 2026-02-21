@@ -43,12 +43,13 @@ class LampiranController extends Controller
 
         $request->validate([
             'nama' => 'required',
-            'lampiran' => 'required|file|mimes:pdf',
+            'lampiran' => 'required|file|mimes:pdf|mimetypes:application/pdf,application/x-pdf|max:5120',
         ], [
             'nama.required' => 'Jenis dokumen wajib diisi',
             'lampiran.required' => 'Lampiran wajib diunggah',
             'lampiran.mimes' => 'Lampiran harus berformat PDF',
-            //'lampiran.max' => 'Ukuran file lampiran maksimal 2MB',
+            'lampiran.mimetypes' => 'Lampiran harus berupa file PDF yang valid',
+            'lampiran.max' => 'Ukuran file lampiran maksimal 5MB',
         ]);
 
         $kelayakan = Kelayakan::findOrFail($kelayakanID);
@@ -58,11 +59,9 @@ class LampiranController extends Controller
         }
 
         $image = $request->file('lampiran');
-        $name = str_replace(' ', '-', $image->getClientOriginalName());
         $size = $image->getSize();
-        $type = $image->getClientOriginalExtension();
-        $featured_new_name = time() .".".$type;
-        $image->move('attachment',$featured_new_name);
+        $type = strtolower($image->guessExtension() ?: $image->getClientOriginalExtension() ?: 'bin');
+        $featured_new_name = $this->storeAttachmentFile($image, $request->nama);
 
         $dataLampiran = [
             'ID_KELAYAKAN' => $kelayakan->id_kelayakan,
@@ -92,11 +91,12 @@ class LampiranController extends Controller
 
         $request->validate([
             'nama' => 'required',
-            'lampiran' => 'nullable|file|mimes:pdf',
+            'lampiran' => 'nullable|file|mimes:pdf|mimetypes:application/pdf,application/x-pdf|max:5120',
         ], [
             'nama.required' => 'Jenis dokumen wajib diisi',
             'lampiran.mimes' => 'Lampiran harus berformat PDF',
-            //'lampiran.max' => 'Ukuran file lampiran maksimal 2MB',
+            'lampiran.mimetypes' => 'Lampiran harus berupa file PDF yang valid',
+            'lampiran.max' => 'Ukuran file lampiran maksimal 5MB',
         ]);
 
         $lampiran = Lampiran::findOrFail($lampiranID);
@@ -110,17 +110,13 @@ class LampiranController extends Controller
         // Jika user mengupload file baru
         if ($request->hasFile('lampiran')) {
             $file = $request->file('lampiran');
-            $extension = $file->getClientOriginalExtension();
-            $fileName = time() . '.' . $extension;
+            $fileName = $this->storeAttachmentFile($file, $request->nama);
 
             // Hapus file lama jika ada
-            $oldPath = public_path('attachment/' . $lampiran->lampiran);
-            if (file_exists($oldPath)) {
-                unlink($oldPath);
+            if (!empty($lampiran->lampiran) && Storage::disk('attachment')->exists($lampiran->lampiran)) {
+                Storage::disk('attachment')->delete($lampiran->lampiran);
             }
 
-            // Simpan file baru
-            $file->move('attachment', $fileName);
             $lampiran->lampiran = $fileName;
             $lampiran->upload_date = now();
         }
@@ -190,6 +186,21 @@ class LampiranController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('gagalDetail', 'Dokumentasi bantuan gagal disimpan');
         }
+    }
+
+    private function storeAttachmentFile($file, $context = 'lampiran')
+    {
+        $extension = strtolower($file->guessExtension() ?: $file->getClientOriginalExtension() ?: 'bin');
+        $safeContext = preg_replace('/[^a-z0-9]+/i', '-', (string) $context);
+        $safeContext = trim(strtolower($safeContext), '-');
+        if ($safeContext === '') {
+            $safeContext = 'lampiran';
+        }
+
+        $fileName = sprintf('%s-%s-%s.%s', $safeContext, date('YmdHis'), bin2hex(random_bytes(4)), $extension);
+        Storage::disk('attachment')->putFileAs('', $file, $fileName);
+
+        return $fileName;
     }
 
 }
