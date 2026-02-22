@@ -42,7 +42,7 @@ class Handler extends ExceptionHandler
     public function report(Exception $exception)
     {
         if ($this->shouldReport($exception)) {
-            $request = request();
+            $request = app()->bound('request') ? app('request') : null;
             $sessionUser = null;
             if ($request && method_exists($request, 'hasSession') && $request->hasSession()) {
                 $sessionUser = $request->session()->get('user');

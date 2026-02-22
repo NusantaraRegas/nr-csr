@@ -21,11 +21,11 @@
 
     <!-- Page plugins css -->
     <link href="{{ asset('template/dist/css/pages/form-icheck.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/node_modules/clockpicker/dist/jquery-clockpicker.css') }}"
+    <link href="{{ asset('assets/node_modules/clockpicker/dist/jquery-clockpicker.min.css') }}"
         rel="stylesheet">
     <link href="{{ asset('assets/node_modules/footable/css/footable.core.css') }}" rel="stylesheet">
     <!-- Color picker plugins css -->
-    <link href="{{ asset('assets/node_modules/jquery-asColorPicker/dist/css/asColorPicker.css') }}"
+    <link href="{{ asset('assets/node_modules/jquery-asColorPicker-master/css/asColorPicker.css') }}"
         rel="stylesheet">
     <!-- Date picker plugins css -->
     <link href="{{ asset('assets/node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}"
@@ -474,7 +474,7 @@
 
     <!--stickey kit -->
     <script src="{{ asset('assets/node_modules/sticky-kit/dist/sticky-kit.min.js') }}"></script>
-    <script src="{{ asset('assets/node_modules/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/sparkline/jquery.sparkline.min.js') }}"></script>
 
     <!-- This is data table -->
     <script src="{{ asset('assets/node_modules/datatables.net/js/jquery.dataTables.min.js') }}"></script>
@@ -494,11 +494,11 @@
     <!-- Clock Plugin JavaScript -->
     <script src="{{ asset('assets/node_modules/clockpicker/dist/jquery-clockpicker.min.js') }}"></script>
     <!-- Color Picker Plugin JavaScript -->
-    <script src="{{ asset('assets/node_modules/jquery-asColor/dist/jquery-asColor.min.js') }}"></script>
-    <script src="{{ asset('assets/node_modules/jquery-asGradient/dist/jquery-asGradient.min.js') }}">
+    <script src="{{ asset('assets/node_modules/jquery-asColorPicker-master/libs/jquery-asColor.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/jquery-asColorPicker-master/libs/jquery-asGradient.js') }}">
     </script>
     <script
-        src="{{ asset('assets/node_modules/jquery-asColorPicker/dist/jquery-asColorPicker.min.js') }}">
+        src="{{ asset('assets/node_modules/jquery-asColorPicker-master/dist/jquery-asColorPicker.min.js') }}">
     </script>
     <!-- Date Picker Plugin JavaScript -->
     <script src="{{ asset('assets/node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
@@ -523,7 +523,7 @@
 {{-- <script src="{{ asset('assets/node_modules/html5-editor/bootstrap-wysihtml5.js') }}"></script> --}}
 
     <!-- EASY PIE CHART JS -->
-    <script src="{{ asset('assets/node_modules/easy-pie-chart/dist/jquery.easypiechart.min.js') }}">
+    <script src="{{ asset('assets/node_modules/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js') }}">
     </script>
 {{-- <script src="{{ asset('assets/node_modules/jquery.easy-pie-chart/easy-pie-chart.init.js') }}"></script> --}}
 
@@ -532,7 +532,7 @@
 {{-- <script src="{{ asset('assets/node_modules/peity/jquery.peity.init.js') }}"></script> --}}
 
     <!-- Footable -->
-    <script src="{{ asset('assets/node_modules/footable/dist/footable.all.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/footable/js/footable.all.min.js') }}"></script>
     <script src="{{ asset('assets/node_modules/bootstrap-select/dist/js/bootstrap-select.min.js') }}"
         type="text/javascript"></script>
     <!--FooTable init-->

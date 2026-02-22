@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EditSurvei;
 use App\Http\Requests\InsertTanggal;
+use App\Http\Requests\StoreSurveiRequest;
+use App\Http\Requests\UpdateSurveiProposalRequest;
 use App\Models\BASTDana;
 use App\Models\Evaluasi;
 use App\Models\Kelayakan;
@@ -76,25 +78,13 @@ class SurveiController extends Controller
             ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreSurveiRequest $request)
     {
         try {
             $kelayakanID = decrypt($request->kelayakanID);
         } catch (Exception $e) {
             abort(404);
         }
-
-        $request->validate([
-            'bantuan'            => 'required|in:Dana,Barang',
-            'usulan'             => 'required|in:Disarankan,Dipertimbangkan,Tidak Memenuhi Kriteria',
-            'nilaiBantuanAsli'   => 'required|numeric|min:1',
-            'reviewer'           => 'required|string|max:200',
-        ], [
-            'bantuan.required' => 'Jenis bantuan wajib dipilih.',
-            'usulan.required' => 'Rekomendasi/usulan wajib dipilih.',
-            'nilaiBantuanAsli.required' => 'Nilai bantuan asli wajib diisi.',
-            'reviewer.required' => 'Reviewer wajib dipilih.',
-        ]);
 
         // Ambil data kelayakan
         $kelayakan = Kelayakan::find($kelayakanID);
@@ -180,27 +170,13 @@ class SurveiController extends Controller
         }
     }
 
-    public function update(Request $request)
+    public function update(UpdateSurveiProposalRequest $request)
     {
         try {
             $surveiID = decrypt($request->surveiID);
         } catch (Exception $e) {
             abort(404);
         }
-
-        $request->validate([
-            'bantuan'            => 'required|in:Dana,Barang',
-            'usulan'             => 'required|in:Disarankan,Dipertimbangkan,Tidak Memenuhi Kriteria',
-            'nilaiBantuan'       => 'required|string',
-            'nilaiBantuanAsli'   => 'required|numeric|min:1',
-            'reviewer'           => 'required|string|max:200',
-        ], [
-            'bantuan.required' => 'Jenis bantuan wajib dipilih.',
-            'usulan.required' => 'Rekomendasi/usulan wajib dipilih.',
-            'nilaiBantuan.required' => 'Nilai bantuan wajib diisi.',
-            'nilaiBantuanAsli.required' => 'Nilai bantuan asli wajib diisi.',
-            'reviewer.required' => 'Reviewer wajib dipilih.',
-        ]);
 
         $survei = DB::table('tbl_survei')->where('id_survei', $surveiID)->first();
         if (!$survei) {

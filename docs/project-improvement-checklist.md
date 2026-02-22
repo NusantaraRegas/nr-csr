@@ -175,8 +175,8 @@ Suggested evidence: command output, test report, screenshot, logs, PR link.
   - [x] Checklist confirmations include command/test evidence links (see Sections 10 and 11)
 
 ### Phase B (2–4 sprints)
-- [ ] Controller decomposition for top-4 large controllers
-- [ ] Route modularization + FormRequest standardization
+- [x] Controller decomposition for top-4 large controllers
+- [x] Route modularization + FormRequest standardization
 
 ### Phase C (parallel roadmap)
 - [ ] Laravel/PHP upgrade preparation + pilot migration
@@ -813,18 +813,130 @@ This keeps improvement work auditable and reduces regression risk during moderni
 - `app/Actions/SubProposal/StoreSubProposalAction.php`
 - `app/Services/SubProposal/StoreSubProposalService.php`
 - `app/Services/Health/HealthCheckService.php`
+- `app/Services/PaymentReceiverService.php`
 - `app/Support/ApiResponse.php`
 - `config/health.php`
 - `routes/api.php`
+- `routes/web.php`
 - `tests/Feature/ApiResponseContractTest.php`
 - `tests/Feature/HealthCheckEndpointsTest.php`
 - `tests/Feature/ProposalModulePilotExtractionTest.php`
 
 ### Priority 3 residual risks and follow-up
 
-- `/api/dataReceiver` remains legacy HTML option output under API prefix; not part of this Priority 3 slice and should be normalized/moved in follow-up.
-- Queue/mail checks currently validate driver viability + configuration and only perform deep connectivity where feasible (DB/redis); SQS/beanstalk/smtp transport-level probes can be added in a later hardened slice.
-- `APIController::dataProvinsi()` still contains legacy JSON shape but is not wired to active API route in `routes/api.php`; if reused later it should be migrated to `ApiResponse` contract.
+- Legacy compatibility endpoint `/legacy/dataReceiver/options` is intentionally retained for UI `<option>` rendering; API consumers should use `/api/dataReceiver` JSON envelope.
+- SQS/SMTP/Beanstalk transport probes are opt-in by default (`config/health.php`) to avoid local/dev false negatives; production should explicitly enable and tune timeout.
+- `APIController::dataProvinsi()` is now `ApiResponse`-compatible but still not wired in `routes/api.php` (active route remains `WilayahController@getProvinsi`).
+
+### Priority 3 follow-up completion slice (executed 2026-02-22)
+
+#### Scope confirmation
+
+- [x] `/api/dataReceiver` normalization completed with JSON `ApiResponse` envelope.
+- [x] Transport-level probe deepening added for SMTP/SQS/Beanstalk with structured probe logging.
+- [x] Dormant `APIController::dataProvinsi()` migrated to `ApiResponse` contract.
+
+#### A) `/api/dataReceiver` normalization
+
+- Before scan commands/output:
+  - `git show HEAD~1:app/Http/Controllers/APIController.php | rg -n "public function dataReceiver|public function dataProvinsi|echo \\$output|response\\(\\)->json\\(\\['code'" -S`
+    - output highlights: `dataReceiver()` used `echo '<option...>'`; `dataProvinsi()` returned legacy `response()->json(['code' => "200", ...])`.
+  - `git show HEAD~1:routes/web.php | rg -n "legacy/dataReceiver/options" -S`
+    - output: no match.
+
+- After scan commands/output:
+  - `rg -n "public function dataReceiver|public function dataReceiverOptions|DATA_RECEIVER_FETCH_FAILED|public function dataProvinsi|ApiResponse::success\\(\\$result, 'Data provinsi berhasil ditampilkan'" app/Http/Controllers/APIController.php -S`
+    - output highlights:
+      - `dataReceiver(PaymentReceiverService $paymentReceiverService)` now returns `ApiResponse::success(...)` or `ApiResponse::error(..., 502, 'DATA_RECEIVER_FETCH_FAILED')`.
+      - `dataReceiverOptions(...)` added as web-layer HTML adapter.
+      - `dataProvinsi()` returns `ApiResponse::success(...)`.
+  - `rg -n "legacy/dataReceiver/options" routes/web.php -S`
+    - output: `Route::get('/legacy/dataReceiver/options', 'APIController@dataReceiverOptions')->name('legacy.dataReceiver.options');`
+
+- Route parity evidence (touched routes):
+  - Command: `docker compose run --rm php74-pgsql "php artisan route:list --path=dataReceiver"`
+  - Output:
+    - `GET|HEAD api/dataReceiver -> APIController@dataReceiver (middleware: api)`
+    - `GET|HEAD legacy/dataReceiver/options -> APIController@dataReceiverOptions (middleware: web)`
+
+- Contract tests:
+  - Command: `docker compose run --rm php74-pgsql "vendor/bin/phpunit tests/Feature/ApiResponseContractTest.php"`
+  - Output: `OK (9 tests, 61 assertions)`
+  - Coverage highlights:
+    - `/api/dataReceiver` happy-path envelope
+    - `/api/dataReceiver` failure envelope (`DATA_RECEIVER_FETCH_FAILED`)
+    - `/legacy/dataReceiver/options` adapter HTML output
+    - dormant `APIController::dataProvinsi()` contract consistency test
+
+#### B) Health transport probe deepening (SMTP/SQS/Beanstalk)
+
+- Before scan commands/output:
+  - `git show HEAD~1:app/Services/Health/HealthCheckService.php | rg -n "sqs|beanstalkd|smtp|health\\.probe" -S`
+    - output highlights: only config presence checks for SQS/Beanstalk/SMTP; no `health.probe.*` structured events.
+  - `git show HEAD~1:config/health.php | rg -n "probes|timeout_seconds|smtp|sqs|beanstalk" -S`
+    - output: no probe configuration block.
+
+- After scan commands/output:
+  - `rg -n "checkSqsQueue|checkBeanstalkQueue|checkSmtpMail|probeTcpEndpoint|probeHttpEndpoint|probeSmtpAuthentication|health\\.probe\\.(failure|timeout)" app/Services/Health/HealthCheckService.php -S`
+    - output highlights:
+      - SQS HTTP reachability probe (`sqs_http`)
+      - Beanstalk TCP probe (`beanstalk_tcp`)
+      - SMTP TCP + optional auth probe (`smtp_tcp` / `smtp_auth`)
+      - structured logs: `health.probe.failure` and `health.probe.timeout`
+  - `rg -n "probes|timeout_seconds|smtp|sqs|beanstalk" config/health.php -S`
+    - output highlights: probe timeout and per-driver enable flags present.
+
+- Health probe tests:
+  - Command: `docker compose run --rm php74-pgsql "vendor/bin/phpunit tests/Feature/HealthCheckEndpointsTest.php"`
+  - Output: `OK (11 tests, 49 assertions)`
+  - Coverage highlights:
+    - SQS degraded placeholder config
+    - SQS unhealthy transport failure
+    - Beanstalk healthy/unhealthy transport socket cases
+    - SMTP healthy/degraded/unhealthy transport/auth-config cases
+    - structured alert log assertion (`health.probe.failure` + `health.unhealthy`)
+
+- Health endpoint hit outputs (concrete):
+  - Command: inline PHP request runner via `docker compose run --rm -T php74-pgsql "php /dev/stdin"` (configured sqlite in-memory + queue table + mail sendmail)
+  - Output:
+    - `/api/health => HTTP 200 | status=healthy | code=OK`
+    - `/api/health?simulate=queue => HTTP 200 | status=degraded | code=OK`
+    - `/api/health?simulate=db:unhealthy => HTTP 503 | status=unhealthy | code=HEALTH_UNHEALTHY`
+
+- Structured probe log evidence:
+  - Command: `rg -n "health\\.probe\\.(failure|timeout)|health\\.unhealthy|health\\.degraded" storage/logs/laravel.log -S | Select-Object -Last 20`
+  - Output highlights:
+    - `local.ERROR: health.probe.failure {"component":"mail","driver":"smtp","probe":"smtp_tcp",...,"reason":"Connection refused"}`
+    - `local.ERROR: health.unhealthy {..."mail":{"status":"unhealthy","message":"SMTP connection probe failed.",...}}`
+
+#### C) `APIController::dataProvinsi()` migration/reactivation handling
+
+- Implementation:
+  - `APIController::dataProvinsi()` migrated from legacy custom JSON to `ApiResponse::success($result, 'Data provinsi berhasil ditampilkan')`.
+  - Route status remains unchanged: active `/api/dataProvinsi` still points to `WilayahController@getProvinsi`.
+
+- Route status evidence:
+  - Command: `docker compose run --rm php74-pgsql "php artisan route:list --path=dataProvinsi"`
+  - Output highlight: `api/dataProvinsi -> App\Http\Controllers\WilayahController@getProvinsi` (unchanged).
+
+- Contract test evidence:
+  - Included in `tests/Feature/ApiResponseContractTest.php`:
+    - `test_api_controller_data_provinsi_uses_standard_success_envelope_when_reactivated`
+
+#### Follow-up slice impacted files
+
+- `app/Http/Controllers/APIController.php`
+- `app/Services/PaymentReceiverService.php`
+- `app/Services/Health/HealthCheckService.php`
+- `config/health.php`
+- `routes/web.php`
+- `tests/Feature/ApiResponseContractTest.php`
+- `tests/Feature/HealthCheckEndpointsTest.php`
+
+#### Follow-up residual risks / next actions
+
+- Transport probes are disabled by default; deployment config should explicitly enable only relevant drivers and set safe timeout per environment.
+- `/legacy/dataReceiver/options` should be treated as transitional; consumer migration to `/api/dataReceiver` JSON should be tracked.
 
 ## 17) Priority 2 Follow-up Evidence Notes (executed 2026-02-22)
 
@@ -994,3 +1106,99 @@ This keeps improvement work auditable and reduces regression risk during moderni
 - Exact unblock path:
   1. Upgrade runtime to PHP >= 8.0.2 and framework to Laravel >= 9, then move to `larastan/larastan ^2`.
   2. Upgrade runtime/framework further to PHP >= 8.2 and Laravel >= 11, then move to `larastan/larastan ^3` and `phpstan/phpstan ^2.1`.
+
+## 19) Priority 3 Tail Items Evidence Notes (executed 2026-02-22)
+
+### Scope completed
+
+- Environment-safe transport probe rollout controls added with runtime guards + timeout bounds.
+- Legacy endpoint decommission workflow added with phase1 telemetry and phase2 deterministic error behavior.
+- `/api/dataReceiver` JSON contract unchanged.
+
+### Verification commands and outputs
+
+- PHPUnit (health + API adapter tests):
+  - Command:
+    - `docker compose run --rm php74-pgsql "vendor/bin/phpunit tests/Feature/HealthCheckEndpointsTest.php"`
+  - Output:
+    - `OK (18 tests, 75 assertions)`
+  - Command:
+    - `docker compose run --rm php74-pgsql "vendor/bin/phpunit tests/Feature/ApiResponseContractTest.php"`
+  - Output:
+    - `OK (12 tests, 79 assertions)`
+
+- Route list evidence (legacy endpoint enabled vs disabled by config):
+  - Command (phase1/enabled):
+    - `docker compose run --rm php74-pgsql "php artisan route:list --path=legacy/dataReceiver/options --no-ansi"`
+  - Output:
+    - `legacy/dataReceiver/options -> App\Http\Controllers\APIController@dataReceiverOptions`
+  - Command (phase2/disabled):
+    - `docker compose run --rm php74-pgsql "LEGACY_DATA_RECEIVER_OPTIONS_PHASE=phase2 php artisan route:list --path=legacy/dataReceiver/options --no-ansi"`
+  - Output:
+    - `legacy/dataReceiver/options -> App\Http\Controllers\APIController@dataReceiverOptionsDisabled`
+
+- Sample request outputs:
+  - Command:
+    - inline PHP kernel runner via:
+      - `docker compose run --rm -T php74-pgsql "php /dev/stdin"`
+  - Output highlights:
+    - `[health-disabled] HTTP 200 status=healthy`
+    - `[health-one-probe] HTTP 200 status=healthy`
+    - `[health-one-probe] queue_probe=beanstalk_tcp`
+    - `[legacy-enabled] HTTP 200 header=deprecated body_prefix=<option></option><option value="Receiver A"...`
+    - `[legacy-disabled] HTTP 410 code=LEGACY_DATA_RECEIVER_OPTIONS_DECOMMISSIONED endpoint=/legacy/dataReceiver/options`
+
+- Working tree diff evidence:
+  - Command:
+    - `git diff --name-only`
+  - Output:
+    - `README.md`
+    - `app/Http/Controllers/APIController.php`
+    - `app/Services/Health/HealthCheckService.php`
+    - `config/health.php`
+    - `docs/project-improvement-checklist.md`
+    - `routes/web.php`
+    - `tests/Feature/ApiResponseContractTest.php`
+    - `tests/Feature/HealthCheckEndpointsTest.php`
+  - Note:
+    - new file `config/data_receiver.php` appears as untracked (`git status --short`) until staged.
+
+### Rollout plan (operational)
+
+1. Keep `LEGACY_DATA_RECEIVER_OPTIONS_PHASE=phase1` and `LEGACY_DATA_RECEIVER_OPTIONS_ENABLED=true`.
+2. Keep probe guard defaults for local/dev/CI:
+   - `HEALTH_PROBE_ALLOWED_ENVIRONMENTS=production`
+   - `HEALTH_PROBE_ALLOW_NON_PRODUCTION=false`
+   - `HEALTH_PROBE_ALLOW_IN_CI=false`
+3. In production, enable only required transport probes per actual driver and set conservative timeout bounds.
+4. Monitor `legacy.data_receiver_options.deprecated_access` logs until migration window shows zero legacy traffic.
+5. Flip to `LEGACY_DATA_RECEIVER_OPTIONS_PHASE=phase2` for deterministic decommission response.
+
+### Rollback plan
+
+1. Restore legacy adapter availability:
+   - `LEGACY_DATA_RECEIVER_OPTIONS_PHASE=phase1`
+   - `LEGACY_DATA_RECEIVER_OPTIONS_ENABLED=true`
+2. If route/config cache is used, run:
+   - `php artisan config:clear`
+   - `php artisan route:clear`
+3. If transport probes produce false negatives in production, set relevant per-driver toggle(s) back to `false` and review infra reachability before re-enabling.
+
+### Impacted files
+
+- `.env.docker.example`
+- `README.md`
+- `app/Http/Controllers/APIController.php`
+- `app/Services/Health/HealthCheckService.php`
+- `config/data_receiver.php`
+- `config/health.php`
+- `docs/project-improvement-checklist.md`
+- `routes/web.php`
+- `tests/Feature/ApiResponseContractTest.php`
+- `tests/Feature/HealthCheckEndpointsTest.php`
+
+### Residual risks
+
+- Legacy endpoint can still receive traffic in phase1 and depends on external receiver source availability; telemetry must be reviewed before phase2.
+- Probe execution in non-production remains guarded by default; teams must explicitly enable overrides for staging validation.
+- Route-to-action mode switch depends on config at route bootstrap/cache build time; cache clear remains part of operational toggle procedure.

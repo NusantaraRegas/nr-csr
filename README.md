@@ -9,6 +9,7 @@ Laravel 6 (PHP ^7.2) monolith for CSR proposal intake, evaluation/survey workflo
 - [Tech Stack](#tech-stack)
 - [Business / Domain Map](#business--domain-map)
 - [Architecture Overview](#architecture-overview)
+- [Phase B Refactor Summary](#phase-b-refactor-summary)
 - [Key Middleware / Authorization](#key-middleware--authorization)
 - [Initialization / Boot Flow](#initialization--boot-flow)
 - [Getting Started](#getting-started)
@@ -149,6 +150,23 @@ flowchart LR
   Artisan --> LaravelApp
 ```
 
+## Phase B Refactor Summary
+
+Phase B implementation in this repository is now reflected in code:
+
+- Controller decomposition (top 4 large controllers):
+  - `KelayakanController` -> `app/Services/Kelayakan/KelayakanProposalService.php`
+  - `APIController` -> `app/Services/API/ApiPaymentRequestService.php` + `app/Actions/API/StoreApiPaymentRequestAction.php`
+  - `DashboardController` -> `app/Services/Dashboard/DashboardOverviewService.php`
+  - `TasklistSurveiController` -> `app/Services/Tasklist/TasklistSurveiService.php`
+- Route modularization:
+  - Web entrypoint remains `routes/web.php` and now includes `routes/web/legacy.php`, `routes/web/public-auth.php`, `routes/web/public-form.php`, and `routes/web/protected.php`
+  - API entrypoint remains `routes/api.php` and now includes:
+    - `routes/api/wilayah.php`
+    - `routes/api/payment.php`
+    - `routes/api/health.php`
+- FormRequest standardization expanded across major flows (Kelayakan, API payment/realisasi filters, Pekerjaan, Survei, ReportSubsidiary).
+
 ### Key Middleware / Authorization
 
 Route groups use role-based middleware defined in `app/Http/Kernel.php`:
@@ -261,7 +279,7 @@ sequenceDiagram
 
 8. **(Optional) Run tests**
    ```bash
-   vendor/bin/phpunit
+   php artisan test
    ```
 
 ### Docker Setup (PostgreSQL)
@@ -280,12 +298,7 @@ From that dump we generate Laravel migrations (Postgres) under `database/migrati
 
 #### Step-by-Step Docker Setup
 
-1. **Bring up containers**
-   ```bash
-   docker compose up -d --build
-   ```
-
-2. **Create `.env` file**
+1. **Create `.env` file**
    ```bash
    # Windows
    copy .env.docker.example .env
@@ -293,21 +306,30 @@ From that dump we generate Laravel migrations (Postgres) under `database/migrati
    # Linux/macOS
    cp .env.docker.example .env
    ```
-   
-   Generate app key:
+2. **(If needed) reset old Docker state**
+   ```bash
+   docker compose down -v
+   ```
+
+3. **Bring up containers**
+   ```bash
+   docker compose up -d --build
+   ```
+
+4. **Generate app key**
    ```bash
    docker compose exec -T app php artisan key:generate --force
    ```
 
-3. **Install PHP dependencies**
+5. **Install PHP dependencies**
    
    This project includes packages that require extensions used by Oracle (oci8) and Excel exports (gd). If running Postgres-only locally, install dependencies while ignoring platform requirements:
    
    ```bash
-   docker compose exec -T app composer install --no-interaction --ignore-platform-req=ext-gd --ignore-platform-req=ext-oci8
+   docker compose exec -T app composer install --no-interaction --ignore-platform-req=ext-oci8
    ```
 
-4. **Run migrations**
+6. **Run migrations**
    ```bash
    docker compose exec -T app php artisan migrate --force
    ```
@@ -317,14 +339,30 @@ From that dump we generate Laravel migrations (Postgres) under `database/migrati
    docker compose exec -T app php artisan migrate:fresh --force
    ```
 
-5. **(Optional) Verify schema**
+7. **Seed master data and local superadmin**
    
-   List tables created in the NR_CSR schema:
+   Make sure `.env` has:
+   - `DEFAULT_USER_PASSWORD=<your_password>`
+   - `AUTH_LDAP_ENABLED=false` (for local DB login without LDAP fallback)
+   
+   Then run:
    ```bash
-   docker compose exec -T db psql -U nr_csr -d nr_csr -c "SELECT schemaname, tablename FROM pg_tables WHERE schemaname IN ('NR_CSR') ORDER BY tablename;"
+   docker compose exec -T app php artisan db:seed --class=DatabaseSeeder --force
+   ```
+   
+   This seeds:
+   - `tbl_pilar` (PilarSeeder)
+   - `tbl_sdg` (SdgSeeder, TPB 1-17)
+   - local `superadmin` (SuperAdminSeeder)
+
+8. **(Optional) Verify schema**
+   
+   List tables created in the `nr_csr` schema:
+   ```bash
+   docker compose exec -T db psql -U nrcsr_user -d nrcsr_prod -c "SELECT schemaname, tablename FROM pg_tables WHERE schemaname = 'nr_csr' ORDER BY tablename;"
    ```
 
-6. **Access the application**
+9. **Access the application**
    
    Nginx is exposed on:
    ```
@@ -347,7 +385,7 @@ docker compose logs -f app
 docker compose exec app bash
 
 # Access database
-docker compose exec db psql -U nr_csr -d nr_csr
+docker compose exec db psql -U nrcsr_user -d nrcsr_prod
 
 # Rebuild containers
 docker compose up -d --build --force-recreate
@@ -375,6 +413,8 @@ docker compose up -d --build --force-recreate
   - `routes/web/public-form.php`
 - Protected wrapper:
   - `routes/web/protected.php`
+- Legacy compatibility route:
+  - `routes/web/legacy.php`
 - Protected domains:
   - `routes/web/protected/dashboard.php`
   - `routes/web/protected/master.php`
@@ -391,6 +431,12 @@ docker compose up -d --build --force-recreate
   - `routes/web/protected/dokumen-legal.php`
   - `routes/web/protected/profile.php`
   - `routes/web/protected/subsidiary.php`
+
+`routes/api.php` also acts as an entrypoint loader:
+
+- `routes/api/wilayah.php`
+- `routes/api/payment.php`
+- `routes/api/health.php`
 
 ## Project Maintenance
 
@@ -508,12 +554,80 @@ Checks covered:
 - Database connectivity
 - Queue dependency status (healthy/degraded/unhealthy based on driver/runtime conditions)
 - Mail dependency status (healthy/degraded based on driver/configuration)
+- Optional transport-level probes:
+  - SMTP TCP connectivity and optional SMTP auth handshake probe
+  - SQS queue endpoint reachability probe
+  - Beanstalkd socket connectivity probe
+
+Transport probe configuration (`config/health.php`):
+
+- `HEALTH_PROBE_TIMEOUT_SECONDS` (default: `2`)
+- `HEALTH_PROBE_TIMEOUT_MIN_SECONDS` (default: `0.2`)
+- `HEALTH_PROBE_TIMEOUT_MAX_SECONDS` (default: `5`)
+- `HEALTH_PROBE_ALLOWED_ENVIRONMENTS` (default: `production`)
+- `HEALTH_PROBE_ALLOW_NON_PRODUCTION` (default: `false`)
+- `HEALTH_PROBE_ALLOW_IN_CI` (default: `false`)
+- `HEALTH_SMTP_TRANSPORT_PROBE` (default: `false`)
+- `HEALTH_SQS_TRANSPORT_PROBE` (default: `false`)
+- `HEALTH_BEANSTALK_TRANSPORT_PROBE` (default: `false`)
+
+Operational note:
+
+- Local/dev/CI safe default (probes remain skipped even if a toggle is accidentally enabled):
+  - `HEALTH_PROBE_ALLOWED_ENVIRONMENTS=production`
+  - `HEALTH_PROBE_ALLOW_NON_PRODUCTION=false`
+  - `HEALTH_PROBE_ALLOW_IN_CI=false`
+  - keep `HEALTH_SMTP_TRANSPORT_PROBE`, `HEALTH_SQS_TRANSPORT_PROBE`, `HEALTH_BEANSTALK_TRANSPORT_PROBE` as `false`
+- Production rollout example (enable only dependencies actually used by this deployment):
+  - `HEALTH_PROBE_ALLOWED_ENVIRONMENTS=production`
+  - `HEALTH_PROBE_TIMEOUT_SECONDS=1.5`
+  - `HEALTH_PROBE_TIMEOUT_MIN_SECONDS=0.2`
+  - `HEALTH_PROBE_TIMEOUT_MAX_SECONDS=3`
+  - set only needed driver toggles to `true`
+- Timeout guardrails are clamped to min/max bounds to prevent long-hanging probes.
+- When a probe is enabled but required config/infrastructure is missing, health returns explicit degraded metadata (`probe`, `reason`, `probe_requested`) instead of silently failing.
 
 Health tests:
 
 ```bash
 docker compose run --rm php74-pgsql "vendor/bin/phpunit tests/Feature/HealthCheckEndpointsTest.php"
 ```
+
+#### API Receiver Endpoint Transition
+
+- `GET /api/dataReceiver` now returns standard JSON envelope (`ApiResponse`) with receiver data.
+- Legacy HTML option rendering is temporarily available at:
+  - `GET /legacy/dataReceiver/options`
+
+Transition note:
+
+- UI consumers should migrate to `/api/dataReceiver` JSON.
+- Decommission `/legacy/dataReceiver/options` only after all consumers are confirmed migrated.
+
+Legacy endpoint decommission config (`config/data_receiver.php`):
+
+- `LEGACY_DATA_RECEIVER_OPTIONS_ENABLED` (default: `true`)
+- `LEGACY_DATA_RECEIVER_OPTIONS_PHASE`:
+  - `phase1`: endpoint enabled, serves HTML adapter, logs warning telemetry per request (`legacy.data_receiver_options.deprecated_access`)
+  - `phase2`: endpoint disabled, returns deterministic JSON error with `meta.code=LEGACY_DATA_RECEIVER_OPTIONS_DECOMMISSIONED`
+- `LEGACY_DATA_RECEIVER_OPTIONS_DISABLED_STATUS` (default: `410`)
+- `LEGACY_DATA_RECEIVER_OPTIONS_LOG_CHANNEL` (default: `LOG_CHANNEL`)
+- `LEGACY_DATA_RECEIVER_OPTIONS_SUNSET_DATE` (optional response header during phase1)
+
+Migration checklist:
+
+1. Inventory all callers of `/legacy/dataReceiver/options`.
+2. Migrate callers to `/api/dataReceiver` JSON.
+3. Monitor phase1 warning logs for residual callers.
+4. Switch to `phase2` only when usage reaches zero for agreed window.
+5. Keep deterministic error response during phase2 for controlled consumer failure handling.
+
+Rollback:
+
+1. Set `LEGACY_DATA_RECEIVER_OPTIONS_PHASE=phase1`.
+2. Set `LEGACY_DATA_RECEIVER_OPTIONS_ENABLED=true`.
+3. Clear config/route cache if used (`php artisan config:clear && php artisan route:clear`).
+4. Confirm route target returns to `APIController@dataReceiverOptions` via `php artisan route:list --path=legacy/dataReceiver/options`.
 
 #### Proposal Modularization Pilot
 

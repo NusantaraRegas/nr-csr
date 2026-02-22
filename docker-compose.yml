@@ -35,22 +35,19 @@ services:
     volumes:
       - ./:/var/www/html
     environment:
-      APP_ENV: production
-      APP_DEBUG: "false"
-      # Ensure Laravel can encrypt/decrypt cookies (sessions) correctly
-      # so custom middleware (cred.login) sees session('user') after login.
-      APP_KEY: ${APP_KEY}
-      APP_URL: http://tjsl.nusantararegas.com
-      DB_CONNECTION: pgsql
-      DB_HOST: db
-      DB_PORT: 5432
+      APP_ENV: ${APP_ENV:-local}
+      APP_DEBUG: ${APP_DEBUG:-true}
+      APP_URL: ${APP_URL:-http://localhost:8080}
+      DB_CONNECTION: ${DB_CONNECTION:-pgsql}
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-5432}
       DB_DATABASE: nrcsr_prod
       DB_USERNAME: nrcsr_user
-      # Must be provided via environment (.env/.env.docker) and never committed as literal
-      DB_PASSWORD: ${DB_PASSWORD}
-      DEFAULT_USER_PASSWORD: ${DEFAULT_USER_PASSWORD}
-      SESSION_DRIVER: ${SESSION_DRIVER}
-      SESSION_LIFETIME: ${SESSION_LIFETIME}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-nrcsr_dev}
+      DB_SCHEMA: ${DB_SCHEMA:-nr_csr}
+      DEFAULT_USER_PASSWORD: ${DEFAULT_USER_PASSWORD:-nrcsr_dev}
+      SESSION_DRIVER: ${SESSION_DRIVER:-file}
+      SESSION_LIFETIME: ${SESSION_LIFETIME:-120}
     depends_on:
       - db
 
@@ -58,7 +55,7 @@ services:
     image: nginx:1.25-alpine
     container_name: nr_csr_nginx
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ./:/var/www/html
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
@@ -71,8 +68,7 @@ services:
     environment:
       POSTGRES_DB: nrcsr_prod
       POSTGRES_USER: nrcsr_user
-      # Keep aligned with app DB_PASSWORD for the same DB user unless intentionally separated
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nrcsr_dev}
     ports:
       - "5432:5432"
     volumes:

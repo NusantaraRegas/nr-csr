@@ -13,6 +13,8 @@ use App\Models\SPK;
 use App\Models\SPPH;
 use App\Models\Vendor;
 use App\Models\ViewPekerjaan;
+use App\Http\Requests\StorePekerjaanRequest;
+use App\Http\Requests\UpdatePekerjaanRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use DB;
@@ -125,16 +127,8 @@ class PekerjaanController extends Controller
             ]);
     }
 
-    public function store(Request $request)
+    public function store(StorePekerjaanRequest $request)
     {
-        $this->validate($request, [
-            'namaPekerjaan' => 'required',
-            'ringkasan' => 'required',
-            'proker' => 'required',
-            'nilaiPerkiraan' => 'required',
-            'lampiran' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx|max:10240',
-        ]);
-
         $tanggalMenit = date("Y-m-d H:i:s");
         $proker = Proker::where('id_proker', $request->proker)->first();
 
@@ -205,21 +199,13 @@ class PekerjaanController extends Controller
             ]);
     }
 
-    public function update(Request $request)
+    public function update(UpdatePekerjaanRequest $request)
     {
         try {
             $logID = decrypt($request->pekerjaanID);
         } catch (Exception $e) {
             abort(404);
         }
-
-        $this->validate($request, [
-            'namaPekerjaan' => 'required',
-            'ringkasan' => 'required',
-            'proker' => 'required',
-            'nilaiPerkiraan' => 'required',
-            'lampiran' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx|max:10240',
-        ]);
 
         $tanggalMenit = date("Y-m-d H:i:s");
         $proker = Proker::where('id_proker', $request->proker)->first();

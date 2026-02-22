@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(PilarSeeder::class);
+        $this->call(SdgSeeder::class);
 
         // Local dev helper account
         $this->call(SuperAdminSeeder::class);

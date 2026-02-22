@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\Auth\AuthContext;
+use App\Services\Dashboard\DashboardOverviewService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
@@ -28,10 +29,12 @@ class DashboardController extends Controller
      * @var AuthContext
      */
     protected $authContext;
+    protected $dashboardOverviewService;
 
-    public function __construct(AuthContext $authContext)
+    public function __construct(AuthContext $authContext, DashboardOverviewService $dashboardOverviewService)
     {
         $this->authContext = $authContext;
+        $this->dashboardOverviewService = $dashboardOverviewService;
     }
 
     public function home()
@@ -44,146 +47,9 @@ class DashboardController extends Controller
         $perusahaanID = $this->authContext->perusahaanId();
         $tahun = $request->input('tahun', date("Y"));
 
-        // Ambil data perusahaan yang dipilih
-        $company = Perusahaan::findOrFail($perusahaanID);
-
-        $budget = Anggaran::where('id_perusahaan', $perusahaanID)
-            ->where('tahun', $tahun)
-            ->first();
-
-        $realisasi = DB::table('v_pembayaran')
-            ->select(DB::raw('SUM(subtotal) as total'))
-            ->where('tahun', $tahun)
-            ->first(); 
-
-        $totalRealisasi = $realisasi->total ?? 0;
-        $sisa = $budget->nominal - $totalRealisasi;
-
-        $prokerPilar = DB::table('tbl_proker')
-            ->select('pilar', DB::raw('SUM(anggaran) as total'))
-            ->where('id_perusahaan', $perusahaanID)
-            ->where('tahun', $tahun)
-            ->groupBy('pilar')
-            ->get();
-
-        $realisasiPilar = DB::table('v_pembayaran')
-            ->select('pilar', DB::raw('SUM(subtotal) as total'))
-            ->where('tahun', $tahun)
-            ->groupBy('pilar')
-            ->get();
-
-        $prokerPrioritas = DB::table('tbl_proker')
-            ->select('prioritas', DB::raw('SUM(anggaran) as total'))
-            ->where('id_perusahaan', $perusahaanID)
-            ->where('tahun', $tahun)
-            ->groupBy('prioritas')
-            ->get();   
-
-        $realisasiPrioritas = DB::table('v_pembayaran')
-            ->select('prioritas', DB::raw('SUM(subtotal) as total'))
-            ->where('tahun', $tahun)
-            ->groupBy('prioritas')
-            ->get();   
-        
-        $dataRealisasi = DB::table('v_pembayaran')
-            ->selectRaw("TO_CHAR(approve_date, 'MM') as bulan, SUM(subtotal) as total")
-            ->whereRaw("EXTRACT(YEAR FROM approve_date) = ?", [$tahun])
-            ->groupBy(DB::raw("TO_CHAR(approve_date, 'MM')"))
-            ->get();
-
-        $dataTotalPilar = $realisasiPilar->map(function ($row) use ($tahun) {
-            return [
-                'name' => $row->pilar ?: 'Tanpa Pilar',
-                'y'    => (float) $row->total,
-                'url'  => route('indexPembayaran', ['tahun' => $tahun, 'pilar' => $row->pilar]),
-            ];
-        })->toArray();
-
-        $dataTotalPrioritas = $realisasiPrioritas->map(function ($row) use ($tahun) {
-            return [
-                'name' => $row->prioritas ?: 'Tanpa Prioritas',
-                'y'    => (float) $row->total,
-                'url'  => route('indexPembayaran', ['tahun' => $tahun, 'prioritas' => $row->prioritas]),
-            ];
-        })->toArray();
-
-        $bulanIndo = [
-            '01' => 'Jan', '02' => 'Feb', '03' => 'Mar', '04' => 'Apr',
-            '05' => 'Mei', '06' => 'Jun', '07' => 'Jul', '08' => 'Agu',
-            '09' => 'Sep', '10' => 'Okt', '11' => 'Nov', '12' => 'Des'
-        ];
-
-        // Inisialisasi 12 bulan dengan nilai 0
-        $realisasiDefault = collect($bulanIndo)->map(function ($label, $kode) {
-            return [
-                'code' => $kode,
-                'name' => $label,
-                'total' => 0,
-            ];
-        });
-
-        $realisasiPerBulan = $realisasiDefault->map(function ($item) use ($dataRealisasi) {
-            $found = $dataRealisasi->firstWhere('bulan', $item['code']);
-            return [
-                'name' => $item['name'],
-                'y'    => $found ? (float) $found->total : 0
-            ];
-        })->values();
-
-        $dataAnggaran = Anggaran::where('id_perusahaan', $perusahaanID)
-            ->orderByDesc('tahun')
-            ->get();
-        
-        // Anggaran per perusahaan
-        $anggaranAP = DB::table('tbl_anggaran as a')
-            ->join('tbl_perusahaan as p', 'a.id_perusahaan', '=', 'p.id_perusahaan')
-            ->select(
-                'a.id_perusahaan',
-                'p.nama_perusahaan',
-                'a.nominal'
-            )
-            ->where('a.tahun', $tahun)
-            ->whereNotIn('a.id_perusahaan', [1])
-            ->get();
-
-        // Realisasi per perusahaan (di-SUM terlebih dahulu)
-        $realisasiAP = DB::table('tbl_realisasi_ap as r')
-            ->select(
-                'r.id_perusahaan',
-                DB::raw('SUM(r.nilai_bantuan) as nilai_realisasi')
-            )
-            ->where('r.tahun', $tahun)
-            ->groupBy('r.id_perusahaan')
-            ->get()
-            ->keyBy('id_perusahaan'); // supaya mudah diakses
-
-        $categories    = [];
-        $anggaranData  = [];
-        $realisasiData = [];
-
-        foreach ($anggaranAP as $row) {
-            $categories[]   = $row->nama_perusahaan;
-            $anggaranData[] = (int) $row->nominal;
-            $realisasiData[] = isset($realisasiAP[$row->id_perusahaan])
-                ? (int) $realisasiAP[$row->id_perusahaan]->nilai_realisasi
-                : 0;
-        }
-
-        return view('home.dashboard')
-            ->with([
-                'tahun' => $tahun,
-                'anggaran' => $budget->nominal,
-                'perusahaan' => $company,
-                'realisasi' => $totalRealisasi,
-                'sisa' => $sisa,
-                'dataAnggaran' => $dataAnggaran,
-                'dataTotalPilar' => $dataTotalPilar,
-                'dataTotalPrioritas' => $dataTotalPrioritas,
-                'realisasiPerBulan' => $realisasiPerBulan,
-                'categories'    => $categories,
-                'anggaranData'  => $anggaranData,
-                'realisasiData' => $realisasiData,
-            ]);
+        return view('home.dashboard')->with(
+            $this->dashboardOverviewService->build($perusahaanID, $tahun)
+        );
     }
 
     public function postAnnual(PostDashboardAnnualRequest $request, PostDashboardAnnualAction $action)

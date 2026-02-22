@@ -34,9 +34,16 @@ use App\Models\ViewDetailApproval;
 use App\Http\Requests\CariKelayakanBulanRequest;
 use App\Http\Requests\CariKelayakanPeriodeRequest;
 use App\Http\Requests\CariKelayakanTahunRequest;
+use App\Http\Requests\StoreKelayakanRequest;
+use App\Http\Requests\UpdateKelayakanBankRequest;
+use App\Http\Requests\UpdateKelayakanPenerimaRequest;
+use App\Http\Requests\UpdateKelayakanProkerRequest;
+use App\Http\Requests\UpdateKelayakanProposalRequest;
+use App\Http\Requests\UpdateKelayakanRequest;
 use App\Actions\Kelayakan\CariKelayakanBulanAction;
 use App\Actions\Kelayakan\CariKelayakanPeriodeAction;
 use App\Actions\Kelayakan\CariKelayakanTahunAction;
+use App\Services\Kelayakan\KelayakanProposalService;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -193,156 +200,9 @@ class KelayakanController extends Controller
             ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreKelayakanRequest $request, KelayakanProposalService $service)
     {
-        $request->validate([
-            'noAgenda' => 'required|unique:tbl_kelayakan,no_agenda|max:100',
-            'tglPenerimaan' => 'required|date',
-            'pengirim' => 'required',
-            'noSurat' => 'required|max:100',
-            'tglSurat' => 'required|date',
-            'sifat' => 'required',
-            'digunakanUntuk' => 'required|string|max:200',
-            'jenis' => 'required',
-            'dari' => 'required|string|max:150',
-            'alamat' => 'required|string|max:255',
-            'besarPermohonanAsli' => 'required|numeric',
-            'perihal' => 'required|string|max:100',
-            'provinsi' => 'required|string|max:100',
-            'kabupaten' => 'required|string|max:100',
-            'kecamatan' => 'required|string|max:100',
-            'kelurahan' => 'required|string|max:100',
-            'deskripsiBantuan' => 'required|string|max:500',
-            'disposisi' => 'required|file|mimes:pdf',
-            'lampiran' => 'required|file|mimes:pdf',
-        ], [
-            'noAgenda.required' => 'No Agenda harus diisi',
-            'noAgenda.max' => 'No Agenda maksimal 100 karakter',
-            'tglPenerimaan.required' => 'Tanggal penerimaan harus diisi',
-            'tglPenerimaan.date' => 'Format tanggal penerimaan tidak valid',
-            'pengirim.required' => 'Pengirim harus diisi',
-            'noSurat.required' => 'Nomor surat harus diisi',
-            'noSurat.max' => 'Nomor surat maksimal 100 karakter',
-            'tglSurat.required' => 'Tanggal surat harus diisi',
-            'tglSurat.date' => 'Format tanggal surat tidak valid',
-            'sifat.required' => 'Sifat surat harus diisi',
-            'digunakanUntuk.required' => 'Perihal harus diisi',
-            'digunakanUntuk.max' => 'Perihal maksimal 200 karakter',
-            'jenis.required' => 'Jenis proposal harus dipilih',
-            'dari.required' => 'Nama lembaga harus dipilih',
-            'besarPermohonan.required' => 'Besar permohonan harus diisi',
-            'besarPermohonan.regex' => 'Format besar permohonan hanya angka, koma, dan titik',
-            'perihal.required' => 'Kategori bantuan harus diisi',
-            'provinsi.required' => 'Provinsi harus diisi',
-            'kabupaten.required' => 'Kabupaten/Kota harus diisi',
-            'kecamatan.required' => 'Kecamatan harus diisi',
-            'kelurahan.required' => 'Kelurahan harus diisi',
-            'deskripsiBantuan.required' => 'Deskripsi bantuan harus diisi',
-            'deskripsiBantuan.max' => 'Deskripsi maksimal 500 karakter',
-            'disposisi.required' => 'Disposisi wajib diunggah',
-            'disposisi.mimes' => 'Disposisi harus berformat PDF',
-            //'disposisi.max' => 'Ukuran file disposisi maksimal 2MB',
-            'lampiran.required' => 'Proposal/Surat wajib diunggah',
-            'lampiran.mimes' => 'Proposal/Surat harus berformat PDF',
-            //'lampiran.max' => 'Ukuran file Proposal/Surat maksimal 2MB',
-        ]);
-
-        $hirarki = Hirarki::where('id_user', session('user')->id_user)->where('id_level', 1)->first();
-
-        if(empty($hirarki)){
-            return redirect()->back()->with('gagal', "Anda tidak terdaftar sebagai Maker kelayakan proposal")->withInput();
-        }
-
-        try {
-            $lembaga = Lembaga::findOrFail($request->dari);
-
-            $idKelayakan = DB::selectOne("SELECT TBL_KELAYAKAN_ID_KELAYAKAN_SEQ.NEXTVAL AS ID FROM DUAL")->id;
-
-            $dataKelayakan = [
-                'id_kelayakan' => $idKelayakan,
-                'no_agenda' => strtoupper($request->noAgenda),
-                'id_pengirim' => $request->pengirim,
-                'tgl_terima' => date('Y-m-d', strtotime($request->tglPenerimaan)),
-                'sifat' => $request->sifat,
-                'asal_surat' => $lembaga->nama_lembaga,
-                'no_surat' => strtoupper($request->noSurat),
-                'tgl_surat' => date("Y-m-d", strtotime($request->tglSurat)),
-                'perihal' => $request->perihal,
-                'alamat' => $lembaga->alamat,
-                'provinsi' => $request->provinsi,
-                'kabupaten' => $request->kabupaten,
-                'kecamatan' => $request->kecamatan,
-                'kelurahan' => $request->kelurahan,
-                'id_lembaga' => $lembaga->id_lembaga,
-                'pengaju_proposal' => $lembaga->nama_pic,
-                'sebagai' => $lembaga->jabatan,
-                'contact_person' => $lembaga->no_telp,
-                'email_pengaju' => session('user')->email,
-                'nilai_pengajuan' => $request->besarPermohonanAsli,
-                'bantuan_untuk' => $request->digunakanUntuk,
-                'deskripsi' => $request->deskripsiBantuan,
-                'jenis' => $request->jenis,
-                'status' => 'Draft',
-                'create_by' => session('user')->username,
-                'created_date' => now(),
-                'created_by' => session('user')->id_user,
-                'no_rekening' => $lembaga->no_rekening,
-                'atas_nama' => $lembaga->atas_nama,
-                'nama_bank' => $lembaga->nama_bank,
-            ];
-
-            $dataLog = [
-                'id_kelayakan' => $idKelayakan,
-                'keterangan' => 'Input kelayakan proposal',
-                'created_by' => session('user')->id_user,
-                'created_date' => now(),
-            ];
-
-            DB::table('tbl_kelayakan')->insert($dataKelayakan);
-            DB::table('tbl_log')->insert($dataLog);
-
-            // Upload Lampiran
-            if ($request->hasFile('lampiran')) {
-                $lampiran = $request->file('lampiran');
-                $lampiranName = time() . '-' . str_replace(' ', '-', $lampiran->getClientOriginalName());
-                $lampiran->move('attachment', $lampiranName);
-
-                Lampiran::create([
-                    'ID_KELAYAKAN' => $idKelayakan,
-                    'NO_AGENDA' => $request->noAgenda,
-                    'NAMA' => 'Surat Pengantar dan Proposal',
-                    'LAMPIRAN' => $lampiranName,
-                    'UPLOAD_BY' => session('user')->username,
-                    'UPLOAD_DATE' => now(),
-                    'CREATED_BY' => session('user')->id_user,
-                ]);
-            }
-
-            // Upload Disposisi
-            if ($request->hasFile('disposisi')) {
-                $disposisi = $request->file('disposisi');
-                $disposisiName = time() . '-' . str_replace(' ', '-', $disposisi->getClientOriginalName());
-                $disposisi->move('attachment', $disposisiName);
-
-                Lampiran::create([
-                    'ID_KELAYAKAN' => $idKelayakan,
-                    'NO_AGENDA' => $request->noAgenda,
-                    'NAMA' => 'Disposisi',
-                    'LAMPIRAN' => $disposisiName,
-                    'UPLOAD_BY' => session('user')->username,
-                    'UPLOAD_DATE' => now(),
-                    'CREATED_BY' => session('user')->id_user,
-                ]);
-            }
-
-            DB::commit();
-            return redirect()->route('dataKelayakan')->with('sukses', 'Kelayakan proposal berhasil disimpan');
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            report($e); // Log error
-            return redirect()->back()->withInput()->with('gagal', 'Gagal menyimpan data kelayakan');
-        }
+        return $service->store($request);
     }
 
     public function edit($id)
@@ -370,7 +230,7 @@ class KelayakanController extends Controller
             ]);
     }
 
-    public function update(Request $request)
+    public function update(UpdateKelayakanRequest $request, KelayakanProposalService $service)
     {
 
         try {
@@ -379,98 +239,7 @@ class KelayakanController extends Controller
             abort(404);
         }
 
-        $request->validate([
-            'noAgenda' => 'required|max:100',
-            'tglPenerimaan' => 'required|date',
-            'pengirim' => 'required',
-            'noSurat' => 'required|max:100',
-            'tglSurat' => 'required|date',
-            'sifat' => 'required',
-            'jenis' => 'required',
-            'digunakanUntuk' => 'required|string|max:200',
-            'dari' => 'required|string|max:150',
-            'alamat' => 'required|string|max:255',
-            'besarPermohonanAsli' => 'required|numeric',
-            'perihal' => 'required|string|max:100',
-            'provinsi' => 'required|string|max:100',
-            'kabupaten' => 'required|string|max:100',
-            'kecamatan' => 'required|string|max:100',
-            'kelurahan' => 'required|string|max:100',
-            'deskripsiBantuan' => 'required|string|max:500',
-        ], [
-            'noAgenda.required' => 'No Agenda harus diisi',
-            'noAgenda.max' => 'No Agenda maksimal 100 karakter',
-            'tglPenerimaan.required' => 'Tanggal penerimaan harus diisi',
-            'tglPenerimaan.date' => 'Format tanggal penerimaan tidak valid',
-            'pengirim.required' => 'Pengirim harus diisi',
-            'noSurat.required' => 'Nomor surat harus diisi',
-            'noSurat.max' => 'Nomor surat maksimal 100 karakter',
-            'tglSurat.required' => 'Tanggal surat harus diisi',
-            'tglSurat.date' => 'Format tanggal surat tidak valid',
-            'sifat.required' => 'Sifat surat harus diisi',
-            'digunakanUntuk.required' => 'Perihal harus diisi',
-            'digunakanUntuk.max' => 'Perihal maksimal 200 karakter',
-            'jenis.required' => 'Jenis proposal harus dipilih',
-            'dari.required' => 'Nama lembaga harus dipilih',
-            'besarPermohonan.required' => 'Besar permohonan harus diisi',
-            'besarPermohonan.regex' => 'Format besar permohonan hanya angka, koma, dan titik',
-            'perihal.required' => 'Kategori bantuan harus diisi',
-            'provinsi.required' => 'Provinsi harus diisi',
-            'kabupaten.required' => 'Kabupaten/Kota harus diisi',
-            'kecamatan.required' => 'Kecamatan harus diisi',
-            'kelurahan.required' => 'Kelurahan harus diisi',
-            'deskripsiBantuan.required' => 'Deskripsi bantuan harus diisi',
-            'deskripsiBantuan.max' => 'Deskripsi maksimal 500 karakter',
-        ]);
-
-        try {
-            $lembaga = Lembaga::findOrFail($request->dari);
-
-            $dataKelayakan = [
-                'no_agenda' => strtoupper($request->noAgenda),
-                'id_pengirim' => $request->pengirim,
-                'tgl_terima' => date('Y-m-d', strtotime($request->tglPenerimaan)),
-                'sifat' => $request->sifat,
-                'asal_surat' => $lembaga->nama_lembaga,
-                'no_surat' => strtoupper($request->noSurat),
-                'tgl_surat' => date("Y-m-d", strtotime($request->tglSurat)),
-                'perihal' => $request->perihal,
-                'alamat' => $lembaga->alamat,
-                'provinsi' => $request->provinsi,
-                'kabupaten' => $request->kabupaten,
-                'kecamatan' => $request->kecamatan,
-                'kelurahan' => $request->kelurahan,
-                'id_lembaga' => $lembaga->id_lembaga,
-                'pengaju_proposal' => $lembaga->nama_pic,
-                'sebagai' => $lembaga->jabatan,
-                'contact_person' => $lembaga->no_telp,
-                'email_pengaju' => session('user')->email,
-                'nilai_pengajuan' => $request->besarPermohonanAsli,
-                'bantuan_untuk' => $request->digunakanUntuk,
-                'deskripsi' => $request->deskripsiBantuan,
-                'jenis' => $request->jenis,
-                'no_rekening' => $lembaga->no_rekening,
-                'atas_nama' => $lembaga->atas_nama,
-                'nama_bank' => $lembaga->nama_bank,
-            ];
-
-            $dataLog = [
-                'id_kelayakan' => $kelayakanID,
-                'keterangan' => 'Edit kelayakan proposal',
-                'created_by' => session('user')->id_user,
-                'created_date' => now(),
-            ];
-
-            DB::table('tbl_kelayakan')->where('id_kelayakan', $kelayakanID)->update($dataKelayakan);
-            DB::table('tbl_log')->insert($dataLog);
-            DB::commit();
-            return redirect()->route('dataKelayakan')->with('sukses', 'Kelayakan proposal berhasil diubah');
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            report($e);
-            return redirect()->back()->withInput()->with('gagal', 'Gagal merubah data kelayakan');
-        }
+        return $service->update($kelayakanID, $request);
     }
 
     private function romanMonth(int $n): string {
@@ -786,143 +555,29 @@ class KelayakanController extends Controller
             ]);
     }
 
-    public function updateProposal(Request $request)
+    public function updateProposal(UpdateKelayakanProposalRequest $request, KelayakanProposalService $service)
     {
-
         try {
             $kelayakanID = decrypt($request->kelayakanID);
         } catch (Exception $e) {
             abort(404);
         }
 
-        $request->validate([
-            'noAgenda' => 'required|max:100',
-            'tglPenerimaan' => 'required|date',
-            'pengirim' => 'required',
-            'noSurat' => 'required|max:100',
-            'tglSurat' => 'required|date',
-            'sifat' => 'required',
-            'digunakanUntuk' => 'required|string|max:200',
-            'jenis' => 'required',
-        ], [
-            'noAgenda.required' => 'No Agenda harus diisi',
-            'noAgenda.max' => 'No Agenda maksimal 100 karakter',
-            'tglPenerimaan.required' => 'Tanggal penerimaan harus diisi',
-            'tglPenerimaan.date' => 'Format tanggal penerimaan tidak valid',
-            'pengirim.required' => 'Pengirim harus diisi',
-            'noSurat.required' => 'Nomor surat harus diisi',
-            'noSurat.max' => 'Nomor surat maksimal 100 karakter',
-            'tglSurat.required' => 'Tanggal surat harus diisi',
-            'tglSurat.date' => 'Format tanggal surat tidak valid',
-            'sifat.required' => 'Sifat surat harus diisi',
-            'digunakanUntuk.required' => 'Perihal harus diisi',
-            'digunakanUntuk.max' => 'Perihal maksimal 200 karakter',
-            'jenis.required' => 'Jenis proposal harus dipilih',
-        ]);
-
-        try {
-            $dataKelayakan = [
-                'no_agenda' => strtoupper($request->noAgenda),
-                'id_pengirim' => $request->pengirim,
-                'tgl_terima' => date('Y-m-d', strtotime($request->tglPenerimaan)),
-                'sifat' => $request->sifat,
-                'no_surat' => strtoupper($request->noSurat),
-                'tgl_surat' => date("Y-m-d", strtotime($request->tglSurat)),
-                'bantuan_untuk' => $request->digunakanUntuk,
-                'jenis' => $request->jenis,
-            ];
-
-            $dataLog = [
-                'id_kelayakan' => $kelayakanID,
-                'keterangan' => 'Edit surat/proposal',
-                'created_by' => session('user')->id_user,
-                'created_date' => now(),
-            ];
-
-            DB::table('tbl_kelayakan')->where('id_kelayakan', $kelayakanID)->update($dataKelayakan);
-            DB::table('tbl_log')->insert($dataLog);
-            DB::commit();
-            return redirect()->back()->with('suksesDetail', 'Surat/proposal berhasil diperbarui');
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            report($e);
-            return redirect()->back()->withInput()->with('gagalDetail', 'Gagal memperbarui data surat/proposal');
-        }
+        return $service->updateProposal($kelayakanID, $request);
     }
 
-    public function updatePenerima(Request $request)
+    public function updatePenerima(UpdateKelayakanPenerimaRequest $request, KelayakanProposalService $service)
     {
-
         try {
             $kelayakanID = decrypt($request->kelayakanID);
         } catch (Exception $e) {
             abort(404);
         }
 
-        $request->validate([
-            'dari' => 'required|string|max:150',
-            'alamat' => 'required|string|max:255',
-            'besarPermohonanAsli' => 'required|numeric',
-            'perihal' => 'required|string|max:100',
-            'provinsi' => 'required|string|max:100',
-            'kabupaten' => 'required|string|max:100',
-            'kecamatan' => 'required|string|max:100',
-            'kelurahan' => 'required|string|max:100',
-            'deskripsiBantuan' => 'required|string|max:500',
-        ], [
-            'dari.required' => 'Nama lembaga harus dipilih',
-            'besarPermohonanAsli.required' => 'Besar permohonan harus diisi',
-            'besarPermohonanAsli.regex' => 'Format besar permohonan hanya angka, koma, dan titik',
-            'perihal.required' => 'Kategori bantuan harus diisi',
-            'provinsi.required' => 'Provinsi harus diisi',
-            'kabupaten.required' => 'Kabupaten/Kota harus diisi',
-            'kecamatan.required' => 'Kecamatan harus diisi',
-            'kelurahan.required' => 'Kelurahan harus diisi',
-            'deskripsiBantuan.required' => 'Deskripsi bantuan harus diisi',
-            'deskripsiBantuan.max' => 'Deskripsi maksimal 500 karakter',
-        ]);
-
-        try {
-            $lembaga = Lembaga::findOrFail($request->dari);
-
-            $dataKelayakan = [
-                'perihal' => $request->perihal,
-                'alamat' => $lembaga->alamat,
-                'provinsi' => $request->provinsi,
-                'kabupaten' => $request->kabupaten,
-                'kecamatan' => $request->kecamatan,
-                'kelurahan' => $request->kelurahan,
-                'id_lembaga' => $lembaga->id_lembaga,
-                'pengaju_proposal' => $lembaga->nama_pic,
-                'sebagai' => $lembaga->jabatan,
-                'contact_person' => $lembaga->no_telp,
-                'email_pengaju' => session('user')->email,
-                'nilai_pengajuan' => $request->besarPermohonanAsli,
-                'deskripsi' => $request->deskripsiBantuan,
-            ];
-
-            $dataLog = [
-                'id_kelayakan' => $kelayakanID,
-                'keterangan' => 'Edit penerima manfaat',
-                'created_by' => session('user')->id_user,
-                'created_date' => now(),
-            ];
-
-            DB::table('tbl_kelayakan')->where('id_kelayakan', $kelayakanID)->update($dataKelayakan);
-            DB::table('tbl_log')->insert($dataLog);
-
-            DB::commit();
-            return redirect()->back()->with('suksesDetail', 'Penerima manfaat berhasil diperbarui');
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            report($e);
-            return redirect()->back()->withInput()->with('gagalDetail', 'Gagal memperbarui data penerima manfaat');
-        }
+        return $service->updatePenerima($kelayakanID, $request);
     }
 
-    public function updateBank(Request $request)
+    public function updateBank(UpdateKelayakanBankRequest $request, KelayakanProposalService $service)
     {
         try {
             $kelayakanID = decrypt($request->kelayakanID);
@@ -930,41 +585,10 @@ class KelayakanController extends Controller
             abort(404);
         }
 
-        $request->validate([
-            'namaBank' => 'required',
-            'noRekening' => 'required|numeric',
-            'atasNama' => 'required|max:100|min:3',
-        ], [
-            'namaBank.required'  => 'Nama bank harus diisi',
-            'noRekening.required' => 'No rekening harus diisi',
-            'atasNama.required'  => 'Atas nama harus diisi',
-            'atasNama.max' => 'Atas nama maksimal 100 karakter',
-            'atasNama.min' => 'Atas nama minimal 3 karakter',
-        ]);
-
-        $dataBank = [
-            'nama_bank' => $request->namaBank,
-            'atas_nama' => $request->atasNama,
-            'no_rekening' => $request->noRekening,
-        ];
-
-        $dataLog = [
-            'id_kelayakan' => $kelayakanID,
-            'keterangan' => 'Edit informasi bank',
-            'created_by' => session('user')->id_user,
-            'created_date' => now(),
-        ];
-
-       try {
-            Kelayakan::where('id_kelayakan', $kelayakanID)->update($dataBank);
-            DB::table('tbl_log')->insert($dataLog);
-            return redirect()->back()->with('suksesDetail', 'Informasi bank berhasil diperbarui');
-       } catch (Exception $e) {
-            return redirect()->back()->with('gagalDetail', 'Gagal memperbarui data informasi bank');
-       }
+        return $service->updateBank($kelayakanID, $request);
     }
 
-    public function updateProker(Request $request)
+    public function updateProker(UpdateKelayakanProkerRequest $request, KelayakanProposalService $service)
     {
         try {
             $kelayakanID = decrypt($request->kelayakanID);
@@ -972,42 +596,7 @@ class KelayakanController extends Controller
             abort(404);
         }
 
-        $request->validate([
-            'prokerID' => 'required',
-            'pilar' => 'required|max:100',
-            'tpb' => 'required|max:200',
-        ], [
-            'prokerID.required'  => 'Program kerja harus dipilih',
-            'pilar.required' => 'Pilar harus diisi',
-            'tpb.required'  => 'TPB harus diisi',
-        ]);
-
-        $proker = Proker::findOrFail($request->prokerID);
-
-        if (!$proker) {
-            return redirect()->back()->with('gagalDetail', 'Data Program kerja tidak ditemukan.');
-        }
-
-        $dataProker = [
-            'id_proker' => $request->prokerID,
-            'pilar' => $request->pilar,
-            'tpb' => $request->tpb,
-        ];
-
-        $dataLog = [
-            'id_kelayakan' => $kelayakanID,
-            'keterangan' => 'Edit Program Kerja',
-            'created_by' => session('user')->id_user,
-            'created_date' => now(),
-        ];
-
-       try {
-            Kelayakan::where('id_kelayakan', $kelayakanID)->update($dataProker);
-            DB::table('tbl_log')->insert($dataLog);
-            return redirect()->back()->with('suksesDetail', 'Program kerja berhasil diperbarui');
-       } catch (Exception $e) {
-            return redirect()->back()->with('gagalDetail', 'Gagal memperbarui data program kerja');
-       }
+        return $service->updateProker($kelayakanID, $request);
     }
     public function submit(Request $request)
     {
@@ -3330,10 +2919,17 @@ class KelayakanController extends Controller
 
     public function dataTPB($pilar)
     {
-        $data = DB::table('TBL_SDG')
-            ->where('pilar', $pilar)
-            ->orderBy('id_sdg', 'ASC')
-            ->get();
+        $data = DB::table('tbl_sdg')
+            ->select('id_sdg', 'kode', 'nama')
+            ->get()
+            ->sortBy(function ($row) {
+                $kodeSort = is_numeric((string) $row->kode)
+                    ? str_pad((string) ((int) $row->kode), 6, '0', STR_PAD_LEFT)
+                    : '999999';
+
+                return $kodeSort . '-' . str_pad((string) $row->id_sdg, 10, '0', STR_PAD_LEFT);
+            })
+            ->values();
 
         $output = [];
 
@@ -3349,7 +2945,7 @@ class KelayakanController extends Controller
 
     public function dataIndikator($tpb)
     {
-        $data = DB::table('TBL_SUB_PILAR')->select('kode_indikator', 'keterangan')
+        $data = DB::table('tbl_sub_pilar')->select('kode_indikator', 'keterangan')
             ->where('tpb', $tpb)
 //            ->groupBy('kode_indikator')
             ->orderBy('kode_indikator', 'ASC')
