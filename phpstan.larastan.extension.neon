@@ -1,36 +1,36 @@
 parameters:
     stubFiles:
-        - vendor/nunomaduro/larastan/stubs/Enumerable.stub
-        - vendor/nunomaduro/larastan/stubs/EloquentBuilder.stub
-        - vendor/nunomaduro/larastan/stubs/Collection.stub
-        - vendor/nunomaduro/larastan/stubs/EloquentCollection.stub
-        - vendor/nunomaduro/larastan/stubs/Factory.stub
-        - vendor/nunomaduro/larastan/stubs/Model.stub
-        - vendor/nunomaduro/larastan/stubs/Gate.stub
-        - vendor/nunomaduro/larastan/stubs/Relation.stub
-        - vendor/nunomaduro/larastan/stubs/BelongsTo.stub
-        - vendor/nunomaduro/larastan/stubs/BelongsToMany.stub
-        - vendor/nunomaduro/larastan/stubs/HasOneOrMany.stub
-        - vendor/nunomaduro/larastan/stubs/HasMany.stub
-        - vendor/nunomaduro/larastan/stubs/HasOne.stub
-        - vendor/nunomaduro/larastan/stubs/HasOneThrough.stub
-        - vendor/nunomaduro/larastan/stubs/HasManyThrough.stub
-        - vendor/nunomaduro/larastan/stubs/Mailable.stub
-        - vendor/nunomaduro/larastan/stubs/MorphOne.stub
-        - vendor/nunomaduro/larastan/stubs/MorphOneOrMany.stub
-        - vendor/nunomaduro/larastan/stubs/MorphTo.stub
-        - vendor/nunomaduro/larastan/stubs/MorphToMany.stub
-        - vendor/nunomaduro/larastan/stubs/MorphMany.stub
-        - vendor/nunomaduro/larastan/stubs/Helpers.stub
-        - vendor/nunomaduro/larastan/stubs/HigherOrderProxies.stub
-        - vendor/nunomaduro/larastan/stubs/QueryBuilder.stub
-        - vendor/nunomaduro/larastan/stubs/Facades.stub
-        - vendor/nunomaduro/larastan/stubs/Pagination.stub
-        - vendor/nunomaduro/larastan/stubs/Contracts/Pagination.stub
-        - vendor/nunomaduro/larastan/stubs/Contracts/Support.stub
-        - vendor/nunomaduro/larastan/stubs/Redis/Connection.stub
-        - vendor/nunomaduro/larastan/stubs/Logger.stub
-        - vendor/nunomaduro/larastan/stubs/EnumeratesValues.stub
+        - vendor/larastan/larastan/stubs/Enumerable.stub
+        - vendor/larastan/larastan/stubs/EloquentBuilder.stub
+        - vendor/larastan/larastan/stubs/Collection.stub
+        - vendor/larastan/larastan/stubs/EloquentCollection.stub
+        - vendor/larastan/larastan/stubs/Factory.stub
+        - vendor/larastan/larastan/stubs/Model.stub
+        - vendor/larastan/larastan/stubs/Gate.stub
+        - vendor/larastan/larastan/stubs/Relation.stub
+        - vendor/larastan/larastan/stubs/BelongsTo.stub
+        - vendor/larastan/larastan/stubs/BelongsToMany.stub
+        - vendor/larastan/larastan/stubs/HasOneOrMany.stub
+        - vendor/larastan/larastan/stubs/HasMany.stub
+        - vendor/larastan/larastan/stubs/HasOne.stub
+        - vendor/larastan/larastan/stubs/HasOneThrough.stub
+        - vendor/larastan/larastan/stubs/HasManyThrough.stub
+        - vendor/larastan/larastan/stubs/Mailable.stub
+        - vendor/larastan/larastan/stubs/MorphOne.stub
+        - vendor/larastan/larastan/stubs/MorphOneOrMany.stub
+        - vendor/larastan/larastan/stubs/MorphTo.stub
+        - vendor/larastan/larastan/stubs/MorphToMany.stub
+        - vendor/larastan/larastan/stubs/MorphMany.stub
+        - vendor/larastan/larastan/stubs/Helpers.stub
+        - vendor/larastan/larastan/stubs/HigherOrderProxies.stub
+        - vendor/larastan/larastan/stubs/QueryBuilder.stub
+        - vendor/larastan/larastan/stubs/Facades.stub
+        - vendor/larastan/larastan/stubs/Pagination.stub
+        - vendor/larastan/larastan/stubs/Contracts/Pagination.stub
+        - vendor/larastan/larastan/stubs/Contracts/Support.stub
+        - vendor/larastan/larastan/stubs/Redis/Connection.stub
+        - vendor/larastan/larastan/stubs/Logger.stub
+        - vendor/larastan/larastan/stubs/EnumeratesValues.stub
     universalObjectCratesClasses:
         - Illuminate\Http\Request
     earlyTerminatingFunctionCalls:
@@ -41,7 +41,7 @@ parameters:
     mixinExcludeClasses:
         - Eloquent
     bootstrapFiles:
-        - vendor/nunomaduro/larastan/bootstrap.php
+        - vendor/larastan/larastan/bootstrap.php
     checkOctaneCompatibility: false
     noModelMake: true
     noUnnecessaryCollectionCall: true

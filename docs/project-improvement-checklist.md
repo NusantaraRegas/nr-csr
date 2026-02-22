@@ -910,3 +910,87 @@ This keeps improvement work auditable and reduces regression risk during moderni
 
 - `nunomaduro/larastan` remains legacy/abandoned in this Laravel 6 line; warning is removed at project config layer, but package-line migration to `larastan/larastan` remains blocked by framework/runtime constraints.
 - PHP-CS-Fixer is now on maintained v3 baseline; resolved version (`v3.4.0`) is intentionally compatibility-bound to current legacy dependency stack.
+
+## 18) Priority 2 Follow-up Evidence Notes (executed 2026-02-22)
+
+### P2-F3 Larastan package-line migration (`nunomaduro/larastan` -> `larastan/larastan`)
+
+- Scope guard:
+  - Focused only on remaining P2 Larastan package-line debt.
+  - No PHPStan level/path changes, no broad framework/runtime upgrade.
+
+- Compatibility constraint evidence (exact commands + outputs):
+  - Before direct dependencies:
+    - Command: `docker compose run --rm php74-pgsql "vendor/bin/composer show --direct"`
+    - Output relevant lines:
+      - `nunomaduro/larastan 1.0.3`
+      - `phpstan/phpstan 1.12.32`
+      - `laravel/framework v6.20.16`
+  - Target compatibility checks:
+    - Command: `docker compose run --rm php74-pgsql "vendor/bin/composer why-not larastan/larastan 2.11.2"`
+    - Output highlights:
+      - requires `php ^8.0.2` (installed: `7.4.33`)
+      - requires `illuminate/* ^9.52.20 || ^10.48.28 || ^11.41.3` (project locked to Laravel 6 line)
+    - Command: `docker compose run --rm php74-pgsql "vendor/bin/composer why-not larastan/larastan 3.9.2"`
+    - Output highlights:
+      - requires `php ^8.2` (installed: `7.4.33`)
+      - requires `illuminate/* ^11.44.2 || ^12.4.1`
+      - requires `phpstan/phpstan ^2.1.32` (project constraint: `^1.10`, lock `1.12.32`)
+    - Command: `docker compose run --rm php74-pgsql "vendor/bin/composer why-not larastan/larastan 1.0.4"`
+    - Output highlight:
+      - `larastan/larastan 1.0.4` requires `phpstan/phpstan ^1.0 <1.9`, conflicts with project `^1.10`.
+
+- Smallest viable migration implemented:
+  - `composer.json`: replaced `nunomaduro/larastan: ^1.0` with `larastan/larastan: 1.0.3` (pin required to keep current PHPStan `1.12.32`).
+  - `phpstan.larastan.extension.neon`: updated all Larastan stub/bootstrap paths from `vendor/nunomaduro/larastan/...` to `vendor/larastan/larastan/...` to preserve existing sanitized-extension behavior.
+  - `composer.lock`: removed `nunomaduro/larastan`, added `larastan/larastan 1.0.3`.
+
+- After direct dependencies:
+  - Command: `docker compose run --rm php74-pgsql "vendor/bin/composer show --direct"`
+  - Output relevant lines:
+    - `larastan/larastan 1.0.3`
+    - `phpstan/phpstan 1.12.32`
+    - `laravel/framework v6.20.16`
+
+- Static gate behavior verification:
+  - Command: `docker compose run --rm php74-pgsql "vendor/bin/composer run quality:static"`
+  - Output: `[OK] No errors`
+  - Confirmation: no Larastan deprecated-option warning output.
+
+- Full local sequence verification:
+  - Command:
+    - `docker compose run --rm php74-pgsql "vendor/bin/composer run security:guardrail && vendor/bin/composer run quality:static && vendor/bin/composer run quality:style && vendor/bin/composer run quality:test:critical"`
+  - Output highlights:
+    - `Hardcoded-secret guardrail passed (no obvious literals found).`
+    - `[OK] No errors` (PHPStan)
+    - style dry-run clean
+    - `OK (48 tests, 118 assertions)`
+
+- File diff evidence:
+  - Command: `git diff --name-only`
+  - Output:
+    - `composer.json`
+    - `composer.lock`
+    - `docs/project-improvement-checklist.md`
+    - `phpstan.larastan.extension.neon`
+
+- Lockfile churn rationale (constrained, compatibility-driven):
+  - Mandatory debt fix:
+    - removed `nunomaduro/larastan 1.0.3` (abandoned package line)
+    - added `larastan/larastan 1.0.3` (replacement package line)
+  - Secondary transitive churn during solve/install:
+    - `composer/composer: 2.2.26 -> 2.1.14`
+    - `composer/pcre: 1.0.1 -> 3.3.2`
+    - `composer/semver: 3.4.3 -> 3.4.4`
+    - `composer/xdebug-handler: 2.0.5 -> 2.0.2`
+    - `symfony/polyfill-(ctype|intl-normalizer|mbstring|php73|php80|php81): v1.31.0 -> v1.33.0`
+  - Laravel/framework major/minor line remained unchanged (`v6.20.16`).
+
+### Residual risks / exact next actions
+
+- Current stack cannot move to supported Larastan `2.x/3.x` without runtime/framework modernization:
+  - `2.x` requires at least PHP 8.0.2 and Laravel 9+.
+  - `3.x` requires at least PHP 8.2, Laravel 11/12, and PHPStan 2.x.
+- Exact unblock path:
+  1. Upgrade runtime to PHP >= 8.0.2 and framework to Laravel >= 9, then move to `larastan/larastan ^2`.
+  2. Upgrade runtime/framework further to PHP >= 8.2 and Laravel >= 11, then move to `larastan/larastan ^3` and `phpstan/phpstan ^2.1`.

@@ -430,6 +430,8 @@ It runs these checks on push/PR in this order:
 Tooling baseline notes:
 
 - PHPStan/Larastan runs through `phpstan.neon.dist` with local include `phpstan.larastan.extension.neon` to avoid legacy deprecated-option noise from vendor defaults.
+- Larastan dependency line has been migrated to `larastan/larastan` and pinned to `1.0.3` for current Laravel 6 / PHP 7.4 / PHPStan 1.x compatibility.
+- Larastan `2.x/3.x` requires newer PHP/Laravel lines and is tracked as a dependency-roadmap follow-up in `docs/dependency-hygiene-plan.md`.
 - PHP-CS-Fixer baseline is on v3 (`friendsofphp/php-cs-fixer`).
 
 Local equivalent command set (runtime-compatible in this repository):

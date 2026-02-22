@@ -14,6 +14,8 @@ composer-setup.php
 # Composer
 composer.phar
 auth.json
+composer.local.json
+composer.local.lock
 
 # Laravel IDE Helper (auto-generated)
 _ide_helper.php
