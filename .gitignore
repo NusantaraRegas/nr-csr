@@ -60,6 +60,9 @@ clover.xml
 # Compiled framework cache
 /bootstrap/cache/*.php
 
+# Keep committed operational config files trackable
+!config/data_receiver.php
+
 ############################
 # Node / Frontend
 ############################

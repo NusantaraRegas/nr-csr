@@ -1106,3 +1106,99 @@ This keeps improvement work auditable and reduces regression risk during moderni
 - Exact unblock path:
   1. Upgrade runtime to PHP >= 8.0.2 and framework to Laravel >= 9, then move to `larastan/larastan ^2`.
   2. Upgrade runtime/framework further to PHP >= 8.2 and Laravel >= 11, then move to `larastan/larastan ^3` and `phpstan/phpstan ^2.1`.
+
+## 19) Priority 3 Tail Items Evidence Notes (executed 2026-02-22)
+
+### Scope completed
+
+- Environment-safe transport probe rollout controls added with runtime guards + timeout bounds.
+- Legacy endpoint decommission workflow added with phase1 telemetry and phase2 deterministic error behavior.
+- `/api/dataReceiver` JSON contract unchanged.
+
+### Verification commands and outputs
+
+- PHPUnit (health + API adapter tests):
+  - Command:
+    - `docker compose run --rm php74-pgsql "vendor/bin/phpunit tests/Feature/HealthCheckEndpointsTest.php"`
+  - Output:
+    - `OK (18 tests, 75 assertions)`
+  - Command:
+    - `docker compose run --rm php74-pgsql "vendor/bin/phpunit tests/Feature/ApiResponseContractTest.php"`
+  - Output:
+    - `OK (12 tests, 79 assertions)`
+
+- Route list evidence (legacy endpoint enabled vs disabled by config):
+  - Command (phase1/enabled):
+    - `docker compose run --rm php74-pgsql "php artisan route:list --path=legacy/dataReceiver/options --no-ansi"`
+  - Output:
+    - `legacy/dataReceiver/options -> App\Http\Controllers\APIController@dataReceiverOptions`
+  - Command (phase2/disabled):
+    - `docker compose run --rm php74-pgsql "LEGACY_DATA_RECEIVER_OPTIONS_PHASE=phase2 php artisan route:list --path=legacy/dataReceiver/options --no-ansi"`
+  - Output:
+    - `legacy/dataReceiver/options -> App\Http\Controllers\APIController@dataReceiverOptionsDisabled`
+
+- Sample request outputs:
+  - Command:
+    - inline PHP kernel runner via:
+      - `docker compose run --rm -T php74-pgsql "php /dev/stdin"`
+  - Output highlights:
+    - `[health-disabled] HTTP 200 status=healthy`
+    - `[health-one-probe] HTTP 200 status=healthy`
+    - `[health-one-probe] queue_probe=beanstalk_tcp`
+    - `[legacy-enabled] HTTP 200 header=deprecated body_prefix=<option></option><option value="Receiver A"...`
+    - `[legacy-disabled] HTTP 410 code=LEGACY_DATA_RECEIVER_OPTIONS_DECOMMISSIONED endpoint=/legacy/dataReceiver/options`
+
+- Working tree diff evidence:
+  - Command:
+    - `git diff --name-only`
+  - Output:
+    - `README.md`
+    - `app/Http/Controllers/APIController.php`
+    - `app/Services/Health/HealthCheckService.php`
+    - `config/health.php`
+    - `docs/project-improvement-checklist.md`
+    - `routes/web.php`
+    - `tests/Feature/ApiResponseContractTest.php`
+    - `tests/Feature/HealthCheckEndpointsTest.php`
+  - Note:
+    - new file `config/data_receiver.php` appears as untracked (`git status --short`) until staged.
+
+### Rollout plan (operational)
+
+1. Keep `LEGACY_DATA_RECEIVER_OPTIONS_PHASE=phase1` and `LEGACY_DATA_RECEIVER_OPTIONS_ENABLED=true`.
+2. Keep probe guard defaults for local/dev/CI:
+   - `HEALTH_PROBE_ALLOWED_ENVIRONMENTS=production`
+   - `HEALTH_PROBE_ALLOW_NON_PRODUCTION=false`
+   - `HEALTH_PROBE_ALLOW_IN_CI=false`
+3. In production, enable only required transport probes per actual driver and set conservative timeout bounds.
+4. Monitor `legacy.data_receiver_options.deprecated_access` logs until migration window shows zero legacy traffic.
+5. Flip to `LEGACY_DATA_RECEIVER_OPTIONS_PHASE=phase2` for deterministic decommission response.
+
+### Rollback plan
+
+1. Restore legacy adapter availability:
+   - `LEGACY_DATA_RECEIVER_OPTIONS_PHASE=phase1`
+   - `LEGACY_DATA_RECEIVER_OPTIONS_ENABLED=true`
+2. If route/config cache is used, run:
+   - `php artisan config:clear`
+   - `php artisan route:clear`
+3. If transport probes produce false negatives in production, set relevant per-driver toggle(s) back to `false` and review infra reachability before re-enabling.
+
+### Impacted files
+
+- `.env.docker.example`
+- `README.md`
+- `app/Http/Controllers/APIController.php`
+- `app/Services/Health/HealthCheckService.php`
+- `config/data_receiver.php`
+- `config/health.php`
+- `docs/project-improvement-checklist.md`
+- `routes/web.php`
+- `tests/Feature/ApiResponseContractTest.php`
+- `tests/Feature/HealthCheckEndpointsTest.php`
+
+### Residual risks
+
+- Legacy endpoint can still receive traffic in phase1 and depends on external receiver source availability; telemetry must be reviewed before phase2.
+- Probe execution in non-production remains guarded by default; teams must explicitly enable overrides for staging validation.
+- Route-to-action mode switch depends on config at route bootstrap/cache build time; cache clear remains part of operational toggle procedure.

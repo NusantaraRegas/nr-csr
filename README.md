@@ -516,14 +516,30 @@ Checks covered:
 Transport probe configuration (`config/health.php`):
 
 - `HEALTH_PROBE_TIMEOUT_SECONDS` (default: `2`)
+- `HEALTH_PROBE_TIMEOUT_MIN_SECONDS` (default: `0.2`)
+- `HEALTH_PROBE_TIMEOUT_MAX_SECONDS` (default: `5`)
+- `HEALTH_PROBE_ALLOWED_ENVIRONMENTS` (default: `production`)
+- `HEALTH_PROBE_ALLOW_NON_PRODUCTION` (default: `false`)
+- `HEALTH_PROBE_ALLOW_IN_CI` (default: `false`)
 - `HEALTH_SMTP_TRANSPORT_PROBE` (default: `false`)
 - `HEALTH_SQS_TRANSPORT_PROBE` (default: `false`)
 - `HEALTH_BEANSTALK_TRANSPORT_PROBE` (default: `false`)
 
 Operational note:
 
-- Keep transport probes disabled by default in local/dev/CI unless infrastructure is available.
-- Enable only the relevant probes per deployed environment and tune timeout conservatively.
+- Local/dev/CI safe default (probes remain skipped even if a toggle is accidentally enabled):
+  - `HEALTH_PROBE_ALLOWED_ENVIRONMENTS=production`
+  - `HEALTH_PROBE_ALLOW_NON_PRODUCTION=false`
+  - `HEALTH_PROBE_ALLOW_IN_CI=false`
+  - keep `HEALTH_SMTP_TRANSPORT_PROBE`, `HEALTH_SQS_TRANSPORT_PROBE`, `HEALTH_BEANSTALK_TRANSPORT_PROBE` as `false`
+- Production rollout example (enable only dependencies actually used by this deployment):
+  - `HEALTH_PROBE_ALLOWED_ENVIRONMENTS=production`
+  - `HEALTH_PROBE_TIMEOUT_SECONDS=1.5`
+  - `HEALTH_PROBE_TIMEOUT_MIN_SECONDS=0.2`
+  - `HEALTH_PROBE_TIMEOUT_MAX_SECONDS=3`
+  - set only needed driver toggles to `true`
+- Timeout guardrails are clamped to min/max bounds to prevent long-hanging probes.
+- When a probe is enabled but required config/infrastructure is missing, health returns explicit degraded metadata (`probe`, `reason`, `probe_requested`) instead of silently failing.
 
 Health tests:
 
@@ -541,6 +557,31 @@ Transition note:
 
 - UI consumers should migrate to `/api/dataReceiver` JSON.
 - Decommission `/legacy/dataReceiver/options` only after all consumers are confirmed migrated.
+
+Legacy endpoint decommission config (`config/data_receiver.php`):
+
+- `LEGACY_DATA_RECEIVER_OPTIONS_ENABLED` (default: `true`)
+- `LEGACY_DATA_RECEIVER_OPTIONS_PHASE`:
+  - `phase1`: endpoint enabled, serves HTML adapter, logs warning telemetry per request (`legacy.data_receiver_options.deprecated_access`)
+  - `phase2`: endpoint disabled, returns deterministic JSON error with `meta.code=LEGACY_DATA_RECEIVER_OPTIONS_DECOMMISSIONED`
+- `LEGACY_DATA_RECEIVER_OPTIONS_DISABLED_STATUS` (default: `410`)
+- `LEGACY_DATA_RECEIVER_OPTIONS_LOG_CHANNEL` (default: `LOG_CHANNEL`)
+- `LEGACY_DATA_RECEIVER_OPTIONS_SUNSET_DATE` (optional response header during phase1)
+
+Migration checklist:
+
+1. Inventory all callers of `/legacy/dataReceiver/options`.
+2. Migrate callers to `/api/dataReceiver` JSON.
+3. Monitor phase1 warning logs for residual callers.
+4. Switch to `phase2` only when usage reaches zero for agreed window.
+5. Keep deterministic error response during phase2 for controlled consumer failure handling.
+
+Rollback:
+
+1. Set `LEGACY_DATA_RECEIVER_OPTIONS_PHASE=phase1`.
+2. Set `LEGACY_DATA_RECEIVER_OPTIONS_ENABLED=true`.
+3. Clear config/route cache if used (`php artisan config:clear && php artisan route:clear`).
+4. Confirm route target returns to `APIController@dataReceiverOptions` via `php artisan route:list --path=legacy/dataReceiver/options`.
 
 #### Proposal Modularization Pilot
 

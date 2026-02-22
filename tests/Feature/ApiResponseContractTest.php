@@ -6,6 +6,7 @@ use App\Http\Controllers\APIController;
 use App\Services\PaymentReceiverService;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
@@ -17,6 +18,11 @@ class ApiResponseContractTest extends TestCase
 
         $this->useSqliteInMemory();
         $this->prepareContractTables();
+
+        config()->set('data_receiver.legacy_options.enabled', true);
+        config()->set('data_receiver.legacy_options.phase', 'phase1');
+        config()->set('data_receiver.legacy_options.disabled_status', 410);
+        config()->set('data_receiver.legacy_options.log_channel', 'stack');
     }
 
     public function test_data_provinsi_returns_standard_success_envelope()
@@ -121,6 +127,56 @@ class ApiResponseContractTest extends TestCase
         $response->assertSee('<option></option>', false);
         $response->assertSee('<option value="Receiver A">Receiver A</option>', false);
         $response->assertHeader('Content-Type', 'text/html; charset=UTF-8');
+        $response->assertHeader('Deprecation', 'true');
+        $response->assertHeader('X-Legacy-Endpoint', 'deprecated');
+    }
+
+    public function test_legacy_data_receiver_options_phase1_emits_usage_warning_log()
+    {
+        $this->app->instance(PaymentReceiverService::class, new class extends PaymentReceiverService
+        {
+            public function fetchReceiverNames($userId = '1211'): array
+            {
+                return ['Receiver A'];
+            }
+        });
+
+        Log::shouldReceive('channel')->with('stack')->andReturnSelf()->atLeast()->once();
+        Log::shouldReceive('warning')->withArgs(function ($event, array $context) {
+            return $event === 'legacy.data_receiver_options.deprecated_access'
+                && data_get($context, 'endpoint') === '/legacy/dataReceiver/options'
+                && data_get($context, 'phase') === 'phase1'
+                && data_get($context, 'successor') === '/api/dataReceiver';
+        })->once();
+
+        $response = $this->get('/legacy/dataReceiver/options');
+
+        $response->assertStatus(200);
+    }
+
+    public function test_legacy_data_receiver_options_phase2_returns_deterministic_error_contract()
+    {
+        config()->set('data_receiver.legacy_options.phase', 'phase2');
+
+        $response = $this->getJson('/legacy/dataReceiver/options');
+
+        $response->assertStatus(410);
+        $response->assertJsonPath('success', false);
+        $response->assertJsonPath('meta.code', 'LEGACY_DATA_RECEIVER_OPTIONS_DECOMMISSIONED');
+        $response->assertJsonPath('errors.endpoint', '/legacy/dataReceiver/options');
+        $response->assertJsonPath('errors.successor', '/api/dataReceiver');
+        $response->assertHeader('X-Legacy-Endpoint', 'disabled');
+    }
+
+    public function test_legacy_data_receiver_options_can_be_disabled_by_feature_flag()
+    {
+        config()->set('data_receiver.legacy_options.enabled', false);
+
+        $response = $this->getJson('/legacy/dataReceiver/options');
+
+        $response->assertStatus(410);
+        $response->assertJsonPath('meta.code', 'LEGACY_DATA_RECEIVER_OPTIONS_DECOMMISSIONED');
+        $response->assertHeader('X-Legacy-Endpoint', 'disabled');
     }
 
     public function test_data_kecamatan_validation_error_uses_standard_error_envelope()

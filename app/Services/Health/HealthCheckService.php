@@ -99,6 +99,7 @@ class HealthCheckService
 
     private function checkSqsQueue(): array
     {
+        $probeState = $this->transportProbeState('sqs');
         $prefix = trim((string) config('queue.connections.sqs.prefix'));
         $queue = trim((string) config('queue.connections.sqs.queue'));
 
@@ -108,18 +109,38 @@ class HealthCheckService
             strpos($prefix, 'your-account-id') !== false ||
             strpos($queue, 'your-queue-name') !== false
         ) {
-            return $this->degraded('SQS queue is configured with placeholder/missing values.');
+            $message = $probeState['enabled']
+                ? 'SQS transport probe enabled but queue is configured with placeholder/missing values.'
+                : 'SQS queue is configured with placeholder/missing values.';
+
+            return $this->degraded($message, [
+                'probe' => $probeState['enabled'] ? 'not_executed' : 'skipped',
+                'reason' => 'configuration_missing_or_placeholder',
+                'probe_requested' => $probeState['enabled'],
+            ]);
         }
 
         $queueUrl = $this->resolveSqsQueueUrl($prefix, $queue);
         if ($queueUrl === '') {
-            return $this->degraded('SQS queue URL cannot be resolved from current configuration.');
+            $message = $probeState['enabled']
+                ? 'SQS transport probe enabled but queue URL cannot be resolved from current configuration.'
+                : 'SQS queue URL cannot be resolved from current configuration.';
+
+            return $this->degraded($message, [
+                'probe' => $probeState['enabled'] ? 'not_executed' : 'skipped',
+                'reason' => 'configuration_unresolvable',
+                'probe_requested' => $probeState['enabled'],
+            ]);
         }
 
-        if (!$this->isTransportProbeEnabled('sqs')) {
+        if (!$probeState['run']) {
             return $this->healthy('SQS queue configuration is present. Transport probe skipped.', [
                 'probe' => 'skipped',
                 'queue_url' => $queueUrl,
+                'reason' => $probeState['reason'],
+                'probe_requested' => $probeState['enabled'],
+                'environment' => app()->environment(),
+                'allowed_environments' => data_get($probeState, 'allowed_environments'),
             ]);
         }
 
@@ -131,6 +152,7 @@ class HealthCheckService
                 'timeout' => $probe['timed_out'],
                 'reason' => $probe['reason'],
                 'http_status' => $probe['http_status'],
+                'timeout_seconds' => $probe['timeout_seconds'],
             ]);
         }
 
@@ -139,23 +161,37 @@ class HealthCheckService
             'queue_url' => $queueUrl,
             'http_status' => $probe['http_status'],
             'latency_ms' => $probe['latency_ms'],
+            'timeout_seconds' => $probe['timeout_seconds'],
         ]);
     }
 
     private function checkBeanstalkQueue(): array
     {
+        $probeState = $this->transportProbeState('beanstalkd');
         $host = trim((string) config('queue.connections.beanstalkd.host'));
         $port = (int) config('queue.connections.beanstalkd.port', 11300);
 
         if ($host === '' || $port <= 0) {
-            return $this->degraded('Beanstalkd host/port is not configured.');
+            $message = $probeState['enabled']
+                ? 'Beanstalkd transport probe enabled but host/port is not configured.'
+                : 'Beanstalkd host/port is not configured.';
+
+            return $this->degraded($message, [
+                'probe' => $probeState['enabled'] ? 'not_executed' : 'skipped',
+                'reason' => 'configuration_missing',
+                'probe_requested' => $probeState['enabled'],
+            ]);
         }
 
-        if (!$this->isTransportProbeEnabled('beanstalkd')) {
+        if (!$probeState['run']) {
             return $this->healthy('Beanstalkd queue configuration is present. Transport probe skipped.', [
                 'probe' => 'skipped',
                 'host' => $host,
                 'port' => $port,
+                'reason' => $probeState['reason'],
+                'probe_requested' => $probeState['enabled'],
+                'environment' => app()->environment(),
+                'allowed_environments' => data_get($probeState, 'allowed_environments'),
             ]);
         }
 
@@ -167,6 +203,7 @@ class HealthCheckService
                 'port' => $port,
                 'timeout' => $probe['timed_out'],
                 'reason' => $probe['reason'],
+                'timeout_seconds' => $probe['timeout_seconds'],
             ]);
         }
 
@@ -175,11 +212,13 @@ class HealthCheckService
             'host' => $host,
             'port' => $port,
             'latency_ms' => $probe['latency_ms'],
+            'timeout_seconds' => $probe['timeout_seconds'],
         ]);
     }
 
     private function checkSmtpMail(): array
     {
+        $probeState = $this->transportProbeState('smtp');
         $host = trim((string) config('mail.host'));
         $port = (int) config('mail.port');
         $fromAddress = trim((string) data_get(config('mail.from'), 'address'));
@@ -188,7 +227,15 @@ class HealthCheckService
         $encryption = trim((string) config('mail.encryption'));
 
         if ($host === '' || $port <= 0) {
-            return $this->degraded('SMTP mail host/port is not configured.');
+            $message = $probeState['enabled']
+                ? 'SMTP transport probe enabled but mail host/port is not configured.'
+                : 'SMTP mail host/port is not configured.';
+
+            return $this->degraded($message, [
+                'probe' => $probeState['enabled'] ? 'not_executed' : 'skipped',
+                'reason' => 'configuration_missing',
+                'probe_requested' => $probeState['enabled'],
+            ]);
         }
 
         if ($host === 'smtp.mailgun.org' && $fromAddress === 'hello@example.com') {
@@ -199,11 +246,15 @@ class HealthCheckService
             return $this->degraded('SMTP auth configuration is incomplete.');
         }
 
-        if (!$this->isTransportProbeEnabled('smtp')) {
+        if (!$probeState['run']) {
             return $this->healthy('SMTP mail configuration is present. Transport probe skipped.', [
                 'probe' => 'skipped',
                 'host' => $host,
                 'port' => $port,
+                'reason' => $probeState['reason'],
+                'probe_requested' => $probeState['enabled'],
+                'environment' => app()->environment(),
+                'allowed_environments' => data_get($probeState, 'allowed_environments'),
             ]);
         }
 
@@ -215,6 +266,7 @@ class HealthCheckService
                 'port' => $port,
                 'timeout' => $connectionProbe['timed_out'],
                 'reason' => $connectionProbe['reason'],
+                'timeout_seconds' => $connectionProbe['timeout_seconds'],
             ]);
         }
 
@@ -227,6 +279,7 @@ class HealthCheckService
                     'port' => $port,
                     'timeout' => $authProbe['timed_out'],
                     'reason' => $authProbe['reason'],
+                    'timeout_seconds' => $authProbe['timeout_seconds'],
                 ]);
             }
 
@@ -235,6 +288,7 @@ class HealthCheckService
                 'host' => $host,
                 'port' => $port,
                 'latency_ms' => $authProbe['latency_ms'],
+                'timeout_seconds' => $authProbe['timeout_seconds'],
             ]);
         }
 
@@ -243,6 +297,7 @@ class HealthCheckService
             'host' => $host,
             'port' => $port,
             'latency_ms' => $connectionProbe['latency_ms'],
+            'timeout_seconds' => $connectionProbe['timeout_seconds'],
             'auth' => 'not_configured',
         ]);
     }
@@ -310,11 +365,107 @@ class HealthCheckService
         return (bool) config("health.probes.{$probe}.enabled", false);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
+    private function transportProbeState(string $probe): array
+    {
+        $enabled = $this->isTransportProbeEnabled($probe);
+        if (!$enabled) {
+            return [
+                'enabled' => false,
+                'run' => false,
+                'reason' => 'disabled_by_config',
+            ];
+        }
+
+        $environment = strtolower((string) app()->environment());
+        if ($this->isCiEnvironment() && !config('health.probes.allow_in_ci', false)) {
+            return [
+                'enabled' => true,
+                'run' => false,
+                'reason' => 'ci_guard',
+                'environment' => $environment,
+            ];
+        }
+
+        $allowedEnvironments = $this->probeAllowedEnvironments();
+        if (
+            !empty($allowedEnvironments) &&
+            !in_array($environment, $allowedEnvironments, true) &&
+            !config('health.probes.allow_non_production', false)
+        ) {
+            return [
+                'enabled' => true,
+                'run' => false,
+                'reason' => 'environment_guard',
+                'environment' => $environment,
+                'allowed_environments' => $allowedEnvironments,
+            ];
+        }
+
+        return [
+            'enabled' => true,
+            'run' => true,
+            'reason' => 'enabled',
+            'environment' => $environment,
+        ];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function probeAllowedEnvironments(): array
+    {
+        $configured = config('health.probes.allowed_environments', ['production']);
+
+        if (!is_array($configured)) {
+            return ['production'];
+        }
+
+        $environments = [];
+        foreach ($configured as $environment) {
+            $value = strtolower(trim((string) $environment));
+            if ($value === '') {
+                continue;
+            }
+
+            $environments[] = $value;
+        }
+
+        return array_values(array_unique($environments));
+    }
+
+    private function isCiEnvironment(): bool
+    {
+        return filter_var((string) env('CI', 'false'), FILTER_VALIDATE_BOOLEAN)
+            || filter_var((string) env('GITHUB_ACTIONS', 'false'), FILTER_VALIDATE_BOOLEAN);
+    }
+
     private function probeTimeoutSeconds(): float
     {
         $timeout = (float) config('health.probes.timeout_seconds', 2.0);
+        $min = (float) config('health.probes.timeout_min_seconds', 0.2);
+        $max = (float) config('health.probes.timeout_max_seconds', 5.0);
+        $min = $min > 0 ? $min : 0.1;
+        $max = $max >= $min ? $max : $min;
+        $fallback = $min;
 
-        return $timeout > 0 ? $timeout : 2.0;
+        if ($timeout <= 0) {
+            $timeout = $fallback;
+        }
+
+        $clamped = min($max, max($min, $timeout));
+        if (abs($clamped - $timeout) > 0.0001) {
+            $this->emitProbeAlert('health.probe.timeout_clamped', 'warning', [
+                'configured_timeout_seconds' => $timeout,
+                'effective_timeout_seconds' => $clamped,
+                'min_timeout_seconds' => $min,
+                'max_timeout_seconds' => $max,
+            ]);
+        }
+
+        return $clamped;
     }
 
     /**
@@ -357,6 +508,7 @@ class HealthCheckService
                 'latency_ms' => $latencyMs,
                 'reason' => $reason,
                 'http_status' => null,
+                'timeout_seconds' => $timeout,
             ];
         }
 
@@ -369,6 +521,7 @@ class HealthCheckService
             'latency_ms' => $latencyMs,
             'reason' => null,
             'http_status' => null,
+            'timeout_seconds' => $timeout,
         ];
     }
 
@@ -411,6 +564,7 @@ class HealthCheckService
                     'latency_ms' => $latencyMs,
                     'reason' => $reason,
                     'http_status' => $statusCode,
+                    'timeout_seconds' => $timeout,
                 ];
             }
 
@@ -421,6 +575,7 @@ class HealthCheckService
                 'latency_ms' => $latencyMs,
                 'reason' => null,
                 'http_status' => $statusCode,
+                'timeout_seconds' => $timeout,
             ];
         } catch (\Throwable $e) {
             $latencyMs = (int) round((microtime(true) - $start) * 1000);
@@ -444,6 +599,7 @@ class HealthCheckService
                 'latency_ms' => $latencyMs,
                 'reason' => $reason,
                 'http_status' => null,
+                'timeout_seconds' => $timeout,
             ];
         }
     }
@@ -476,6 +632,7 @@ class HealthCheckService
                 'timed_out' => false,
                 'latency_ms' => (int) round((microtime(true) - $start) * 1000),
                 'reason' => null,
+                'timeout_seconds' => $swiftTimeout,
             ];
         } catch (\Throwable $e) {
             $latencyMs = (int) round((microtime(true) - $start) * 1000);
@@ -499,6 +656,7 @@ class HealthCheckService
                 'timed_out' => $timedOut,
                 'latency_ms' => $latencyMs,
                 'reason' => $reason,
+                'timeout_seconds' => $swiftTimeout,
             ];
         }
     }

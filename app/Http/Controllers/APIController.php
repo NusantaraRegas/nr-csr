@@ -19,6 +19,7 @@ use App\Http\Requests\PostPaymentRequestAnnualRequest;
 use App\Actions\API\PostPaymentRequestAnnualAction;
 use App\Support\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Exception;
 use DB;
 
@@ -1634,8 +1635,19 @@ class APIController extends Controller
         }
     }
 
-    public function dataReceiverOptions(PaymentReceiverService $paymentReceiverService)
+    public function dataReceiverOptions(Request $request, PaymentReceiverService $paymentReceiverService)
     {
+        if (!$this->isLegacyDataReceiverOptionsEnabled()) {
+            return $this->legacyDataReceiverOptionsDisabledResponse($request);
+        }
+
+        Log::channel($this->legacyDataReceiverOptionsLogChannel())->warning(
+            'legacy.data_receiver_options.deprecated_access',
+            $this->legacyDataReceiverOptionsContext($request) + [
+                'successor' => '/api/dataReceiver',
+            ]
+        );
+
         $receiverNames = [];
 
         try {
@@ -1644,9 +1656,24 @@ class APIController extends Controller
             report($e);
         }
 
-        return response($paymentReceiverService->renderLegacyOptions($receiverNames), 200, [
+        $headers = [
             'Content-Type' => 'text/html; charset=UTF-8',
-        ]);
+            'Deprecation' => 'true',
+            'Link' => '</api/dataReceiver>; rel="successor-version"',
+            'X-Legacy-Endpoint' => 'deprecated',
+        ];
+
+        $sunsetDate = trim((string) config('data_receiver.legacy_options.sunset_date', ''));
+        if ($sunsetDate !== '') {
+            $headers['Sunset'] = $sunsetDate;
+        }
+
+        return response($paymentReceiverService->renderLegacyOptions($receiverNames), 200, $headers);
+    }
+
+    public function dataReceiverOptionsDisabled(Request $request)
+    {
+        return $this->legacyDataReceiverOptionsDisabledResponse($request);
     }
 
     public function dataBank()
@@ -1924,6 +1951,62 @@ class APIController extends Controller
         $jumlahProkerNonRelokasi = (clone $baseQuery)->count();
 
         return [$prokerNonRelokasi, $jumlahProkerNonRelokasi];
+    }
+
+    private function isLegacyDataReceiverOptionsEnabled()
+    {
+        $phase = strtolower((string) config('data_receiver.legacy_options.phase', 'phase1'));
+        $enabled = (bool) config('data_receiver.legacy_options.enabled', true);
+
+        return $enabled && $phase !== 'phase2';
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function legacyDataReceiverOptionsContext(Request $request): array
+    {
+        return [
+            'endpoint' => '/legacy/dataReceiver/options',
+            'phase' => strtolower((string) config('data_receiver.legacy_options.phase', 'phase1')),
+            'method' => $request->method(),
+            'ip' => $request->ip(),
+            'user_agent' => (string) $request->userAgent(),
+        ];
+    }
+
+    private function legacyDataReceiverOptionsLogChannel()
+    {
+        return (string) config('data_receiver.legacy_options.log_channel', config('log.channel', 'stack'));
+    }
+
+    private function legacyDataReceiverOptionsDisabledResponse(Request $request)
+    {
+        $status = (int) config('data_receiver.legacy_options.disabled_status', 410);
+        if ($status < 400 || $status > 599) {
+            $status = 410;
+        }
+
+        Log::channel($this->legacyDataReceiverOptionsLogChannel())->warning(
+            'legacy.data_receiver_options.blocked',
+            $this->legacyDataReceiverOptionsContext($request) + [
+                'status' => $status,
+                'successor' => '/api/dataReceiver',
+            ]
+        );
+
+        $response = ApiResponse::error(
+            'Endpoint legacy dinonaktifkan. Gunakan /api/dataReceiver.',
+            $status,
+            'LEGACY_DATA_RECEIVER_OPTIONS_DECOMMISSIONED',
+            [
+                'endpoint' => '/legacy/dataReceiver/options',
+                'successor' => '/api/dataReceiver',
+                'phase' => 'phase2',
+            ]
+        );
+
+        return $response->header('X-Legacy-Endpoint', 'disabled');
     }
 
     public function dataProvinsi()
