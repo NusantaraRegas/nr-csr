@@ -100,4 +100,20 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | LDAP Authentication (Fallback)
+    |--------------------------------------------------------------------------
+    |
+    | Local username/password auth is always attempted first in LoginController.
+    | If local auth fails, LDAP fallback will only run when this toggle is true.
+    |
+    */
+    'ldap' => [
+        'enabled' => env('AUTH_LDAP_ENABLED', false),
+        'domain' => env('AUTH_LDAP_DOMAIN', 'pertamina\\'),
+        'host' => env('AUTH_LDAP_HOST', '10.129.1.4'),
+        'port' => env('AUTH_LDAP_PORT', 389),
+    ],
+
 ];

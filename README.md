@@ -298,12 +298,7 @@ From that dump we generate Laravel migrations (Postgres) under `database/migrati
 
 #### Step-by-Step Docker Setup
 
-1. **Bring up containers**
-   ```bash
-   docker compose up -d --build
-   ```
-
-2. **Create `.env` file**
+1. **Create `.env` file**
    ```bash
    # Windows
    copy .env.docker.example .env
@@ -311,21 +306,30 @@ From that dump we generate Laravel migrations (Postgres) under `database/migrati
    # Linux/macOS
    cp .env.docker.example .env
    ```
-   
-   Generate app key:
+2. **(If needed) reset old Docker state**
+   ```bash
+   docker compose down -v
+   ```
+
+3. **Bring up containers**
+   ```bash
+   docker compose up -d --build
+   ```
+
+4. **Generate app key**
    ```bash
    docker compose exec -T app php artisan key:generate --force
    ```
 
-3. **Install PHP dependencies**
+5. **Install PHP dependencies**
    
    This project includes packages that require extensions used by Oracle (oci8) and Excel exports (gd). If running Postgres-only locally, install dependencies while ignoring platform requirements:
    
    ```bash
-   docker compose exec -T app composer install --no-interaction --ignore-platform-req=ext-gd --ignore-platform-req=ext-oci8
+   docker compose exec -T app composer install --no-interaction --ignore-platform-req=ext-oci8
    ```
 
-4. **Run migrations**
+6. **Run migrations**
    ```bash
    docker compose exec -T app php artisan migrate --force
    ```
@@ -335,14 +339,30 @@ From that dump we generate Laravel migrations (Postgres) under `database/migrati
    docker compose exec -T app php artisan migrate:fresh --force
    ```
 
-5. **(Optional) Verify schema**
+7. **Seed master data and local superadmin**
    
-   List tables created in the NR_CSR schema:
+   Make sure `.env` has:
+   - `DEFAULT_USER_PASSWORD=<your_password>`
+   - `AUTH_LDAP_ENABLED=false` (for local DB login without LDAP fallback)
+   
+   Then run:
    ```bash
-   docker compose exec -T db psql -U nr_csr -d nr_csr -c "SELECT schemaname, tablename FROM pg_tables WHERE schemaname IN ('NR_CSR') ORDER BY tablename;"
+   docker compose exec -T app php artisan db:seed --class=DatabaseSeeder --force
+   ```
+   
+   This seeds:
+   - `tbl_pilar` (PilarSeeder)
+   - `tbl_sdg` (SdgSeeder, TPB 1-17)
+   - local `superadmin` (SuperAdminSeeder)
+
+8. **(Optional) Verify schema**
+   
+   List tables created in the `nr_csr` schema:
+   ```bash
+   docker compose exec -T db psql -U nrcsr_user -d nrcsr_prod -c "SELECT schemaname, tablename FROM pg_tables WHERE schemaname = 'nr_csr' ORDER BY tablename;"
    ```
 
-6. **Access the application**
+9. **Access the application**
    
    Nginx is exposed on:
    ```
@@ -365,7 +385,7 @@ docker compose logs -f app
 docker compose exec app bash
 
 # Access database
-docker compose exec db psql -U nr_csr -d nr_csr
+docker compose exec db psql -U nrcsr_user -d nrcsr_prod
 
 # Rebuild containers
 docker compose up -d --build --force-recreate

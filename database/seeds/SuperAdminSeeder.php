@@ -28,17 +28,11 @@ class SuperAdminSeeder extends Seeder
         // Postgres local DB: we normalize to lowercase table name.
         $table = 'nr_csr.tbl_user';
 
-        $exists = DB::table($table)
+        $existing = DB::table($table)
             ->whereRaw('LOWER(username) = ?', [$username])
-            ->exists();
+            ->first();
 
-        if ($exists) {
-            return;
-        }
-
-        // ID_USER is integer in our Postgres schema.
-        DB::table($table)->insert([
-            'id_user' => 999999,
+        $payload = [
             'username' => $username,
             'email' => 'superadmin@local.test',
             'nama' => 'Super Admin (Local)',
@@ -48,6 +42,20 @@ class SuperAdminSeeder extends Seeder
             'role' => 'Admin',
             'status' => 'Active',
             'remember_token' => null,
-        ]);
+        ];
+
+        if ($existing) {
+            DB::table($table)
+                ->whereRaw('LOWER(username) = ?', [$username])
+                ->update($payload);
+
+            return;
+        }
+
+        // ID_USER is integer in our Postgres schema.
+        DB::table($table)->insert(array_merge(
+            ['id_user' => 999999],
+            $payload
+        ));
     }
 }

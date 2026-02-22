@@ -2919,10 +2919,17 @@ class KelayakanController extends Controller
 
     public function dataTPB($pilar)
     {
-        $data = DB::table('TBL_SDG')
-            ->where('pilar', $pilar)
-            ->orderBy('id_sdg', 'ASC')
-            ->get();
+        $data = DB::table('tbl_sdg')
+            ->select('id_sdg', 'kode', 'nama')
+            ->get()
+            ->sortBy(function ($row) {
+                $kodeSort = is_numeric((string) $row->kode)
+                    ? str_pad((string) ((int) $row->kode), 6, '0', STR_PAD_LEFT)
+                    : '999999';
+
+                return $kodeSort . '-' . str_pad((string) $row->id_sdg, 10, '0', STR_PAD_LEFT);
+            })
+            ->values();
 
         $output = [];
 
@@ -2938,7 +2945,7 @@ class KelayakanController extends Controller
 
     public function dataIndikator($tpb)
     {
-        $data = DB::table('TBL_SUB_PILAR')->select('kode_indikator', 'keterangan')
+        $data = DB::table('tbl_sub_pilar')->select('kode_indikator', 'keterangan')
             ->where('tpb', $tpb)
 //            ->groupBy('kode_indikator')
             ->orderBy('kode_indikator', 'ASC')

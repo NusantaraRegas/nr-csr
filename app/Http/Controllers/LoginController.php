@@ -82,7 +82,11 @@ class LoginController extends Controller
 
         }
 
-        // 4. Coba login via LDAP
+        // 4. Coba login via LDAP (optional fallback)
+        if (!config('auth.ldap.enabled', false)) {
+            return redirect()->back()->with('credential', 'Username atau password salah.');
+        }
+
         // Guard: PHP LDAP extension might not be installed in local Docker.
         // Without it, calling ldap_connect() would fatal with "Call to undefined function".
         if (!function_exists('ldap_connect')) {
@@ -92,9 +96,9 @@ class LoginController extends Controller
             );
         }
 
-        $domain   = 'pertamina\\';
-        $ldapHost = '10.129.1.4';
-        $ldapPort = 389;
+        $domain   = config('auth.ldap.domain', 'pertamina\\');
+        $ldapHost = config('auth.ldap.host', '10.129.1.4');
+        $ldapPort = (int) config('auth.ldap.port', 389);
         $ldapUser = strtolower($request->username);
         $ldapPass = $request->password;
 

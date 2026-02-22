@@ -35,6 +35,7 @@ clover.xml
 # Environment (secrets)
 .env
 .env.*
+!.env.docker.example
 
 # Runtime storage (generated)
 /storage/*.key
