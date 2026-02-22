@@ -175,8 +175,8 @@ Suggested evidence: command output, test report, screenshot, logs, PR link.
   - [x] Checklist confirmations include command/test evidence links (see Sections 10 and 11)
 
 ### Phase B (2–4 sprints)
-- [ ] Controller decomposition for top-4 large controllers
-- [ ] Route modularization + FormRequest standardization
+- [x] Controller decomposition for top-4 large controllers
+- [x] Route modularization + FormRequest standardization
 
 ### Phase C (parallel roadmap)
 - [ ] Laravel/PHP upgrade preparation + pilot migration

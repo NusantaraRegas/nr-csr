@@ -10,6 +10,13 @@ use App\Exports\RealisasiProkerSubsidiaryExport;
 use App\Exports\RealisasiProposalSubsidiaryExport;
 use App\Exports\RealisasiRegionSubsidiaryExport;
 use App\Exports\RealisasiSDGsSubsidiaryExport;
+use App\Http\Requests\ReportSubsidiaryMonthlyRequest;
+use App\Http\Requests\ReportSubsidiaryPeriodeRequest;
+use App\Http\Requests\ReportSubsidiaryPriorityRequest;
+use App\Http\Requests\ReportSubsidiaryProkerAnnualRequest;
+use App\Http\Requests\ReportSubsidiaryRegionRequest;
+use App\Http\Requests\ReportSubsidiarySdgsRequest;
+use App\Http\Requests\ReportSubsidiaryYearRequest;
 use App\Models\Anggaran;
 use App\Models\LampiranAP;
 use App\Models\Pilar;
@@ -93,12 +100,8 @@ class ReportSubsidiaryController extends Controller
             ]);
     }
 
-    public function postRealisasiSubsidiaryAnnual(Request $request)
+    public function postRealisasiSubsidiaryAnnual(ReportSubsidiaryYearRequest $request)
     {
-        $this->validate($request, [
-            'tahun' => 'required',
-        ]);
-
         return redirect()->route('indexRealisasiSubsidiaryAnnual', ['year' => encrypt($request->tahun)]);
     }
 
@@ -150,13 +153,8 @@ class ReportSubsidiaryController extends Controller
             ]);
     }
 
-    public function postRealisasiSubsidiaryMonthly(Request $request)
+    public function postRealisasiSubsidiaryMonthly(ReportSubsidiaryMonthlyRequest $request)
     {
-        $this->validate($request, [
-            'bulan1' => 'required',
-            'bulan2' => 'required',
-        ]);
-
         return redirect()->route('indexRealisasiSubsidiaryMonthly', ['bulan1' => $request->bulan1, 'bulan2' => $request->bulan2, 'year' => encrypt($request->tahun)]);
     }
 
@@ -212,13 +210,8 @@ class ReportSubsidiaryController extends Controller
             ]);
     }
 
-    public function postRealisasiSubsidiaryPeriode(Request $request)
+    public function postRealisasiSubsidiaryPeriode(ReportSubsidiaryPeriodeRequest $request)
     {
-        $this->validate($request, [
-            'tanggal1' => 'required',
-            'tanggal2' => 'required',
-        ]);
-
         return redirect()->route('indexRealisasiSubsidiaryPeriode', ['tanggal1' => $request->tanggal1, 'tanggal2' => $request->tanggal2]);
     }
 
@@ -271,13 +264,8 @@ class ReportSubsidiaryController extends Controller
             ]);
     }
 
-    public function postRealisasiSubsidiaryRegion(Request $request)
+    public function postRealisasiSubsidiaryRegion(ReportSubsidiaryRegionRequest $request)
     {
-        $this->validate($request, [
-            'provinsi' => 'required',
-            'kabupaten' => 'required',
-        ]);
-
         return redirect()->route('indexRealisasiSubsidiaryRegion', ['provinsi' => $request->provinsi, 'kabupaten' => encrypt($request->kabupaten), 'year' => encrypt($request->tahun)]);
     }
 
@@ -347,13 +335,8 @@ class ReportSubsidiaryController extends Controller
             ]);
     }
 
-    public function postRealisasiSubsidiarySDGs(Request $request)
+    public function postRealisasiSubsidiarySDGs(ReportSubsidiarySdgsRequest $request)
     {
-        $this->validate($request, [
-            'pilar' => 'required',
-            'gols' => 'required',
-        ]);
-
         return redirect()->route('indexRealisasiSubsidiarySDGs', ['pilar' => $request->pilar, 'gols' => $request->gols, 'year' => encrypt($request->tahun)]);
     }
 
@@ -423,12 +406,8 @@ class ReportSubsidiaryController extends Controller
             ]);
     }
 
-    public function postRealisasiSubsidiaryPriority(Request $request)
+    public function postRealisasiSubsidiaryPriority(ReportSubsidiaryPriorityRequest $request)
     {
-        $this->validate($request, [
-            'prioritas' => 'required',
-        ]);
-
         return redirect()->route('indexRealisasiSubsidiaryPriority', ['prioritas' => $request->prioritas, 'year' => encrypt($request->tahun)]);
     }
 
@@ -572,12 +551,8 @@ class ReportSubsidiaryController extends Controller
             ]);
     }
 
-    public function postRealisasiProkerAnnualSubsidiary(Request $request)
+    public function postRealisasiProkerAnnualSubsidiary(ReportSubsidiaryProkerAnnualRequest $request)
     {
-        $this->validate($request, [
-            'tahun' => 'required',
-        ]);
-
         return redirect()->route('indexRealisasiProkerAnnualSubsidiary', ['company' => $request->perusahaan, 'year' => encrypt($request->tahun)]);
     }
 

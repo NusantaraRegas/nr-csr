@@ -15,8 +15,16 @@ use App\Models\ViewPembayaran;
 use App\Models\ViewProker;
 use App\Services\PaymentReceiverService;
 use App\Http\Requests\ApiUpdateStatusRequest;
+use App\Http\Requests\ApiDateRangeRequest;
+use App\Http\Requests\ApiMonthRequest;
+use App\Http\Requests\ApiRealisasiMonthlyRequest;
+use App\Http\Requests\ApiYearRequest;
 use App\Http\Requests\PostPaymentRequestAnnualRequest;
+use App\Http\Requests\StoreApiDetailAccountIdulAdhaRequest;
+use App\Http\Requests\StoreApiPaymentRequestIdulAdhaRequest;
+use App\Http\Requests\StoreApiPaymentRequestRequest;
 use App\Actions\API\PostPaymentRequestAnnualAction;
+use App\Actions\API\StoreApiPaymentRequestAction;
 use App\Support\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -26,149 +34,13 @@ use DB;
 class APIController extends Controller
 {
     
-    public function storePaymentRequest(Request $request)
+    public function storePaymentRequest(StoreApiPaymentRequestRequest $request, StoreApiPaymentRequestAction $action)
     {
-
-        try {
-            $pembayaranID = decrypt($request->pembayaranID);
-        } catch (Exception $e) {
-            abort(404);
-        }
-
-
-        $request->validate([
-            'noInvoice' => 'required',
-            'invoiceDate' => 'required|date',
-            'invoiceDueDate' => 'required|date',
-        ], [
-            'noInvoice.required'   => 'Nomor invoice harus diisi',
-            'invoiceDate.required' => 'Tanggal invoice harus diisi',
-            'invoiceDate.date'  => 'Format tanggal invoice tidak valid',
-            'invoiceDueDate.required' => 'Due date harus diisi',
-            'invoiceDueDate.date'  => 'Format due date tidak valid',
-        ]);
-
-        $pembayaran = ViewPembayaran::findOrFail($pembayaranID);
-
-        if(empty($pembayaran)){
-            return redirect()->back()->with('gagalDetail', "Data pembayaran tidak ditemukan")->withInput();
-        }
-
-        $username = session('user')->username;
-
-        $paramUser = array(
-            "username" => $username
-        );
-
-
-        $callUser = APIHelper::instance()->httpCallJson('POST', env('BASEURLPOPAYSAP') . '/api/APISAPTravelManagement/CheckUser', $paramUser, '');
-        $resultUser = json_decode(strstr($callUser, '{'), true);
-
-        $status = $resultUser['status'];
-
-        if ($status == 'S') {
-
-            $roleID = $resultUser['data']['role_id'];
-            $userID = $resultUser['data']['id'];
-            $user_name = $resultUser['data']['username'];
-            $divID = $resultUser['data']['div_id'];
-            $orgID = $resultUser['data']['org_id'];
-
-            if (strcasecmp($roleID, 'Maker') !== 0) {
-                return redirect()->back()->with('gagalDetail', 'Anda tidak terdaftar sebagai maker Popay');
-            }
-
-            $dateTime = date("Y-m-d H:i:s");
-            
-            $deskripsi = 'POPAY/' . strtoupper($request->noInvoice);
-
-            $param = array(
-                'user_id' => $userID,
-                'user_name' => $user_name,
-                'org_id' => $orgID,
-                'div_id' => $divID,
-                'category' => "INVOICE MIRO",
-                "payment_type" => "CSR 517/518",
-                "budget_year" => $pembayaran->tahun,
-                "budget_name" => "RKAP $pembayaran->tahun",
-                'description_bank' => strtoupper(substr($deskripsi, 0, 30)),
-                'description_detail' => strtoupper(strtoupper($pembayaran->deskripsi_pembayaran)),
-                'invoice_num' => strtoupper($request->noInvoice),
-                "invoice_date" => date("Y-m-d", strtotime($request->invoiceDate)),
-                "invoice_due_date" => date("Y-m-d", strtotime($request->invoiceDueDate)),
-                'invoice_curr' => "IDR",
-                'invoice_amount' => $pembayaran->subtotal,
-                'sap_header_amount' => $pembayaran->subtotal,
-                'invoice_amount_paid' => $pembayaran->subtotal,
-                'supplier_type' => null,
-                'supplier_number' => null,
-                'supplier_name' => null,
-                'supplier_site_address' => null,
-                'supplier_email' => null,
-                'supplier_npwp' => null,
-                'sap_vendor_number' => null,
-                'sap_vendor_glacc' => null,
-                'attribute1' => null,
-                'attribute2' => null,
-                'attribute3' => null,
-                'attribute4' => null
-            );
-
-            try {
-                $store = APIHelper::instance()->httpCallJson('POST', env('BASEURLPOPAYSAP') . '/api/APIPaymentRequest/StorePaymentRequestWithAttribute', $param, '');
-                $return = json_decode(strstr($store, '{'), true);
-                $statusRequest = $return['status'];
-                $pesanRequest = $return['message'];
-
-                if ($statusRequest == "S"){
-                    $prID = $return['data']['pr_id'];
-
-                    $dataUpdate = [
-                        'pr_id' => $prID,
-                        'status' => 'Exported',
-                        'export_by' => session('user')->username,
-                        'export_date' => $dateTime,
-                    ];
-
-                    DB::table('tbl_pembayaran')->where('id_pembayaran', $pembayaranID)->update($dataUpdate);
-                    return redirect()->back()->with('sukses', "$pesanRequest");
-                }else{
-                    return redirect()->back()->with('gagal', "$pesanRequest");
-                }  
-            } catch (Exception $e) {
-                return redirect()->back()->with('gagal', 'Pembayaran gagal diexport ke popay');
-            }
-        } else {
-            return redirect()->back()->with('peringatan', 'Anda tidak terdaftar sebagai maker Popay');
-        }
-
+        return $action->execute($request);
     }
 
-    public function storePaymentRequestIdulAdha(Request $request)
+    public function storePaymentRequestIdulAdha(StoreApiPaymentRequestIdulAdhaRequest $request)
     {
-        $this->validate($request, [
-            'noInvoice' => 'required',
-            'invoiceDate' => 'required',
-            'invoiceDueDate' => 'required',
-            'budget' => 'required',
-            'deskripsi' => 'required',
-            'receiverName' => 'required',
-            'receiverType' => 'required',
-            'receiverNumber' => 'required',
-            'receiverEmail' => 'required',
-            'siteName' => 'required',
-            'receiverAddress' => 'required',
-            'accountNumber' => 'required',
-            'accountName' => 'required',
-            'bankName' => 'required',
-            'bankCity' => 'required',
-            'bankBranch' => 'required',
-            'emailBank' => 'required',
-            'receiverBank' => 'required',
-            'citizen' => 'required',
-            'totalAmount' => 'required',
-        ]);
-
         if (session('user')->role == '1') {
             $username = 'dinar.valupi-e';
         } else {
@@ -263,18 +135,8 @@ class APIController extends Controller
 
     }
 
-    public function storeDetailAccountIdulAdha(Request $request)
+    public function storeDetailAccountIdulAdha(StoreApiDetailAccountIdulAdhaRequest $request)
     {
-
-        $this->validate($request, [
-            'prID' => 'required',
-            'coaAccount' => 'required',
-            'ppn' => 'required',
-//            'ppnCode' => 'required',
-//            'ppnPut' => 'required',
-//            'taxCode' => 'required',
-        ]);
-
         $username = session('user')->username;
 
         $paramUser = array(
@@ -508,12 +370,8 @@ class APIController extends Controller
             ]);
     }
 
-    public function postProgressAllAnnual(Request $request)
+    public function postProgressAllAnnual(ApiYearRequest $request)
     {
-        $this->validate($request, [
-            'tahun' => 'required',
-        ]);
-
         return redirect()->route('listProgressAllAnnual', ['year' => $request->tahun]);
     }
 
@@ -582,12 +440,8 @@ class APIController extends Controller
             ]);
     }
 
-    public function listPaymentRequestAllBulan(Request $request)
+    public function listPaymentRequestAllBulan(ApiMonthRequest $request)
     {
-        $this->validate($request, [
-            'bulan' => 'required',
-        ]);
-
         $tahun = date("Y");
         $bulan = $request->bulan;
         $bulanLalu = $request->bulan - 1;
@@ -619,13 +473,8 @@ class APIController extends Controller
             ]);
     }
 
-    public function listPaymentRequestAllDate(Request $request)
+    public function listPaymentRequestAllDate(ApiDateRangeRequest $request)
     {
-        $this->validate($request, [
-            'tanggal1' => 'required',
-            'tanggal2' => 'required',
-        ]);
-
         $tanggal1 = date("Y-m-d", strtotime($request->tanggal1));
         $tanggal2 = date("Y-m-d", strtotime($request->tanggal2));
 
@@ -786,13 +635,8 @@ class APIController extends Controller
             ]);
     }
 
-    public function postRealisasiAllMonthly(Request $request)
+    public function postRealisasiAllMonthly(ApiRealisasiMonthlyRequest $request)
     {
-        $this->validate($request, [
-            'bulan' => 'required',
-            'tahun' => 'required',
-        ]);
-
         return redirect()->route('listRealisasiAllMonthly', ['month' => $request->bulan, 'year' => $request->tahun]);
     }
 
@@ -1299,14 +1143,8 @@ class APIController extends Controller
             ]);
     }
 
-    public function listPaymentRequestPeriode(Request $request)
+    public function listPaymentRequestPeriode(ApiDateRangeRequest $request)
     {
-
-        $this->validate($request, [
-            'tanggal1' => 'required',
-            'tanggal2' => 'required',
-        ]);
-
         $company = session('user')->perusahaan;
         $tahun = date("Y");
         $status = "Periode";
@@ -1445,13 +1283,8 @@ class APIController extends Controller
             ]);
     }
 
-    public function listPaymentRequestProposalPeriodeJenis(Request $request)
+    public function listPaymentRequestProposalPeriodeJenis(ApiDateRangeRequest $request)
     {
-        $this->validate($request, [
-            'tanggal1' => 'required',
-            'tanggal2' => 'required',
-        ]);
-
         $tanggal1 = date("Y-m-d", strtotime($request->tanggal1));
         $tanggal2 = date("Y-m-d", strtotime($request->tanggal2));
         $attribute1 = $request->attribute1;
@@ -1837,12 +1670,8 @@ class APIController extends Controller
             ]);
     }
 
-    public function postRealisasiProkerAnnual(Request $request)
+    public function postRealisasiProkerAnnual(ApiYearRequest $request)
     {
-        $this->validate($request, [
-            'tahun' => 'required',
-        ]);
-
         return redirect()->route('listRealisasiProkerAnnual', ['year' => $request->tahun]);
     }
 

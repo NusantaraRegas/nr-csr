@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Kelayakan;
 use App\Models\Pembayaran;
 use App\Models\ViewSurvei;
-use Illuminate\Http\Request;
+use App\Http\Requests\ReviewTasklistSurveiRequest;
+use App\Services\Tasklist\TasklistSurveiService;
 use App\Models\Evaluasi;
 use App\Models\Survei;
 use App\Models\User;
@@ -17,259 +18,43 @@ use Exception;
 
 class TasklistSurveiController extends Controller
 {
+    protected $tasklistSurveiService;
+
+    public function __construct(TasklistSurveiService $tasklistSurveiService)
+    {
+        $this->tasklistSurveiService = $tasklistSurveiService;
+    }
 
     public function index()
     {
         date_default_timezone_set("Asia/Jakarta");
-        function tanggal_indo($tanggal)
-        {
-            $bulan = array(1 => 'Januari',
-                'Februari',
-                'Maret',
-                'April',
-                'Mei',
-                'Juni',
-                'Juli',
-                'Agustus',
-                'September',
-                'Oktober',
-                'November',
-                'Desember'
-            );
-            $split = explode('-', $tanggal);
-            return $split[2] . ' ' . $bulan[(int)$split[1]] . ' ' . $split[0];
-        }
-
         $username = session('user')->username;
 
-        $evaluator2 = DB::table('v_evaluasi')
-            ->select('v_evaluasi.*')
-            ->where([
-                ['evaluator2', $username],
-                ['status', 'Forward'],
-            ])
-            ->orderBy('id_evaluasi', 'DESC')
-            ->get();
-
-        $jumlahEvaluator2 = DB::table('v_evaluasi')
-            ->select(DB::raw('count(*) as jumlah'))
-            ->where([
-                ['evaluator2', $username],
-                ['status', 'Forward'],
-            ])
-            ->first();
-
-        $kadep = DB::table('v_evaluasi')
-            ->select('v_evaluasi.*')
-            ->where([
-                ['kadep', $username],
-                ['status', 'Approved 1'],
-            ])
-            ->orderBy('id_evaluasi', 'DESC')
-            ->get();
-
-        $jumlahKadep = DB::table('v_evaluasi')
-            ->select(DB::raw('count(*) as jumlah'))
-            ->where([
-                ['kadep', $username],
-                ['status', 'Approved 1'],
-            ])
-            ->first();
-
-        $kadiv = DB::table('v_evaluasi')
-            ->select('v_evaluasi.*')
-            ->where([
-                ['kadiv', $username],
-                ['status', 'Approved 2'],
-            ])
-            ->orderBy('id_evaluasi', 'DESC')
-            ->get();
-
-        $jumlahKadiv = DB::table('v_evaluasi')
-            ->select(DB::raw('count(*) as jumlah'))
-            ->where([
-                ['kadiv', $username],
-                ['status', 'Approved 2'],
-            ])
-            ->first();
-
-
-        $jumlahTask = $jumlahEvaluator2->jumlah + $jumlahKadep->jumlah + $jumlahKadiv->jumlah;
-
-        $surveyor2 = DB::table('v_survei')
-            ->select('v_survei.*')
-            ->where([
-                ['survei2', $username],
-                ['status', 'Forward'],
-            ])
-            ->orderBy('id_survei', 'DESC')
-            ->get();
-
-        $jumlahSurveyor2 = DB::table('v_survei')
-            ->select(DB::raw('count(*) as jumlah'))
-            ->where([
-                ['survei2', $username],
-                ['status', 'Forward'],
-            ])
-            ->first();
-
-        $kadepSurvei = DB::table('v_survei')
-            ->select('v_survei.*')
-            ->where([
-                ['kadep', $username],
-                ['status', 'Approved 1'],
-            ])
-            ->orderBy('id_survei', 'DESC')
-            ->get();
-
-
-        $jumlahKadepSurvei = DB::table('v_survei')
-            ->select(DB::raw('count(*) as jumlah'))
-            ->where([
-                ['kadep', $username],
-                ['status', 'Approved 1'],
-            ])
-            ->first();
-
-        $kadivSurvei = DB::table('v_survei')
-            ->select('v_survei.*')
-            ->where([
-                ['kadiv', $username],
-                ['status', 'Approved 2'],
-            ])
-            ->orderBy('id_survei', 'DESC')
-            ->get();
-
-        $jumlahKadivSurvei = DB::table('v_survei')
-            ->select(DB::raw('count(*) as jumlah'))
-            ->where([
-                ['kadiv', $username],
-                ['status', 'Approved 2'],
-            ])
-            ->first();
-
-        $jumlahTaskSurvei = $jumlahSurveyor2->jumlah + $jumlahKadepSurvei->jumlah + $jumlahKadivSurvei->jumlah;
-
-        return view('tasklist.survei')
-            ->with([
-                'username' => $username,
-                'dataEvaluator2' => $evaluator2,
-                'jumlahEvaluator2' => $jumlahEvaluator2->jumlah,
-                'dataKadep' => $kadep,
-                'jumlahKadep' => $jumlahKadep->jumlah,
-                'dataKadiv' => $kadiv,
-                'jumlahKadiv' => $jumlahKadiv->jumlah,
-                'dataSurvei2' => $surveyor2,
-                'jumlahSurvei2' => $jumlahSurveyor2->jumlah,
-                'dataKadepSurvei' => $kadepSurvei,
-                'jumlahKadepSurvei' => $jumlahKadepSurvei->jumlah,
-                'dataKadivSurvei' => $kadivSurvei,
-                'jumlahKadivSurvei' => $jumlahKadivSurvei->jumlah,
-                'jumlahTask' => $jumlahTask,
-                'jumlahTaskSurvei' => $jumlahTaskSurvei,
-            ]);
+        return view('tasklist.survei')->with(
+            $this->tasklistSurveiService->indexData($username)
+        );
     }
 
     public function reviewSurvei()
     {
-        function tanggal_indo($tanggal)
-        {
-            $bulan = array(1 => 'Januari',
-                'Februari',
-                'Maret',
-                'April',
-                'Mei',
-                'Juni',
-                'Juli',
-                'Agustus',
-                'September',
-                'Oktober',
-                'November',
-                'Desember'
-            );
-            $split = explode('-', $tanggal);
-            return $split[2] . ' ' . $bulan[(int)$split[1]] . ' ' . $split[0];
-        }
-
         $username = session('user')->username;
 
-        $data = ViewSurvei::where('survei2', $username)
-            ->where('status', 'Forward')
-            ->orderBy('id_survei', 'DESC')
-            ->get();
-
-        $jumlahData = ViewSurvei::where('survei2', $username)
-            ->where('status', 'Forward')
-            ->orderBy('id_survei', 'DESC')
-            ->count();
-
-        return view('home.review_survei')
-            ->with([
-                'username' => $username,
-                'dataSurvei' => $data,
-                'jumlahData' => $jumlahData,
-            ]);
+        return view('home.review_survei')->with(
+            $this->tasklistSurveiService->reviewSurveiData($username)
+        );
     }
 
     public function tasklistSurvei()
     {
-        function tanggal_indo($tanggal)
-        {
-            $bulan = array(1 => 'Januari',
-                'Februari',
-                'Maret',
-                'April',
-                'Mei',
-                'Juni',
-                'Juli',
-                'Agustus',
-                'September',
-                'Oktober',
-                'November',
-                'Desember'
-            );
-            $split = explode('-', $tanggal);
-            return $split[2] . ' ' . $bulan[(int)$split[1]] . ' ' . $split[0];
-        }
-
         $username = session('user')->username;
+        $role = session('user')->role;
 
-        if (session('user')->role == 'Manager') {
-            $data = ViewSurvei::where('kadiv', $username)
-                ->where('status', 'Approved 2')
-                ->orderBy('id_survei', 'DESC')
-                ->get();
-
-            $jumlahData = ViewSurvei::where('kadiv', $username)
-                ->where('status', 'Approved 2')
-                ->count();
-        } elseif (session('user')->role == 'Supervisor 1') {
-            $data = ViewSurvei::where('kadep', $username)
-                ->where('status', 'Approved 1')
-                ->orderBy('id_survei', 'DESC')
-                ->get();
-
-            $jumlahData = ViewSurvei::where('kadep', $username)
-                ->where('status', 'Approved 1')
-                ->count();
-        }else{
-            $data = ViewSurvei::where('kadep', $username)
-                ->where('status', 'Approved 1')
-                ->orderBy('id_survei', 'DESC')
-                ->get();
-
-            $jumlahData = 0;
-        }
-
-        return view('home.tasklist_survei')
-            ->with([
-                'username' => $username,
-                'dataSurvei' => $data,
-                'jumlahData' => $jumlahData,
-            ]);
+        return view('home.tasklist_survei')->with(
+            $this->tasklistSurveiService->tasklistSurveiData($username, $role)
+        );
     }
 
-    public function review(Request $request)
+    public function review(ReviewTasklistSurveiRequest $request)
     {
         try {
             $logID = decrypt($request->surveiID);
@@ -277,45 +62,12 @@ class TasklistSurveiController extends Controller
             abort(404);
         }
 
-        $this->validate($request, [
-            'hasilSurvei' => 'required',
-        ]);
-
-        date_default_timezone_set('Asia/Jakarta');
-        $tanggalMenit = date("Y-m-d");
-
-        $kadep = User::where('role', 'Supervisor 1')->where('status', 'Active')->first();
-        $survei = ViewSurvei::where('id_survei', $logID)->first();
-
-        $dataEmail = [
-            'no_agenda' => $survei->no_agenda,
-            'pengirim' => $survei->pengirim,
-            'tgl_terima' => $survei->tgl_terima,
-            'dari' => $survei->asal_surat,
-            'no_surat' => $survei->no_surat,
-            'tgl_surat' => $survei->tgl_surat,
-            'perihal' => $survei->bantuan_untuk,
-            'permohonan' => $survei->nilai_pengajuan,
-            'bantuan' => $survei->nilai_bantuan,
-            'survei1' => $survei->hasil_survei,
-            'survei2' => $request->hasilSurvei,
-            'penerima' => $kadep->nama,
-        ];
-
-        $dataUpdate = [
-            'status' => 'Approved 1',
-            'hasil_konfirmasi' => $request->hasilSurvei,
-            'approve_date' => $tanggalMenit,
-        ];
-
         try {
-//            Mail::send('mail.approval_surveyor', $dataEmail, function ($message) use ($kadep) {
-//                $message->to($kadep->email, $kadep->nama)
-//                    ->subject('Approval Survei Proposal')
-//                    ->from('pgn.no.reply@pertamina.com', 'NR SHARE');
-//            });
+            $updated = $this->tasklistSurveiService->review($logID, $request->hasilSurvei);
+            if (! $updated) {
+                return redirect()->back()->with('gagal', 'Survei proposal gagal direview');
+            }
 
-            Survei::where('id_survei', $logID)->update($dataUpdate);
             return redirect()->back()->with('berhasil', 'Survei proposal berhasil direview');
         } catch (Exception $e) {
             return redirect()->back()->with('gagal', 'Survei proposal gagal direview');

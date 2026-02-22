@@ -9,6 +9,7 @@ Laravel 6 (PHP ^7.2) monolith for CSR proposal intake, evaluation/survey workflo
 - [Tech Stack](#tech-stack)
 - [Business / Domain Map](#business--domain-map)
 - [Architecture Overview](#architecture-overview)
+- [Phase B Refactor Summary](#phase-b-refactor-summary)
 - [Key Middleware / Authorization](#key-middleware--authorization)
 - [Initialization / Boot Flow](#initialization--boot-flow)
 - [Getting Started](#getting-started)
@@ -149,6 +150,23 @@ flowchart LR
   Artisan --> LaravelApp
 ```
 
+## Phase B Refactor Summary
+
+Phase B implementation in this repository is now reflected in code:
+
+- Controller decomposition (top 4 large controllers):
+  - `KelayakanController` -> `app/Services/Kelayakan/KelayakanProposalService.php`
+  - `APIController` -> `app/Services/API/ApiPaymentRequestService.php` + `app/Actions/API/StoreApiPaymentRequestAction.php`
+  - `DashboardController` -> `app/Services/Dashboard/DashboardOverviewService.php`
+  - `TasklistSurveiController` -> `app/Services/Tasklist/TasklistSurveiService.php`
+- Route modularization:
+  - Web entrypoint remains `routes/web.php` and now includes `routes/web/legacy.php`, `routes/web/public-auth.php`, `routes/web/public-form.php`, and `routes/web/protected.php`
+  - API entrypoint remains `routes/api.php` and now includes:
+    - `routes/api/wilayah.php`
+    - `routes/api/payment.php`
+    - `routes/api/health.php`
+- FormRequest standardization expanded across major flows (Kelayakan, API payment/realisasi filters, Pekerjaan, Survei, ReportSubsidiary).
+
 ### Key Middleware / Authorization
 
 Route groups use role-based middleware defined in `app/Http/Kernel.php`:
@@ -261,7 +279,7 @@ sequenceDiagram
 
 8. **(Optional) Run tests**
    ```bash
-   vendor/bin/phpunit
+   php artisan test
    ```
 
 ### Docker Setup (PostgreSQL)
@@ -375,6 +393,8 @@ docker compose up -d --build --force-recreate
   - `routes/web/public-form.php`
 - Protected wrapper:
   - `routes/web/protected.php`
+- Legacy compatibility route:
+  - `routes/web/legacy.php`
 - Protected domains:
   - `routes/web/protected/dashboard.php`
   - `routes/web/protected/master.php`
@@ -391,6 +411,12 @@ docker compose up -d --build --force-recreate
   - `routes/web/protected/dokumen-legal.php`
   - `routes/web/protected/profile.php`
   - `routes/web/protected/subsidiary.php`
+
+`routes/api.php` also acts as an entrypoint loader:
+
+- `routes/api/wilayah.php`
+- `routes/api/payment.php`
+- `routes/api/health.php`
 
 ## Project Maintenance
 

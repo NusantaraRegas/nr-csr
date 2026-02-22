@@ -1,5 +1,8 @@
 <?php
 
+// Laravel 6 compatibility on PHP >= 8.1: ignore deprecation notices that are promoted during bootstrap.
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application

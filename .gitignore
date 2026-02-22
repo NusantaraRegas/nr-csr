@@ -38,11 +38,14 @@ clover.xml
 
 # Runtime storage (generated)
 /storage/*.key
+/storage/*.sqlite
+/storage/*.db
 /storage/logs/
 /storage/framework/cache/
 /storage/framework/sessions/
 /storage/framework/views/
 /storage/framework/testing/
+/storage/test-results/
 /storage/framework/laravel-excel/
 # Local verification artifacts (route/test scan snapshots)
 /storage/route-list-*.txt
