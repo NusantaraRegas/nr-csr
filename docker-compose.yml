@@ -39,11 +39,11 @@ services:
       APP_DEBUG: ${APP_DEBUG:-true}
       APP_URL: ${APP_URL:-http://localhost:8080}
       DB_CONNECTION: ${DB_CONNECTION:-pgsql}
-      DB_HOST: ${DB_HOST:-db}
+      DB_HOST: db
       DB_PORT: ${DB_PORT:-5432}
       DB_DATABASE: nrcsr_prod
       DB_USERNAME: nrcsr_user
-      DB_PASSWORD: ${POSTGRES_PASSWORD:-nrcsr_dev}
+      DB_PASSWORD: ${DB_PASSWORD:-nrcsr_dev}
       DB_SCHEMA: ${DB_SCHEMA:-nr_csr}
       DEFAULT_USER_PASSWORD: ${DEFAULT_USER_PASSWORD:-nrcsr_dev}
       SESSION_DRIVER: ${SESSION_DRIVER:-file}
@@ -55,7 +55,7 @@ services:
     image: nginx:1.25-alpine
     container_name: nr_csr_nginx
     ports:
-      - "8080:80"
+      - "80:80"
     volumes:
       - ./:/var/www/html
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
