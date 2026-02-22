@@ -6,11 +6,6 @@ parameters:
 			path: app/Exceptions/Handler.php
 
 		-
-			message: "#^Method App\\\\Exceptions\\\\Handler\\:\\:render\\(\\) should return Illuminate\\\\Http\\\\Response but returns Symfony\\\\Component\\\\HttpFoundation\\\\Response\\.$#"
-			count: 1
-			path: app/Exceptions/Handler.php
-
-		-
 			message: "#^Ternary operator condition is always true\\.$#"
 			count: 2
 			path: app/Exceptions/Handler.php

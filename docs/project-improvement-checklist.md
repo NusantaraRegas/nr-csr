@@ -826,3 +826,87 @@ This keeps improvement work auditable and reduces regression risk during moderni
 - Queue/mail checks currently validate driver viability + configuration and only perform deep connectivity where feasible (DB/redis); SQS/beanstalk/smtp transport-level probes can be added in a later hardened slice.
 - `APIController::dataProvinsi()` still contains legacy JSON shape but is not wired to active API route in `routes/api.php`; if reused later it should be migrated to `ApiResponse` contract.
 
+## 17) Priority 2 Follow-up Evidence Notes (executed 2026-02-22)
+
+### P2-F1 Larastan/PHPStan deprecation warning cleanup
+
+- Root cause identified:
+  - `vendor/nunomaduro/larastan/extension.neon` contains deprecated option `checkGenericClassInNonGenericObjectType: false`.
+- Changes applied:
+  - Added project-owned sanitized extension include: `phpstan.larastan.extension.neon` (copied from Larastan extension, deprecated option removed, Larastan stub/bootstrap paths made explicit to `vendor/...`).
+  - Updated `phpstan.neon.dist` to include `phpstan.larastan.extension.neon` instead of vendor extension directly.
+  - Kept baseline behavior stable by retaining current PHPStan level/path scope and only removing stale baseline ignore that became unmatched.
+  - Updated `app/Exceptions/Handler.php` render return-doc type to `\Symfony\Component\HttpFoundation\Response` to match actual return shape and restore static pass.
+
+- Before command/output:
+  - Command: `docker compose run --rm php74-pgsql "vendor/bin/composer run quality:static"`
+  - Output highlights:
+    - Larastan deprecation warning printed for `checkGenericClassInNonGenericObjectType`
+    - static errors in `app/Exceptions/Handler.php` (5 return-type errors)
+
+- After command/output:
+  - Command: `docker compose run --rm php74-pgsql "vendor/bin/composer run quality:static"`
+  - Output:
+    - `[OK] No errors`
+    - no deprecation warning output
+
+### P2-F2 PHP-CS-Fixer v2 -> v3 baseline migration
+
+- Dependency migration:
+  - `composer.json` updated: `friendsofphp/php-cs-fixer` from `^2.19` to `^3.0`.
+  - Lock resolved on PHP 7.4-compatible graph (host Composer with temporary platform pin during solve; removed after solve).
+
+- `.php-cs-fixer.dist.php` v3 compatibility changes:
+  - `PhpCsFixer\Config::create()` -> `(new PhpCsFixer\Config())`
+  - Rule rename: `trailing_comma_in_multiline_array` -> `trailing_comma_in_multiline` with `elements: [arrays]`
+  - Finder/file scope kept unchanged (no scope expansion).
+
+- `composer show --direct` evidence (before/after relevant package):
+  - Before command: `docker compose run --rm php74-pgsql "vendor/bin/composer show --direct"`
+  - Before output relevant line: `friendsofphp/php-cs-fixer v2.19.3`
+  - After command: `docker compose run --rm php74-pgsql "vendor/bin/composer show --direct"`
+  - After output relevant line: `friendsofphp/php-cs-fixer v3.4.0`
+
+- Lockfile churn (constrained and compatibility-driven):
+  - `friendsofphp/php-cs-fixer: v2.19.3 -> v3.4.0`
+  - `php-cs-fixer/diff: v1.3.1 -> v2.0.2`
+  - `composer/semver: 3.4.4 -> 3.4.3`
+  - polyfill adjustments required by resolved compatible dependency set:
+    - `symfony/polyfill-php81` added
+    - `symfony/polyfill-php70` removed
+    - `symfony/polyfill-(ctype|intl-normalizer|mbstring|php73|php80)` normalized to `v1.31.0`
+
+- Style gate verification under v3:
+  - Command: `docker compose run --rm php74-pgsql "vendor/bin/composer run quality:style"`
+  - Output highlight: dry-run completed cleanly with v3 config loaded from `.php-cs-fixer.dist.php`.
+
+### Full CI-equivalent local sequence (guardrail -> static -> style -> critical tests)
+
+- Command:
+  - `docker compose run --rm php74-pgsql "vendor/bin/composer run security:guardrail && vendor/bin/composer run quality:static && vendor/bin/composer run quality:style && vendor/bin/composer run quality:test:critical"`
+- Output highlights:
+  - `Hardcoded-secret guardrail passed (no obvious literals found).`
+  - `[OK] No errors` (PHPStan)
+  - style dry-run clean
+  - `OK (48 tests, 118 assertions)`
+
+### Workflow/file diff evidence
+
+- CI workflow changes in this follow-up slice:
+  - Command: `git diff -- .github/workflows`
+  - Output: no changes.
+
+### Follow-up impacted files
+
+- `.php-cs-fixer.dist.php`
+- `app/Exceptions/Handler.php`
+- `composer.json`
+- `composer.lock`
+- `phpstan-baseline.neon`
+- `phpstan.neon.dist`
+- `phpstan.larastan.extension.neon`
+
+### Residual risks / next actions
+
+- `nunomaduro/larastan` remains legacy/abandoned in this Laravel 6 line; warning is removed at project config layer, but package-line migration to `larastan/larastan` remains blocked by framework/runtime constraints.
+- PHP-CS-Fixer is now on maintained v3 baseline; resolved version (`v3.4.0`) is intentionally compatibility-bound to current legacy dependency stack.

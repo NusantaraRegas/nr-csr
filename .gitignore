@@ -6,6 +6,8 @@
 .phpunit.result.cache
 .php-cs-fixer.cache
 .phpstan.cache
+.phpstan.result.cache
+.phpstan/
 phpstan.tmp
 composer-setup.php
 

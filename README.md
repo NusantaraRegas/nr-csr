@@ -427,13 +427,18 @@ It runs these checks on push/PR in this order:
 3. Style baseline (`composer run quality:style`)
 4. Critical-path feature tests (`composer run quality:test:critical`)
 
-Local equivalent command set:
+Tooling baseline notes:
+
+- PHPStan/Larastan runs through `phpstan.neon.dist` with local include `phpstan.larastan.extension.neon` to avoid legacy deprecated-option noise from vendor defaults.
+- PHP-CS-Fixer baseline is on v3 (`friendsofphp/php-cs-fixer`).
+
+Local equivalent command set (runtime-compatible in this repository):
 
 ```bash
-php tools/security_guardrail_check.php
-composer run quality:static
-composer run quality:style
-composer run quality:test:critical
+docker compose run --rm php74-pgsql "vendor/bin/composer run security:guardrail"
+docker compose run --rm php74-pgsql "vendor/bin/composer run quality:static"
+docker compose run --rm php74-pgsql "vendor/bin/composer run quality:style"
+docker compose run --rm php74-pgsql "vendor/bin/composer run quality:test:critical"
 ```
 
 ### Strategic Baseline (Priority 3)

@@ -10,13 +10,13 @@ $finder = PhpCsFixer\Finder::create()
         __DIR__ . '/tests/Feature/PriorityTwoCriticalPathTransitionsTest.php',
     ]);
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setRiskyAllowed(false)
     ->setRules([
         '@PSR2' => true,
         'array_syntax' => ['syntax' => 'short'],
         'binary_operator_spaces' => ['default' => 'single_space'],
         'single_quote' => true,
-        'trailing_comma_in_multiline_array' => true,
+        'trailing_comma_in_multiline' => ['elements' => ['arrays']],
     ])
     ->setFinder($finder);
