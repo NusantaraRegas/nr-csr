@@ -508,12 +508,39 @@ Checks covered:
 - Database connectivity
 - Queue dependency status (healthy/degraded/unhealthy based on driver/runtime conditions)
 - Mail dependency status (healthy/degraded based on driver/configuration)
+- Optional transport-level probes:
+  - SMTP TCP connectivity and optional SMTP auth handshake probe
+  - SQS queue endpoint reachability probe
+  - Beanstalkd socket connectivity probe
+
+Transport probe configuration (`config/health.php`):
+
+- `HEALTH_PROBE_TIMEOUT_SECONDS` (default: `2`)
+- `HEALTH_SMTP_TRANSPORT_PROBE` (default: `false`)
+- `HEALTH_SQS_TRANSPORT_PROBE` (default: `false`)
+- `HEALTH_BEANSTALK_TRANSPORT_PROBE` (default: `false`)
+
+Operational note:
+
+- Keep transport probes disabled by default in local/dev/CI unless infrastructure is available.
+- Enable only the relevant probes per deployed environment and tune timeout conservatively.
 
 Health tests:
 
 ```bash
 docker compose run --rm php74-pgsql "vendor/bin/phpunit tests/Feature/HealthCheckEndpointsTest.php"
 ```
+
+#### API Receiver Endpoint Transition
+
+- `GET /api/dataReceiver` now returns standard JSON envelope (`ApiResponse`) with receiver data.
+- Legacy HTML option rendering is temporarily available at:
+  - `GET /legacy/dataReceiver/options`
+
+Transition note:
+
+- UI consumers should migrate to `/api/dataReceiver` JSON.
+- Decommission `/legacy/dataReceiver/options` only after all consumers are confirmed migrated.
 
 #### Proposal Modularization Pilot
 

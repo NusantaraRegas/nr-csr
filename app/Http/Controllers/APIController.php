@@ -13,6 +13,7 @@ use App\Models\Provinsi;
 use App\Models\SektorBantuan;
 use App\Models\ViewPembayaran;
 use App\Models\ViewProker;
+use App\Services\PaymentReceiverService;
 use App\Http\Requests\ApiUpdateStatusRequest;
 use App\Http\Requests\PostPaymentRequestAnnualRequest;
 use App\Actions\API\PostPaymentRequestAnnualAction;
@@ -1609,22 +1610,43 @@ class APIController extends Controller
             ]);
     }
 
-    public function dataReceiver()
+    public function dataReceiver(PaymentReceiverService $paymentReceiverService)
     {
-        $param = array(
-            "user_id" => "1211",
-        );
+        try {
+            $receiverNames = $paymentReceiverService->fetchReceiverNames('1211');
+            $receivers = [];
 
-        $release = APIHelper::instance()->httpCallJson('POST', env('BASEURL') . '/api/APIPaymentRequest/CreatePaymentRequest', $param, '');
-        $return = json_decode(strstr($release, '{'), true);
-        $data = $return['data'];
-        $sup = $data['dataSupplier'];
-        $supplier = $sup['Collection'];
+            foreach ($receiverNames as $name) {
+                $receivers[] = [
+                    'name' => $name,
+                    'value' => $name,
+                    'label' => $name,
+                ];
+            }
 
-        echo $output = '<option></option>';
-        foreach ($supplier as $row) {
-            echo $output = '<option value="' . $row['name'] . '">' . $row['name'] . '</option>';
+            return ApiResponse::success([
+                'receivers' => $receivers,
+            ], 'Data receiver berhasil ditampilkan');
+        } catch (\Throwable $e) {
+            report($e);
+
+            return ApiResponse::error('Data receiver gagal diambil.', 502, 'DATA_RECEIVER_FETCH_FAILED');
         }
+    }
+
+    public function dataReceiverOptions(PaymentReceiverService $paymentReceiverService)
+    {
+        $receiverNames = [];
+
+        try {
+            $receiverNames = $paymentReceiverService->fetchReceiverNames('1211');
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        return response($paymentReceiverService->renderLegacyOptions($receiverNames), 200, [
+            'Content-Type' => 'text/html; charset=UTF-8',
+        ]);
     }
 
     public function dataBank()
@@ -1914,6 +1936,7 @@ class APIController extends Controller
                 'provinsi' => $d->provinsi,
             ];
         }
-        return response()->json(['code' => "200", 'message' => "Data provinsi berhasil ditampilkan", 'data' => $result]);
+
+        return ApiResponse::success($result, 'Data provinsi berhasil ditampilkan');
     }
 }

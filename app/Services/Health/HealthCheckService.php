@@ -2,6 +2,7 @@
 
 namespace App\Services\Health;
 
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -71,29 +72,11 @@ class HealthCheckService
         }
 
         if ($driver === 'sqs') {
-            $prefix = (string) config('queue.connections.sqs.prefix');
-            $queue = (string) config('queue.connections.sqs.queue');
-
-            if (
-                $prefix === '' ||
-                $queue === '' ||
-                strpos($prefix, 'your-account-id') !== false ||
-                strpos($queue, 'your-queue-name') !== false
-            ) {
-                return $this->degraded('SQS queue is configured with placeholder/missing values.');
-            }
-
-            return $this->healthy('SQS queue configuration is present.');
+            return $this->checkSqsQueue();
         }
 
         if ($driver === 'beanstalkd') {
-            $host = (string) config('queue.connections.beanstalkd.host');
-
-            if ($host === '') {
-                return $this->degraded('Beanstalkd host is not configured.');
-            }
-
-            return $this->healthy('Beanstalkd queue configuration is present.');
+            return $this->checkBeanstalkQueue();
         }
 
         return $this->degraded("Queue driver `{$driver}` health check is not explicitly implemented.");
@@ -108,22 +91,160 @@ class HealthCheckService
         }
 
         if ($driver === 'smtp') {
-            $host = (string) config('mail.host');
-            $port = (string) config('mail.port');
-            $fromAddress = (string) data_get(config('mail.from'), 'address');
-
-            if ($host === '' || $port === '') {
-                return $this->degraded('SMTP mail host/port is not configured.');
-            }
-
-            if ($host === 'smtp.mailgun.org' && $fromAddress === 'hello@example.com') {
-                return $this->degraded('SMTP mail configuration is still using placeholder defaults.');
-            }
-
-            return $this->healthy('SMTP mail configuration is present.');
+            return $this->checkSmtpMail();
         }
 
         return $this->healthy("Mail driver `{$driver}` configured.");
+    }
+
+    private function checkSqsQueue(): array
+    {
+        $prefix = trim((string) config('queue.connections.sqs.prefix'));
+        $queue = trim((string) config('queue.connections.sqs.queue'));
+
+        if (
+            $prefix === '' ||
+            $queue === '' ||
+            strpos($prefix, 'your-account-id') !== false ||
+            strpos($queue, 'your-queue-name') !== false
+        ) {
+            return $this->degraded('SQS queue is configured with placeholder/missing values.');
+        }
+
+        $queueUrl = $this->resolveSqsQueueUrl($prefix, $queue);
+        if ($queueUrl === '') {
+            return $this->degraded('SQS queue URL cannot be resolved from current configuration.');
+        }
+
+        if (!$this->isTransportProbeEnabled('sqs')) {
+            return $this->healthy('SQS queue configuration is present. Transport probe skipped.', [
+                'probe' => 'skipped',
+                'queue_url' => $queueUrl,
+            ]);
+        }
+
+        $probe = $this->probeHttpEndpoint('queue', 'sqs', $queueUrl, 'sqs_http');
+        if (!$probe['ok']) {
+            return $this->unhealthy('SQS queue reachability probe failed.', [
+                'probe' => $probe['probe'],
+                'queue_url' => $queueUrl,
+                'timeout' => $probe['timed_out'],
+                'reason' => $probe['reason'],
+                'http_status' => $probe['http_status'],
+            ]);
+        }
+
+        return $this->healthy('SQS queue endpoint reachable.', [
+            'probe' => $probe['probe'],
+            'queue_url' => $queueUrl,
+            'http_status' => $probe['http_status'],
+            'latency_ms' => $probe['latency_ms'],
+        ]);
+    }
+
+    private function checkBeanstalkQueue(): array
+    {
+        $host = trim((string) config('queue.connections.beanstalkd.host'));
+        $port = (int) config('queue.connections.beanstalkd.port', 11300);
+
+        if ($host === '' || $port <= 0) {
+            return $this->degraded('Beanstalkd host/port is not configured.');
+        }
+
+        if (!$this->isTransportProbeEnabled('beanstalkd')) {
+            return $this->healthy('Beanstalkd queue configuration is present. Transport probe skipped.', [
+                'probe' => 'skipped',
+                'host' => $host,
+                'port' => $port,
+            ]);
+        }
+
+        $probe = $this->probeTcpEndpoint('queue', 'beanstalkd', $host, $port, 'beanstalk_tcp');
+        if (!$probe['ok']) {
+            return $this->unhealthy('Beanstalkd socket probe failed.', [
+                'probe' => $probe['probe'],
+                'host' => $host,
+                'port' => $port,
+                'timeout' => $probe['timed_out'],
+                'reason' => $probe['reason'],
+            ]);
+        }
+
+        return $this->healthy('Beanstalkd socket reachable.', [
+            'probe' => $probe['probe'],
+            'host' => $host,
+            'port' => $port,
+            'latency_ms' => $probe['latency_ms'],
+        ]);
+    }
+
+    private function checkSmtpMail(): array
+    {
+        $host = trim((string) config('mail.host'));
+        $port = (int) config('mail.port');
+        $fromAddress = trim((string) data_get(config('mail.from'), 'address'));
+        $username = trim((string) config('mail.username'));
+        $password = (string) config('mail.password');
+        $encryption = trim((string) config('mail.encryption'));
+
+        if ($host === '' || $port <= 0) {
+            return $this->degraded('SMTP mail host/port is not configured.');
+        }
+
+        if ($host === 'smtp.mailgun.org' && $fromAddress === 'hello@example.com') {
+            return $this->degraded('SMTP mail configuration is still using placeholder defaults.');
+        }
+
+        if (($username === '' && $password !== '') || ($username !== '' && $password === '')) {
+            return $this->degraded('SMTP auth configuration is incomplete.');
+        }
+
+        if (!$this->isTransportProbeEnabled('smtp')) {
+            return $this->healthy('SMTP mail configuration is present. Transport probe skipped.', [
+                'probe' => 'skipped',
+                'host' => $host,
+                'port' => $port,
+            ]);
+        }
+
+        $connectionProbe = $this->probeTcpEndpoint('mail', 'smtp', $host, $port, 'smtp_tcp');
+        if (!$connectionProbe['ok']) {
+            return $this->unhealthy('SMTP connection probe failed.', [
+                'probe' => $connectionProbe['probe'],
+                'host' => $host,
+                'port' => $port,
+                'timeout' => $connectionProbe['timed_out'],
+                'reason' => $connectionProbe['reason'],
+            ]);
+        }
+
+        if ($username !== '') {
+            $authProbe = $this->probeSmtpAuthentication($host, $port, $username, $password, $encryption);
+            if (!$authProbe['ok']) {
+                return $this->unhealthy('SMTP auth probe failed.', [
+                    'probe' => $authProbe['probe'],
+                    'host' => $host,
+                    'port' => $port,
+                    'timeout' => $authProbe['timed_out'],
+                    'reason' => $authProbe['reason'],
+                ]);
+            }
+
+            return $this->healthy('SMTP connection/auth probe succeeded.', [
+                'probe' => $authProbe['probe'],
+                'host' => $host,
+                'port' => $port,
+                'latency_ms' => $authProbe['latency_ms'],
+            ]);
+        }
+
+        return $this->healthy('SMTP connection probe succeeded.', [
+            'probe' => $connectionProbe['probe'],
+            'host' => $host,
+            'port' => $port,
+            'latency_ms' => $connectionProbe['latency_ms'],
+            'auth' => 'not_configured',
+        ]);
     }
 
     private function applySimulation(array $checks, array $simulations): array
@@ -182,6 +303,238 @@ class HealthCheckService
         if ($status === 'degraded') {
             Log::channel($channel)->warning('health.degraded', $context);
         }
+    }
+
+    private function isTransportProbeEnabled(string $probe): bool
+    {
+        return (bool) config("health.probes.{$probe}.enabled", false);
+    }
+
+    private function probeTimeoutSeconds(): float
+    {
+        $timeout = (float) config('health.probes.timeout_seconds', 2.0);
+
+        return $timeout > 0 ? $timeout : 2.0;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function probeTcpEndpoint(string $component, string $driver, string $host, int $port, string $probe): array
+    {
+        $timeout = $this->probeTimeoutSeconds();
+        $start = microtime(true);
+        $errno = 0;
+        $errstr = '';
+        $socket = @stream_socket_client(
+            sprintf('tcp://%s:%d', $host, $port),
+            $errno,
+            $errstr,
+            $timeout,
+            STREAM_CLIENT_CONNECT
+        );
+        $latencyMs = (int) round((microtime(true) - $start) * 1000);
+
+        if ($socket === false) {
+            $reason = $errstr !== '' ? $errstr : ('Socket error code ' . $errno);
+            $timedOut = $this->isTimeoutMessage($reason);
+
+            $this->emitProbeAlert($timedOut ? 'health.probe.timeout' : 'health.probe.failure', $timedOut ? 'warning' : 'error', [
+                'component' => $component,
+                'driver' => $driver,
+                'probe' => $probe,
+                'host' => $host,
+                'port' => $port,
+                'timeout_seconds' => $timeout,
+                'latency_ms' => $latencyMs,
+                'reason' => $reason,
+            ]);
+
+            return [
+                'ok' => false,
+                'probe' => $probe,
+                'timed_out' => $timedOut,
+                'latency_ms' => $latencyMs,
+                'reason' => $reason,
+                'http_status' => null,
+            ];
+        }
+
+        fclose($socket);
+
+        return [
+            'ok' => true,
+            'probe' => $probe,
+            'timed_out' => false,
+            'latency_ms' => $latencyMs,
+            'reason' => null,
+            'http_status' => null,
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function probeHttpEndpoint(string $component, string $driver, string $url, string $probe): array
+    {
+        $timeout = $this->probeTimeoutSeconds();
+        $start = microtime(true);
+
+        try {
+            $response = (new Client([
+                'timeout' => $timeout,
+                'connect_timeout' => $timeout,
+                'http_errors' => false,
+            ]))->request('HEAD', $url);
+
+            $statusCode = (int) $response->getStatusCode();
+            $latencyMs = (int) round((microtime(true) - $start) * 1000);
+            $isReachable = $statusCode >= 200 && $statusCode < 500;
+
+            if (!$isReachable) {
+                $reason = 'HTTP status ' . $statusCode;
+                $this->emitProbeAlert('health.probe.failure', 'error', [
+                    'component' => $component,
+                    'driver' => $driver,
+                    'probe' => $probe,
+                    'url' => $url,
+                    'timeout_seconds' => $timeout,
+                    'latency_ms' => $latencyMs,
+                    'reason' => $reason,
+                    'http_status' => $statusCode,
+                ]);
+
+                return [
+                    'ok' => false,
+                    'probe' => $probe,
+                    'timed_out' => false,
+                    'latency_ms' => $latencyMs,
+                    'reason' => $reason,
+                    'http_status' => $statusCode,
+                ];
+            }
+
+            return [
+                'ok' => true,
+                'probe' => $probe,
+                'timed_out' => false,
+                'latency_ms' => $latencyMs,
+                'reason' => null,
+                'http_status' => $statusCode,
+            ];
+        } catch (\Throwable $e) {
+            $latencyMs = (int) round((microtime(true) - $start) * 1000);
+            $reason = $e->getMessage();
+            $timedOut = $this->isTimeoutMessage($reason);
+
+            $this->emitProbeAlert($timedOut ? 'health.probe.timeout' : 'health.probe.failure', $timedOut ? 'warning' : 'error', [
+                'component' => $component,
+                'driver' => $driver,
+                'probe' => $probe,
+                'url' => $url,
+                'timeout_seconds' => $timeout,
+                'latency_ms' => $latencyMs,
+                'reason' => $reason,
+            ]);
+
+            return [
+                'ok' => false,
+                'probe' => $probe,
+                'timed_out' => $timedOut,
+                'latency_ms' => $latencyMs,
+                'reason' => $reason,
+                'http_status' => null,
+            ];
+        }
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function probeSmtpAuthentication(
+        string $host,
+        int $port,
+        string $username,
+        string $password,
+        string $encryption
+    ): array {
+        $timeout = $this->probeTimeoutSeconds();
+        $swiftTimeout = max(1, (int) ceil($timeout));
+        $start = microtime(true);
+
+        try {
+            $transport = new \Swift_SmtpTransport($host, $port, $encryption !== '' ? $encryption : null);
+            $transport->setTimeout($swiftTimeout);
+            $transport->setUsername($username);
+            $transport->setPassword($password);
+            $transport->start();
+            $transport->stop();
+
+            return [
+                'ok' => true,
+                'probe' => 'smtp_auth',
+                'timed_out' => false,
+                'latency_ms' => (int) round((microtime(true) - $start) * 1000),
+                'reason' => null,
+            ];
+        } catch (\Throwable $e) {
+            $latencyMs = (int) round((microtime(true) - $start) * 1000);
+            $reason = $e->getMessage();
+            $timedOut = $this->isTimeoutMessage($reason);
+
+            $this->emitProbeAlert($timedOut ? 'health.probe.timeout' : 'health.probe.failure', $timedOut ? 'warning' : 'error', [
+                'component' => 'mail',
+                'driver' => 'smtp',
+                'probe' => 'smtp_auth',
+                'host' => $host,
+                'port' => $port,
+                'timeout_seconds' => $swiftTimeout,
+                'latency_ms' => $latencyMs,
+                'reason' => $reason,
+            ]);
+
+            return [
+                'ok' => false,
+                'probe' => 'smtp_auth',
+                'timed_out' => $timedOut,
+                'latency_ms' => $latencyMs,
+                'reason' => $reason,
+            ];
+        }
+    }
+
+    private function resolveSqsQueueUrl(string $prefix, string $queue): string
+    {
+        if (preg_match('/^https?:\\/\\//i', $queue)) {
+            return $queue;
+        }
+
+        if (!preg_match('/^https?:\\/\\//i', $prefix)) {
+            return '';
+        }
+
+        return rtrim($prefix, '/') . '/' . ltrim($queue, '/');
+    }
+
+    private function isTimeoutMessage(string $message): bool
+    {
+        return stripos($message, 'timed out') !== false;
+    }
+
+    private function emitProbeAlert(string $event, string $level, array $context): void
+    {
+        if (!config('health.alerting.enabled', true)) {
+            return;
+        }
+
+        $channel = config('health.alerting.log_channel', 'stack');
+
+        if ($level === 'error') {
+            Log::channel($channel)->error($event, $context);
+            return;
+        }
+
+        Log::channel($channel)->warning($event, $context);
     }
 
     private function healthy(string $message, array $meta = []): array

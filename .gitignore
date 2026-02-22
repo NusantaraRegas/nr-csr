@@ -54,6 +54,8 @@ clover.xml
 /tools/health_hit_probe.php
 /tools/health_auth_probe.php
 /tools/health_alert_probe.php
+/tools/transport_probe_*.php
+/storage/transport-probe-*.txt
 
 # Compiled framework cache
 /bootstrap/cache/*.php
